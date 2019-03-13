@@ -1,0 +1,30 @@
+{
+    "name": "whatwedo/cron-bundle",
+    "type": "symfony-bundle",
+    "description": "Run Symfony commands as cron job",
+    "license": "MIT",
+    "homepage": "https://doc.whatwedo.ch/whatwedo/cronbundle",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Felix Imobersteg",
+            "email": "felix@whatwedo.ch"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "ext-posix": "*",
+        "cocur/background-process": "~0.7",
+        "doctrine/doctrine-bundle": "~1.9",
+        "doctrine/orm": "~2.6",
+        "dragonmantank/cron-expression": "~2.2",
+        "symfony/console": "*",
+        "symfony/framework-bundle": "~4.2",
+        "symfony/process": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "whatwedo\\CronBundle\\": ""
+        }
+    }
+}
