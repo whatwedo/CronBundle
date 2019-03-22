@@ -87,9 +87,13 @@ class SchedulerCommand extends Command
         ini_set('memory_limit', $maxMemory);
 
         // Check cron jobs every 15s
-        while (true) {
-            $this->executionManager->check();
-            sleep(15);
+        try {
+            while (true) {
+                $this->executionManager->check();
+                sleep(15);
+            }
+        } catch (\Exception $ex) {
+            $this->logger->warning($ex->getMessage());
         }
     }
 }
