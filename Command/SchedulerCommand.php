@@ -27,6 +27,9 @@
 
 namespace whatwedo\CronBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Exception\InvalidOptionException;
+use Symfony\Component\Console\Input\InputOption;
 use whatwedo\CronBundle\Manager\ExecutionManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -46,6 +49,11 @@ class SchedulerCommand extends Command
     protected $logger;
 
     /**
+     * @var EntityManagerInterface
+     */
+    protected $em;
+
+    /**
      * @var ExecutionManager
      */
     protected $executionManager;
@@ -56,10 +64,11 @@ class SchedulerCommand extends Command
      * @param LoggerInterface $logger
      * @param ExecutionManager $executionManager
      */
-    public function __construct(LoggerInterface $logger, ExecutionManager $executionManager)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $em, ExecutionManager $executionManager)
     {
         parent::__construct();
         $this->logger = $logger;
+        $this->em = $em;
         $this->executionManager = $executionManager;
     }
 
@@ -70,7 +79,8 @@ class SchedulerCommand extends Command
     {
         parent::configure();
         $this->setName('whatwedo:cron:scheduler')
-            ->setDescription('Run scheduler process');
+            ->setDescription('Run scheduler process')
+            ->addOption('max-runtime', null, InputOption::VALUE_OPTIONAL, 'Max runtime of scheduler in secords', 600);
     }
 
     /**
@@ -81,19 +91,19 @@ class SchedulerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Set the max amount of memory to prevent memory leak (initial memory usage * 2)
-        $maxMemory = memory_get_usage() * 2;
-        $this->logger->debug(sprintf('Setting max amount of scheduler memory to %d', $maxMemory));
-        ini_set('memory_limit', $maxMemory);
+        // Get max runtime
+        $maxRuntime = intval($input->getOption('max-runtime'));
+        if ($maxRuntime < 60) {
+            throw new InvalidOptionException('Max runtime needs to be at least 60 seconds');
+        }
+        $runUntil = time() + $maxRuntime;
 
         // Check cron jobs every 15s
-        try {
-            while (true) {
-                $this->executionManager->check();
-                sleep(15);
-            }
-        } catch (\Exception $ex) {
-            $this->logger->warning($ex->getMessage());
+        while ($runUntil > time()) {
+            $this->executionManager->check();
+            $this->em->clear();
+            gc_collect_cycles();
+            sleep(15);
         }
     }
 }
