@@ -27,6 +27,7 @@
 
 namespace whatwedo\CronBundle\Repository;
 
+use DateTimeInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use Doctrine\Common\Collections\Collection;
@@ -67,5 +68,41 @@ class ExecutionRepository extends EntityRepository
             ->setParameter('class', get_class($cronJob))
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function deleteSuccessfulJobs(DateTimeInterface $retention, $limit = null)
+    {
+        return $this->createQueryBuilder('e')
+            ->delete()
+            ->where('e.startedAt < :retention')
+            ->andWhere('e.state = :stateSuccessful')
+            ->andWhere('e.exitCode = 0')
+            ->setParameters([
+                'retention' => $retention,
+                'stateSuccessful' => Execution::STATE_FINISHED,
+            ])
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    public function deleteNotSuccessfulJobs(DateTimeInterface $retention, $limit = null)
+    {
+        return $this->createQueryBuilder('e')
+            ->delete()
+            ->where('e.startedAt < :retention')
+            ->andWhere('e.state IN (:stateSuccessful)')
+            ->andWhere('e.exitCode != 0')
+            ->setParameters([
+                'retention' => $retention,
+                'stateSuccessful' => [
+                    Execution::STATE_FINISHED,
+                    Execution::STATE_TERMINATED,
+                    Execution::STATE_TERMINATED
+                ],
+            ])
+            ->getQuery()
+            ->execute()
+        ;
     }
 }

@@ -14,6 +14,7 @@ Features include:
 - Schedule cron job with your system existing cron daemon or use integrated scheduler
 - Set maximum runtime of cron jobs
 - Allow/disallow parallel execution of a cron job
+- Automated database cleanup
 
 **Note:** this bundle is currently under heavy development
 
