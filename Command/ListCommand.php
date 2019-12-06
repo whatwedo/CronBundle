@@ -40,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends Command
 {
+    protected static $defaultName = 'whatwedo:cron:list';
     /**
      * @var CronJobManager
      */
@@ -72,7 +73,7 @@ class ListCommand extends Command
      *
      * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);
         $table->setHeaders(['Cron job', 'Description']);
@@ -80,5 +81,6 @@ class ListCommand extends Command
             $table->addRow([get_class($cronJob), $cronJob->getDescription()]);
         }
         $table->render();
+        return 0;
     }
 }

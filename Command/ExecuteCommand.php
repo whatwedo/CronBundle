@@ -27,6 +27,7 @@
 
 namespace whatwedo\CronBundle\Command;
 
+use DateTime;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
@@ -45,6 +46,7 @@ use Symfony\Component\Process\Process;
  */
 class ExecuteCommand extends Command
 {
+    protected static $defaultName = 'whatwedo:cron:execute';
     /**
      * @var CronJobManager
      */
@@ -92,7 +94,7 @@ class ExecuteCommand extends Command
         if (!$cronJob->getMaxRuntime()) {
             return;
         }
-        $now = new \DateTime();
+        $now = new DateTime();
         $diff = $now->getTimestamp() - $execution->getStartedAt()->getTimestamp();
         if ($diff > $cronJob->getMaxRuntime()) {
             $execution
@@ -123,7 +125,7 @@ class ExecuteCommand extends Command
      *
      * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
@@ -159,12 +161,13 @@ class ExecuteCommand extends Command
         $output->writeln('Execution finished with exit code '.$process->getExitCode());
         $execution
             ->setState(Execution::STATE_FINISHED)
-            ->setFinishedAt(new \DateTime())
+            ->setFinishedAt(new DateTime())
             ->setPid(null)
             ->setStdout($process->getOutput())
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
+        return 0;
     }
 
     /**

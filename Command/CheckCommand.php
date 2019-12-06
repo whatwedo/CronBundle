@@ -39,6 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CheckCommand extends Command
 {
+    protected static $defaultName = 'whatwedo:cron:check';
     /**
      * @var ExecutionManager
      */
@@ -71,8 +72,9 @@ class CheckCommand extends Command
      *
      * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->executionManager->check();
+        return 0;
     }
 }

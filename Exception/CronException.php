@@ -27,11 +27,12 @@
 
 namespace whatwedo\CronBundle\Exception;
 
+use RuntimeException;
 /**
  * Class CronException
  *
  * @package whatwedo\CronBundle\Exception
  */
-abstract class CronException extends \RuntimeException
+abstract class CronException extends RuntimeException
 {
 }

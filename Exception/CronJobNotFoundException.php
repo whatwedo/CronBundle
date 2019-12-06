@@ -27,6 +27,7 @@
 
 namespace whatwedo\CronBundle\Exception;
 
+use Throwable;
 /**
  * Class CronJobNotFoundException
  *
@@ -41,7 +42,7 @@ class CronJobNotFoundException extends CronException
      * @param int $code
      * @param \Throwable|null $previous
      */
-    public function __construct(string $class, int $code = 0, \Throwable $previous = null)
+    public function __construct(string $class, int $code = 0, Throwable $previous = null)
     {
         parent::__construct(sprintf('Cron job with class %s not found', $class), $code, $previous);
     }

@@ -27,6 +27,7 @@
 
 namespace whatwedo\CronBundle\Entity;
 
+use DateTime;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -137,8 +138,8 @@ class Execution
      */
     public function __construct()
     {
-        $this->startedAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->startedAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -209,7 +210,7 @@ class Execution
     /**
      * @return \DateTime|null
      */
-    public function getStartedAt(): ?\DateTime
+    public function getStartedAt(): ?DateTime
     {
         return $this->startedAt;
     }
@@ -219,7 +220,7 @@ class Execution
      *
      * @return self
      */
-    public function setStartedAt(?\DateTime $startedAt): self
+    public function setStartedAt(?DateTime $startedAt): self
     {
         $this->startedAt = $startedAt;
         return $this;
@@ -228,7 +229,7 @@ class Execution
     /**
      * @return \DateTime|null
      */
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
@@ -238,7 +239,7 @@ class Execution
      *
      * @return self
      */
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
         return $this;
@@ -247,7 +248,7 @@ class Execution
     /**
      * @return \DateTime|null
      */
-    public function getFinishedAt(): ?\DateTime
+    public function getFinishedAt(): ?DateTime
     {
         return $this->finishedAt;
     }
@@ -257,7 +258,7 @@ class Execution
      *
      * @return self
      */
-    public function setFinishedAt(?\DateTime $finishedAt): self
+    public function setFinishedAt(?DateTime $finishedAt): self
     {
         $this->finishedAt = $finishedAt;
         return $this;
