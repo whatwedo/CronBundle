@@ -27,6 +27,7 @@
 
 namespace whatwedo\CronBundle\Manager;
 
+use DateTime;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use Cocur\BackgroundProcess\BackgroundProcess;
@@ -107,7 +108,7 @@ class ExecutionManager
      *
      * @return \DateTime|null
      */
-    public function getLastExecutionDate(CronJobInterface $cronJob): ?\DateTime
+    public function getLastExecutionDate(CronJobInterface $cronJob): ?DateTime
     {
         $lastExecution = $this->getLastExecution($cronJob);
         if (!$lastExecution) {
@@ -123,7 +124,7 @@ class ExecutionManager
      *
      * @return \DateTime|null
      */
-    public function getNextExecutionDate(CronJobInterface $cronJob): ?\DateTime
+    public function getNextExecutionDate(CronJobInterface $cronJob): ?DateTime
     {
         $lastExecutionDate = $this->getLastExecutionDate($cronJob);
         if (!$lastExecutionDate) {
@@ -151,7 +152,7 @@ class ExecutionManager
         }
 
         // Check if run needed
-        $now = new \DateTime();
+        $now = new DateTime();
         if ($nextExecutionDate > $now) {
             $this->logger->debug(sprintf('%s do not need to run. Next run at %s', get_class($cronJob), $nextExecutionDate->format('Y-m-d H:i:s')));
             return false;

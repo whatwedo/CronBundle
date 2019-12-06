@@ -27,6 +27,7 @@
 
 namespace whatwedo\CronBundle\Command;
 
+use DateTime;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Manager\CronJobManager;
@@ -44,6 +45,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InfoCommand extends Command
 {
+    protected static $defaultName = 'whatwedo:cron:info';
     /**
      * @var CronJobManager
      */
@@ -84,7 +86,7 @@ class InfoCommand extends Command
      *
      * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
@@ -106,6 +108,7 @@ class InfoCommand extends Command
 
         // Render table
         $table->render();
+        return 0;
     }
 
     /**
@@ -133,7 +136,7 @@ class InfoCommand extends Command
         if (!$nextExecutionDate) {
             return null;
         }
-        $now = new \DateTime();
+        $now = new DateTime();
         if ($nextExecutionDate < $now) {
             return 'Now';
         }
@@ -145,7 +148,7 @@ class InfoCommand extends Command
      *
      * @return string|null
      */
-    protected function getFormattedDate(\DateTime $date): ?string
+    protected function getFormattedDate(DateTime $date): ?string
     {
         if (!$date) {
             return null;

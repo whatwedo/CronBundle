@@ -43,6 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SchedulerCommand extends Command
 {
+    protected static $defaultName = 'whatwedo:cron:scheduler';
     /**
      * @var LoggerInterface
      */
@@ -89,7 +90,7 @@ class SchedulerCommand extends Command
      *
      * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get max runtime
         $maxRuntime = intval($input->getOption('max-runtime'));
@@ -105,5 +106,6 @@ class SchedulerCommand extends Command
             gc_collect_cycles();
             sleep(15);
         }
+        return 0;
     }
 }

@@ -46,6 +46,7 @@ use whatwedo\CronBundle\Repository\ExecutionRepository;
  */
 class CleanupCommand extends Command
 {
+    protected static $defaultName = 'whatwedo:cron:cleanup';
     /**
      * @var ExecutionRepository
      */
@@ -84,7 +85,7 @@ class CleanupCommand extends Command
      *
      * @return int|void|null
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $perCall = (int) $input->getOption('per-call');
 
@@ -107,5 +108,6 @@ class CleanupCommand extends Command
             '- deleted <info>%s</info> not successful job execution logs',
             $deletedNotSuccessful
         ));
+        return 0;
     }
 }
