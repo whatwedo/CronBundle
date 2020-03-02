@@ -49,7 +49,7 @@ class Status
     protected $id;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(name="class", type="string", length=255, nullable=false)
      */
@@ -71,19 +71,19 @@ class Status
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getClass(): ?string
+    public function getClass(): string
     {
         return $this->class;
     }
 
     /**
-     * @param string|null $class
+     * @param string $class
      *
      * @return self
      */
-    public function setClass(?string $class): self
+    public function setClass(string $class): self
     {
         $this->class = $class;
         return $this;
