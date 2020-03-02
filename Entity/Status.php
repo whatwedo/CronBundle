@@ -28,6 +28,7 @@
 namespace whatwedo\CronBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Class Execution
@@ -36,6 +37,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="whatwedo_cron_status")
  * @ORM\Entity(repositoryClass="whatwedo\CronBundle\Repository\StatusRepository")
+ * @UniqueEntity("status")
  */
 class Status
 {
@@ -51,7 +53,7 @@ class Status
     /**
      * @var string
      *
-     * @ORM\Column(name="class", type="string", length=255, nullable=false)
+     * @ORM\Column(name="class", type="string", length=255, nullable=false, unique=true)
      */
     protected $class;
 
