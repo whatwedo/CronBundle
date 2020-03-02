@@ -37,7 +37,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="whatwedo_cron_status")
  * @ORM\Entity(repositoryClass="whatwedo\CronBundle\Repository\StatusRepository")
- * @UniqueEntity("status")
+ * @UniqueEntity("class")
  */
 class Status
 {
