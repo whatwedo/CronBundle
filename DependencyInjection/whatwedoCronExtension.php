@@ -31,7 +31,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\CronJob\CronInterface;
 
 /**
  * Class whatwedoCronExtension
@@ -44,7 +44,7 @@ class whatwedoCronExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         // Auto tag cron jobs
-        $container->registerForAutoconfiguration(CronJobInterface::class)->addTag('whatwedo.cron.job');
+        $container->registerForAutoconfiguration(CronInterface::class)->addTag('whatwedo.cron.job');
 
         // Load service configuration
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

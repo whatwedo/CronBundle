@@ -29,7 +29,7 @@ namespace whatwedo\CronBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\CronJob\CronInterface;
 
 /**
  * Class Execution
@@ -124,7 +124,7 @@ class Execution
     protected $stderr;
 
     /**
-     * @var CronJobInterface|null
+     * @var CronInterface|null
      */
     protected $cronJob;
 
@@ -258,12 +258,12 @@ class Execution
         return $this;
     }
 
-    public function getCronJob(): ?CronJobInterface
+    public function getCronJob(): ?CronInterface
     {
         return $this->cronJob;
     }
 
-    public function setCronJob(?CronJobInterface $cronJob): self
+    public function setCronJob(?CronInterface $cronJob): self
     {
         $this->cronJob = $cronJob;
         return $this;

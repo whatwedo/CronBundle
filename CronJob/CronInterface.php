@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) 2019, whatwedo GmbH
+ * Copyright (c) 2020, whatwedo GmbH
  * All rights reserved
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,14 @@
 namespace whatwedo\CronBundle\CronJob;
 
 /**
- * Interface CronJobInterface
+ * Interface CronCommandInterface
  */
-interface CronJobInterface extends CronInterface
+interface CronInterface
 {
     /**
-     * Returns command description
-     */
-    public function getDescription();
-
-    /**
-     * Returns command name
-     */
-    public function getCommand(): string;
-
-    /**
-     * Returns cron expression
+     * Returns cron expression.
      */
     public function getExpression(): string;
-
-    /**
-     * Returns command arguments
-     *
-     *  @return string[]
-     */
-    public function getArguments(): array;
 
     /**
      * Returns max runtime in seconds
