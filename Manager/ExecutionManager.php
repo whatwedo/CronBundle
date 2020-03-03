@@ -29,12 +29,11 @@ namespace whatwedo\CronBundle\Manager;
 
 use DateTime;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
 use Cocur\BackgroundProcess\BackgroundProcess;
 use Cron\CronExpression;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use whatwedo\CronBundle\Entity\Status;
+use whatwedo\CronBundle\Entity\Execution;
 
 /**
  * Class ExecutionManager
@@ -127,7 +126,7 @@ class ExecutionManager
         }
 
         // Check if cron is disabled.
-        if (!$this->isCronJobActive($cronJob)) {
+        if (false === $cronJob->isActive()) {
             $this->logger->debug(sprintf('%s do not need to run. It\'s disabled.', get_class($cronJob)));
             return false;
         }
@@ -165,16 +164,6 @@ class ExecutionManager
     public function getLastExecution(CronJobInterface $cronJob): ?Execution
     {
         return $this->em->getRepository(Execution::class)->findLastExecution($cronJob);
-    }
-
-    public function isCronJobActive(CronJobInterface $cronJob): bool
-    {
-        $cronJobStatus = $this->em->getRepository(Status::class)->findOneByClass(get_class($cronJob));
-        if (null === $cronJobStatus) {
-            return true;
-        }
-
-        return $cronJobStatus->getActive();
     }
 
     protected function schedule(CronJobInterface $cronJob): void
