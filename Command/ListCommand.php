@@ -27,16 +27,14 @@
 
 namespace whatwedo\CronBundle\Command;
 
-use whatwedo\CronBundle\Manager\CronJobManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class ListCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class ListCommand extends Command
 {
@@ -48,8 +46,6 @@ class ListCommand extends Command
 
     /**
      * ListCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
      */
     public function __construct(CronJobManager $cronJobManager)
     {
@@ -67,12 +63,6 @@ class ListCommand extends Command
             ->setDescription('List all cron jobs');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);

@@ -28,20 +28,18 @@
 namespace whatwedo\CronBundle\Command;
 
 use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Manager\CronJobManager;
-use whatwedo\CronBundle\Manager\ExecutionManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Manager\CronJobManager;
+use whatwedo\CronBundle\Manager\ExecutionManager;
 
 /**
  * Class InfoCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class InfoCommand extends Command
 {
@@ -50,7 +48,6 @@ class InfoCommand extends Command
      * @var CronJobManager
      */
     protected $cronJobManager;
-
     /**
      * @var ExecutionManager
      */
@@ -58,9 +55,6 @@ class InfoCommand extends Command
 
     /**
      * InfoCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
-     * @param string $projectDir
      */
     public function __construct(CronJobManager $cronJobManager, ExecutionManager $executionManager)
     {
@@ -80,12 +74,6 @@ class InfoCommand extends Command
             ->addArgument('cron_job', InputArgument::REQUIRED, 'Class of cron job to execute');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition
@@ -111,11 +99,6 @@ class InfoCommand extends Command
         return 0;
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return string|null
-     */
     protected function getLastExecutionDateString(CronJobInterface $cronJob): ?string
     {
         $lastExecutionDate = $this->executionManager->getLastExecutionDate($cronJob);
@@ -125,13 +108,11 @@ class InfoCommand extends Command
         return $this->getFormattedDate($lastExecutionDate);
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return string|null
-     */
     protected function getNextExecutionDateString(CronJobInterface $cronJob): ?string
     {
+        if (!$cronJob->isActive()) {
+            return 'Disabled';
+        }
         $nextExecutionDate = $this->executionManager->getNextExecutionDate($cronJob);
         if (!$nextExecutionDate) {
             return null;
@@ -143,11 +124,6 @@ class InfoCommand extends Command
         return $this->getFormattedDate($nextExecutionDate);
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return string|null
-     */
     protected function getFormattedDate(DateTime $date): ?string
     {
         if (!$date) {
@@ -156,11 +132,6 @@ class InfoCommand extends Command
         return $date->format('Y-m-d H:i:s');
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return string
-     */
     protected function getLockStatus(CronJobInterface $cronJob): string
     {
         if ($cronJob->isParallelAllowed()) {

@@ -28,19 +28,14 @@
 namespace whatwedo\CronBundle\Exception;
 
 use Throwable;
+
 /**
  * Class CronJobNotFoundException
- *
- * @package whatwedo\CronBundle\Exception
  */
 class CronJobNotFoundException extends CronException
 {
     /**
      * CronJobNotFoundException constructor.
-     *
-     * @param string $class
-     * @param int $code
-     * @param \Throwable|null $previous
      */
     public function __construct(string $class, int $code = 0, Throwable $previous = null)
     {

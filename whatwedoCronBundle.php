@@ -33,14 +33,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Class whatwedoCronBundle
- *
- * @package whatwedo\CronBundle
  */
 class whatwedoCronBundle extends Bundle
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new CronJobPass());

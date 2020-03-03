@@ -27,18 +27,16 @@
 
 namespace whatwedo\CronBundle\Manager;
 
-use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
 use Cocur\BackgroundProcess\BackgroundProcess;
 use Cron\CronExpression;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 
 /**
  * Class ExecutionManager
- *
- * @package whatwedo\CronBundle\Manager
  */
 class ExecutionManager
 {
@@ -46,22 +44,18 @@ class ExecutionManager
      * @var LoggerInterface
      */
     protected $logger;
-
     /**
      * @var EntityManagerInterface
      */
     protected $em;
-
     /**
      * @var CronJobManager
      */
     protected $cronJobManager;
-
     /**
      * @var string
      */
     protected $projectDir;
-
     /**
      * @var string
      */
@@ -69,12 +63,6 @@ class ExecutionManager
 
     /**
      * ExecutionManager constructor.
-     *
-     * @param LoggerInterface $logger
-     * @param EntityManagerInterface $em
-     * @param CronJobManager $cronJobManager
-     * @param string $projectDir
-     * @param string $environment
      */
     public function __construct(LoggerInterface $logger, EntityManagerInterface $em, CronJobManager $cronJobManager, string $projectDir, string $environment)
     {
@@ -85,9 +73,6 @@ class ExecutionManager
         $this->environment = $environment;
     }
 
-    /**
-     *
-     */
     public function check(): void
     {
         // Cleanup stale
@@ -103,10 +88,6 @@ class ExecutionManager
 
     /**
      * Return date of last execution or null if there is no previous run.
-     *
-     * @param CronJobInterface $cronJob
-     *
-     * @return \DateTime|null
      */
     public function getLastExecutionDate(CronJobInterface $cronJob): ?DateTime
     {
@@ -118,11 +99,7 @@ class ExecutionManager
     }
 
     /**
-     * Return date of nxex execution or null if there is no previous run (run needed).
-     *
-     * @param CronJobInterface $cronJob
-     *
-     * @return \DateTime|null
+     * Return date of next execution or null if there is no previous run (run needed).
      */
     public function getNextExecutionDate(CronJobInterface $cronJob): ?DateTime
     {
@@ -130,19 +107,21 @@ class ExecutionManager
         if (!$lastExecutionDate) {
             return null;
         }
-        $cron = CronExpression::factory($cronJob->getExpression());
-        return $cron->getNextRunDate($this->getLastExecutionDate($cronJob));
+
+        return CronExpression::factory($cronJob->getExpression())
+                             ->getNextRunDate($this->getLastExecutionDate($cronJob));
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return bool
-     */
     public function isRunNeeded(CronJobInterface $cronJob): bool
     {
         // Debug log
         $this->logger->debug(sprintf('Checking if execution of %s is needed', get_class($cronJob)));
+
+        // Check if cron is disabled.
+        if (!$cronJob->isActive()) {
+            $this->logger->debug(sprintf('%s do not need to run. It\'s disabled.', get_class($cronJob)));
+            return false;
+        }
 
         // Get next execution date
         $nextExecutionDate = $this->getNextExecutionDate($cronJob);
@@ -174,19 +153,11 @@ class ExecutionManager
         return true;
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return Execution|null
-     */
     public function getLastExecution(CronJobInterface $cronJob): ?Execution
     {
         return $this->em->getRepository(Execution::class)->findLastExecution($cronJob);
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     */
     protected function schedule(CronJobInterface $cronJob): void
     {
         $this->logger->info(sprintf('Scheduling execution of %s', get_class($cronJob)));
@@ -195,16 +166,13 @@ class ExecutionManager
         $this->logger->debug(sprintf('Helper process running with PID %d', $process->getPid()));
     }
 
-    /**
-     *
-     */
     protected function cleanupStale(): void
     {
         $executions = $this->em->getRepository(Execution::class)->findByState(Execution::STATE_RUNNING);
         foreach ($executions as $execution) {
-            $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getClass()));
+            $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getJob()));
             if (!posix_kill($execution->getPid(), 0)) {
-                $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getClass()));
+                $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getJob()));
                 $execution
                     ->setState(Execution::STATE_STALE)
                     ->setPid(null);

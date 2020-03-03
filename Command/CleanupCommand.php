@@ -29,20 +29,15 @@ namespace whatwedo\CronBundle\Command;
 
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Exception\InvalidOptionException;
-use Symfony\Component\Console\Input\InputOption;
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Manager\ExecutionManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 /**
  * Class SchedulerCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class CleanupCommand extends Command
 {
@@ -54,8 +49,6 @@ class CleanupCommand extends Command
 
     /**
      * CleanupCommand constructor.
-     *
-     * @param ExecutionRepository $executionRepository
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -80,10 +73,7 @@ class CleanupCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

@@ -28,26 +28,21 @@
 namespace whatwedo\CronBundle\Entity;
 
 use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
 use Doctrine\ORM\Mapping as ORM;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 
 /**
  * Class Execution
- *
- * @package whatwedo\CronBundle\Entity
  *
  * @ORM\Table(name="whatwedo_cron_execution")
  * @ORM\Entity(repositoryClass="whatwedo\CronBundle\Repository\ExecutionRepository")
  */
 class Execution
 {
-    const STATE_RUNNING = 'running';
-
-    const STATE_FINISHED = 'finished';
-
-    const STATE_STALE = 'stale';
-
-    const STATE_TERMINATED = 'terminated';
+    public const STATE_RUNNING = 'running';
+    public const STATE_FINISHED = 'finished';
+    public const STATE_STALE = 'stale';
+    public const STATE_TERMINATED = 'terminated';
 
     /**
      * @var int|null
@@ -70,7 +65,7 @@ class Execution
      *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $class;
+    protected $job;
 
     /**
      * @var string[]|null
@@ -142,49 +137,30 @@ class Execution
         $this->updatedAt = new DateTime();
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string|null
-     */
     public function getState(): ?string
     {
         return $this->state;
     }
 
-    /**
-     * @param string|null $state
-     *
-     * @return self
-     */
     public function setState(?string $state): self
     {
         $this->state = $state;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getClass(): ?string
+    public function getJob(): ?string
     {
-        return $this->class;
+        return $this->job;
     }
 
-    /**
-     * @param string|null $class
-     *
-     * @return self
-     */
-    public function setClass(?string $class): self
+    public function setJob(?string $job): self
     {
-        $this->class = $class;
+        $this->job = $job;
         return $this;
     }
 
@@ -198,8 +174,6 @@ class Execution
 
     /**
      * @param string[]|null $command
-     *
-     * @return self
      */
     public function setCommand(?array $command): self
     {
@@ -207,161 +181,94 @@ class Execution
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getStartedAt(): ?DateTime
     {
         return $this->startedAt;
     }
 
-    /**
-     * @param \DateTime|null $startedAt
-     *
-     * @return self
-     */
     public function setStartedAt(?DateTime $startedAt): self
     {
         $this->startedAt = $startedAt;
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @param \DateTime|null $updatedAt
-     *
-     * @return self
-     */
     public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
     public function getFinishedAt(): ?DateTime
     {
         return $this->finishedAt;
     }
 
-    /**
-     * @param \DateTime|null $finishedAt
-     *
-     * @return self
-     */
     public function setFinishedAt(?DateTime $finishedAt): self
     {
         $this->finishedAt = $finishedAt;
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getPid(): ?int
     {
         return $this->pid;
     }
 
-    /**
-     * @param int|null $pid
-     *
-     * @return self
-     */
     public function setPid(?int $pid): self
     {
         $this->pid = $pid;
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getExitCode(): ?int
     {
         return $this->exitCode;
     }
 
-    /**
-     * @param int|null $exitCode
-     *
-     * @return self
-     */
     public function setExitCode(?int $exitCode): self
     {
         $this->exitCode = $exitCode;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getStdout(): ?string
     {
         return $this->stdout;
     }
 
-    /**
-     * @param string|null $stdout
-     *
-     * @return self
-     */
     public function setStdout(?string $stdout): self
     {
         $this->stdout = $stdout;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getStderr(): ?string
     {
         return $this->stderr;
     }
 
-    /**
-     * @param string|null $stderr
-     *
-     * @return self
-     */
     public function setStderr(?string $stderr): self
     {
         $this->stderr = $stderr;
         return $this;
     }
 
-    /**
-     * @return CronJobInterface|null
-     */
     public function getCronJob(): ?CronJobInterface
     {
         return $this->cronJob;
     }
 
-    /**
-     * @param CronJobInterface|null $cronJob
-     *
-     * @return self
-     */
     public function setCronJob(?CronJobInterface $cronJob): self
     {
         $this->cronJob = $cronJob;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return '#'.str_pad($this->getId(), 6, '0', STR_PAD_LEFT);

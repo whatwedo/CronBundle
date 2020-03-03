@@ -28,21 +28,19 @@
 namespace whatwedo\CronBundle\Command;
 
 use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
-use whatwedo\CronBundle\Manager\CronJobManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
+use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class ExecuteCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class ExecuteCommand extends Command
 {
@@ -51,17 +49,14 @@ class ExecuteCommand extends Command
      * @var CronJobManager
      */
     protected $cronJobManager;
-
     /**
      * @var EntityManagerInterface
      */
     protected $em;
-
     /**
      * @var string
      */
     protected $projectDir;
-
     /**
      * @var string
      */
@@ -69,11 +64,6 @@ class ExecuteCommand extends Command
 
     /**
      * ExecuteCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
-     * @param EntityManagerInterface $em
-     * @param string $projectDir
-     * @param string $environment
      */
     public function __construct(CronJobManager $cronJobManager, EntityManagerInterface $em, string $projectDir, string $environment)
     {
@@ -84,11 +74,6 @@ class ExecuteCommand extends Command
         $this->environment = $environment;
     }
 
-    /**
-     * @param Execution $execution
-     * @param CronJobInterface $cronJob
-     * @param Process $process
-     */
     public function checkMaxRuntime(Execution $execution, CronJobInterface $cronJob, Process $process): void
     {
         if (!$cronJob->getMaxRuntime()) {
@@ -119,12 +104,6 @@ class ExecuteCommand extends Command
             ->setHidden(true);
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition
@@ -135,7 +114,7 @@ class ExecuteCommand extends Command
 
         // Create execution
         $execution = new Execution();
-        $execution->setClass(get_class($cronJob))
+        $execution->setJob(get_class($cronJob))
             ->setCommand($command);
         $this->em->persist($execution);
         $this->em->flush($execution);
