@@ -28,23 +28,17 @@
 namespace whatwedo\CronBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use whatwedo\CronBundle\Entity\Status;
 
 /**
  * Class StatusRepository
+ *
+ * @method Status|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Status|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Status|null findOneByClass(string $class, array $orderBy = null)
+ * @method Status[]    findAll()
+ * @method Status[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class StatusRepository extends EntityRepository
 {
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findOneByClass(string $class): ?Status
-    {
-        return $this->createQueryBuilder('s')
-            ->where('s.class = :class')
-            ->setParameter('class', $class)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
 }
