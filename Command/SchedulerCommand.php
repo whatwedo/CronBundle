@@ -80,7 +80,7 @@ class SchedulerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get max runtime
-        $maxRuntime = intval($input->getOption('max-runtime'));
+        $maxRuntime = (int)$input->getOption('max-runtime');
         if ($maxRuntime < 60) {
             throw new InvalidOptionException('Max runtime needs to be at least 60 seconds');
         }
