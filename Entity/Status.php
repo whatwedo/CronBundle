@@ -33,8 +33,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Class Execution
  *
- * @package whatwedo\CronBundle\Entity
- *
  * @ORM\Table(name="whatwedo_cron_status")
  * @ORM\Entity(repositoryClass="whatwedo\CronBundle\Repository\StatusRepository")
  * @UniqueEntity("class")
@@ -64,46 +62,27 @@ class Status
      */
     protected $active;
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return $this->class;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return self
-     */
     public function setClass(string $class): self
     {
         $this->class = $class;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getActive(): bool
     {
         return $this->active;
     }
 
-    /**
-     * @param bool $active
-     *
-     * @return self
-     */
     public function setActive(bool $active): self
     {
         $this->active = $active;

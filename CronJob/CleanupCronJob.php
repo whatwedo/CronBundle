@@ -30,12 +30,13 @@ namespace whatwedo\CronBundle\CronJob;
 use App\Command\CourseSyncCommand;
 use whatwedo\CronBundle\Command\CleanupCommand;
 
+/**
+ * Class CleanupCronJob
+ */
 class CleanupCronJob
 {
     /**
      * Returns command name
-     *
-     * @return string
      */
     public function getCommand(): string
     {
@@ -44,8 +45,6 @@ class CleanupCronJob
 
     /**
      * Returns cron expression
-     *
-     * @return string
      */
     public function getExpression(): string
     {

@@ -34,8 +34,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CheckCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class CheckCommand extends Command
 {
@@ -47,8 +45,6 @@ class CheckCommand extends Command
 
     /**
      * CheckCommand constructor.
-     *
-     * @param ExecutionManager $executionManager
      */
     public function __construct(ExecutionManager $executionManager)
     {

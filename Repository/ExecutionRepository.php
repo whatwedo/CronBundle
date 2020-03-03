@@ -35,14 +35,10 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * Class ExecutionRepository
- *
- * @package whatwedo\CronBundle\Repository
  */
 class ExecutionRepository extends EntityRepository
 {
     /**
-     * @param string $state
-     *
      * @return Collection|Execution[]
      */
     public function findByState(string $state)
@@ -54,11 +50,6 @@ class ExecutionRepository extends EntityRepository
             ->getResult();
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return Execution|null
-     */
     public function findLastExecution(CronJobInterface $cronJob): ?Execution
     {
         return $this->createQueryBuilder('e')

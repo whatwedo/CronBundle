@@ -38,8 +38,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class SchedulerCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class SchedulerCommand extends Command
 {
@@ -61,9 +59,6 @@ class SchedulerCommand extends Command
 
     /**
      * SchedulerCommand constructor.
-     *
-     * @param LoggerInterface $logger
-     * @param ExecutionManager $executionManager
      */
     public function __construct(LoggerInterface $logger, EntityManagerInterface $em, ExecutionManager $executionManager)
     {

@@ -31,8 +31,6 @@ use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class AbstractCronJob
- *
- * @package whatwedo\CronBundle\CronJob
  */
 abstract class AbstractCronJob implements CronJobInterface
 {
@@ -53,8 +51,6 @@ abstract class AbstractCronJob implements CronJobInterface
 
     /**
      * Returns command description
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
@@ -74,17 +70,12 @@ abstract class AbstractCronJob implements CronJobInterface
 
     /**
      * Returns max runtime in seconds
-     *
-     * @return int
      */
     public function getMaxRuntime(): ?int
     {
         return null;
     }
 
-    /**
-     * @return bool
-     */
     public function isParallelAllowed(): bool
     {
         return true;

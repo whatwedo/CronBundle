@@ -37,8 +37,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class ExecutionSubscriber
- *
- * @package whatwedo\CronBundle\EventListener
  */
 class ExecutionSubscriber implements EventSubscriber
 {
@@ -54,9 +52,6 @@ class ExecutionSubscriber implements EventSubscriber
 
     /**
      * ExecutionSubscriber constructor.
-     *
-     * @param LoggerInterface $logger
-     * @param CronJobManager $cronJobManager
      */
     public function __construct(LoggerInterface $logger, CronJobManager $cronJobManager)
     {
@@ -76,9 +71,6 @@ class ExecutionSubscriber implements EventSubscriber
         ];
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
     public function postLoad(LifecycleEventArgs $args): void
     {
         // Only apply on entities which are instance of Execution

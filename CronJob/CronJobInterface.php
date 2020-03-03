@@ -29,29 +29,21 @@ namespace whatwedo\CronBundle\CronJob;
 
 /**
  * Interface CronJobInterface
- *
- * @package whatwedo\CronBundle\CronJob
  */
 interface CronJobInterface
 {
     /**
      * Returns command description
-     *
-     * @return string
      */
     public function getDescription();
 
     /**
      * Returns command name
-     *
-     * @return string
      */
     public function getCommand(): string;
 
     /**
      * Returns cron expression
-     *
-     * @return string
      */
     public function getExpression(): string;
 
@@ -64,15 +56,11 @@ interface CronJobInterface
 
     /**
      * Returns max runtime in seconds
-     *
-     * @return int
      */
     public function getMaxRuntime(): ?int;
 
     /**
      * Allow parallel execution or wait until finished
-     *
-     * @return bool
      */
     public function isParallelAllowed(): bool;
 }

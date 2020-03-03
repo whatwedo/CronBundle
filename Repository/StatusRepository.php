@@ -33,16 +33,10 @@ use whatwedo\CronBundle\Entity\Status;
 
 /**
  * Class StatusRepository
- *
- * @package whatwedo\CronBundle\Repository
  */
 class StatusRepository extends EntityRepository
 {
     /**
-     * @param string $class
-     *
-     * @return Status|null
-     *
      * @throws NonUniqueResultException
      */
     public function findOneByClass(string $class): ?Status

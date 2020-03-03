@@ -35,8 +35,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Class whatwedoCronExtension
- *
- * @package whatwedo\CronBundle\DependencyInjection
  */
 class whatwedoCronExtension extends Extension
 {
