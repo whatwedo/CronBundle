@@ -30,6 +30,7 @@ namespace whatwedo\CronBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class CronJobPass
@@ -41,10 +42,10 @@ class CronJobPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has('whatwedo\CronBundle\Manager\CronJobManager')) {
+        if (!$container->has(CronJobManager::class)) {
             return;
         }
-        $definition = $container->findDefinition('whatwedo\CronBundle\Manager\CronJobManager');
+        $definition = $container->findDefinition(CronJobManager::class);
 
         $taggedServices = $container->findTaggedServiceIds('whatwedo.cron.job');
         foreach (array_keys($taggedServices) as $id) {
