@@ -28,15 +28,15 @@
 namespace whatwedo\CronBundle\Command;
 
 use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Manager\CronJobManager;
-use whatwedo\CronBundle\Manager\ExecutionManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Manager\CronJobManager;
+use whatwedo\CronBundle\Manager\ExecutionManager;
 
 /**
  * Class InfoCommand

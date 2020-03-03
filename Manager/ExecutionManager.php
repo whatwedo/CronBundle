@@ -27,13 +27,13 @@
 
 namespace whatwedo\CronBundle\Manager;
 
-use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
 use Cocur\BackgroundProcess\BackgroundProcess;
 use Cron\CronExpression;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 
 /**
  * Class ExecutionManager

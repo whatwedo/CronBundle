@@ -27,13 +27,13 @@
 
 namespace whatwedo\CronBundle\EventListener;
 
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Exception\CronJobNotFoundException;
-use whatwedo\CronBundle\Manager\CronJobManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
+use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Exception\CronJobNotFoundException;
+use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class ExecutionSubscriber
