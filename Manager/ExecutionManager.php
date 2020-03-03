@@ -178,9 +178,9 @@ class ExecutionManager
     {
         $executions = $this->em->getRepository(Execution::class)->findByState(Execution::STATE_RUNNING);
         foreach ($executions as $execution) {
-            $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getClass()));
+            $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getJob()));
             if (!posix_kill($execution->getPid(), 0)) {
-                $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getClass()));
+                $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getJob()));
                 $execution
                     ->setState(Execution::STATE_STALE)
                     ->setPid(null);

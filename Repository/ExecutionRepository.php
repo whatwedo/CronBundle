@@ -53,10 +53,10 @@ class ExecutionRepository extends EntityRepository
     public function findLastExecution(CronJobInterface $cronJob): ?Execution
     {
         return $this->createQueryBuilder('e')
-            ->where('e.class = :class')
+            ->where('e.job = :job')
             ->orderBy('e.startedAt', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('class', get_class($cronJob))
+            ->setParameter('job', get_class($cronJob))
             ->getQuery()
             ->getOneOrNullResult();
     }

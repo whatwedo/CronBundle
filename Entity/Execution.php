@@ -68,7 +68,7 @@ class Execution
      *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $class;
+    protected $job;
 
     /**
      * @var string[]|null
@@ -156,14 +156,14 @@ class Execution
         return $this;
     }
 
-    public function getClass(): ?string
+    public function getJob(): ?string
     {
-        return $this->class;
+        return $this->job;
     }
 
-    public function setClass(?string $class): self
+    public function setJob(?string $job): self
     {
-        $this->class = $class;
+        $this->job = $job;
         return $this;
     }
 

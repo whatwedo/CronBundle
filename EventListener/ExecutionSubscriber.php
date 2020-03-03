@@ -81,7 +81,7 @@ class ExecutionSubscriber implements EventSubscriber
 
         // Load cron job
         try {
-            $entity->setCronJob($this->cronJobManager->getCronJob($entity->getClass()));
+            $entity->setCronJob($this->cronJobManager->getCronJob($entity->getJob()));
         } catch (CronJobNotFoundException $ex) {
             $this->logger->warning($ex->getMessage());
         }
