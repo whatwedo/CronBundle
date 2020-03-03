@@ -35,8 +35,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class CronJobManager
- *
- * @package whatwedo\CronBundle\Manager
  */
 class CronJobManager
 {
@@ -52,8 +50,6 @@ class CronJobManager
 
     /**
      * CronJobManager constructor.
-     *
-     * @param KernelInterface $kernel
      */
     public function __construct(KernelInterface $kernel)
     {
@@ -74,11 +70,6 @@ class CronJobManager
         return $this->cronJobs;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return CronJobInterface
-     */
     public function getCronJob(string $class): CronJobInterface
     {
         foreach ($this->cronJobs as $cronJob) {
@@ -89,11 +80,6 @@ class CronJobManager
         throw new CronJobNotFoundException($class);
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return Command
-     */
     public function getCommandByCronJob(CronJobInterface $cronJob): Command
     {
         return $this->consoleApplication->find($cronJob->getCommand());

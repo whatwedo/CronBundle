@@ -35,8 +35,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ListCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class ListCommand extends Command
 {
@@ -48,8 +46,6 @@ class ListCommand extends Command
 
     /**
      * ListCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
      */
     public function __construct(CronJobManager $cronJobManager)
     {

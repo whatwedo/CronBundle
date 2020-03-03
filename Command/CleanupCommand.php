@@ -41,8 +41,6 @@ use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 /**
  * Class SchedulerCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class CleanupCommand extends Command
 {
@@ -54,8 +52,6 @@ class CleanupCommand extends Command
 
     /**
      * CleanupCommand constructor.
-     *
-     * @param ExecutionRepository $executionRepository
      */
     public function __construct(EntityManagerInterface $entityManager)
     {

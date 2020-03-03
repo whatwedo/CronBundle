@@ -29,8 +29,6 @@ namespace whatwedo\CronBundle\Exception;
 
 /**
  * Class BackgroundCommandException
- *
- * @package whatwedo\CronBundle\Exception
  */
 class BackgroundCommandException extends CronException
 {

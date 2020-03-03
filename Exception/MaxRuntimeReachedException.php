@@ -32,17 +32,11 @@ use whatwedo\CronBundle\Entity\Execution;
 
 /**
  * Class MaxRuntimeReachedException
- *
- * @package whatwedo\CronBundle\Exception
  */
 class MaxRuntimeReachedException extends CronException
 {
     /**
      * MaxRuntimeReachedException constructor.
-     *
-     * @param Execution $execution
-     * @param int $code
-     * @param \Throwable|null $previous
      */
     public function __construct(Execution $execution, int $code = 0, Throwable $previous = null)
     {

@@ -41,8 +41,6 @@ use Symfony\Component\Process\Process;
 
 /**
  * Class ExecuteCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class ExecuteCommand extends Command
 {
@@ -69,11 +67,6 @@ class ExecuteCommand extends Command
 
     /**
      * ExecuteCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
-     * @param EntityManagerInterface $em
-     * @param string $projectDir
-     * @param string $environment
      */
     public function __construct(CronJobManager $cronJobManager, EntityManagerInterface $em, string $projectDir, string $environment)
     {
@@ -84,11 +77,6 @@ class ExecuteCommand extends Command
         $this->environment = $environment;
     }
 
-    /**
-     * @param Execution $execution
-     * @param CronJobInterface $cronJob
-     * @param Process $process
-     */
     public function checkMaxRuntime(Execution $execution, CronJobInterface $cronJob, Process $process): void
     {
         if (!$cronJob->getMaxRuntime()) {

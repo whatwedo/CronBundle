@@ -40,8 +40,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class InfoCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class InfoCommand extends Command
 {
@@ -58,9 +56,6 @@ class InfoCommand extends Command
 
     /**
      * InfoCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
-     * @param string $projectDir
      */
     public function __construct(CronJobManager $cronJobManager, ExecutionManager $executionManager)
     {
@@ -113,8 +108,6 @@ class InfoCommand extends Command
 
     /**
      * @param CronJobInterface $cronJob
-     *
-     * @return string|null
      */
     protected function getLastExecutionDateString(CronJobInterface $cronJob): ?string
     {
@@ -127,8 +120,6 @@ class InfoCommand extends Command
 
     /**
      * @param CronJobInterface $cronJob
-     *
-     * @return string|null
      */
     protected function getNextExecutionDateString(CronJobInterface $cronJob): ?string
     {
@@ -148,8 +139,6 @@ class InfoCommand extends Command
 
     /**
      * @param \DateTime $date
-     *
-     * @return string|null
      */
     protected function getFormattedDate(DateTime $date): ?string
     {
@@ -161,8 +150,6 @@ class InfoCommand extends Command
 
     /**
      * @param CronJobInterface $cronJob
-     *
-     * @return string
      */
     protected function getLockStatus(CronJobInterface $cronJob): string
     {

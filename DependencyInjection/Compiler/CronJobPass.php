@@ -33,8 +33,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class CronJobPass
- *
- * @package whatwedo\CronBundle\DependencyInjection\Compiler
  */
 class CronJobPass implements CompilerPassInterface
 {

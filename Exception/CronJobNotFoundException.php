@@ -28,10 +28,9 @@
 namespace whatwedo\CronBundle\Exception;
 
 use Throwable;
+
 /**
  * Class CronJobNotFoundException
- *
- * @package whatwedo\CronBundle\Exception
  */
 class CronJobNotFoundException extends CronException
 {
