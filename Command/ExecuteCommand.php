@@ -34,6 +34,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
@@ -74,7 +75,7 @@ class ExecuteCommand extends Command
         $this->environment = $environment;
     }
 
-    public function checkMaxRuntime(Execution $execution, CronJobInterface $cronJob, Process $process): void
+    public function checkMaxRuntime(Execution $execution, CronInterface $cronJob, Process $process): void
     {
         if (!$cronJob->getMaxRuntime()) {
             return;
@@ -110,7 +111,7 @@ class ExecuteCommand extends Command
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
 
         // Build command to execute
-        $command = array_merge(['bin/console', $cronJob->getCommand(), '--env='.$this->environment], $cronJob->getArguments());
+        $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env='.$this->environment], $this->getCronArguments($cronJob));
 
         // Create execution
         $execution = new Execution();
@@ -146,5 +147,30 @@ class ExecuteCommand extends Command
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
         return 0;
+    }
+
+    protected function getCronCommand(CronInterface $cron): string
+    {
+        if ($cron instanceof CronJobInterface) {
+            return $cron->getCommand();
+        }
+
+        if ($cron instanceof Command) {
+            return $cron->getDefaultName();
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getCronArguments(CronInterface $cron): array
+    {
+        if ($cron instanceof CronJobInterface) {
+            return $cron->getArguments();
+        }
+
+        return [];
     }
 }

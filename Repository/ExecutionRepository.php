@@ -30,7 +30,7 @@ namespace whatwedo\CronBundle\Repository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
 /**
@@ -50,7 +50,7 @@ class ExecutionRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findLastExecution(CronJobInterface $cronJob): ?Execution
+    public function findLastExecution(CronInterface $cronJob): ?Execution
     {
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
