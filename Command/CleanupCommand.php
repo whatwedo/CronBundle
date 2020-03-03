@@ -29,14 +29,11 @@ namespace whatwedo\CronBundle\Command;
 
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Exception\InvalidOptionException;
-use Symfony\Component\Console\Input\InputOption;
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Manager\ExecutionManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 /**

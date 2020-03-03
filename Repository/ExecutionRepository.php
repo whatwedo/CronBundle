@@ -28,10 +28,10 @@
 namespace whatwedo\CronBundle\Repository;
 
 use DateTimeInterface;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\Entity\Execution;
 
 /**
  * Class ExecutionRepository

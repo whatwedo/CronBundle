@@ -28,16 +28,16 @@
 namespace whatwedo\CronBundle\Command;
 
 use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
-use whatwedo\CronBundle\Manager\CronJobManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
+use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class ExecuteCommand

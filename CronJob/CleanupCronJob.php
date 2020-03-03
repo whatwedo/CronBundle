@@ -27,7 +27,6 @@
 
 namespace whatwedo\CronBundle\CronJob;
 
-use App\Command\CourseSyncCommand;
 use whatwedo\CronBundle\Command\CleanupCommand;
 
 /**

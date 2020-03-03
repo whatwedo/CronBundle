@@ -27,11 +27,11 @@
 
 namespace whatwedo\CronBundle\Manager;
 
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
+use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 
 /**
  * Class CronJobManager

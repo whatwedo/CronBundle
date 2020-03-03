@@ -28,8 +28,8 @@
 namespace whatwedo\CronBundle\Entity;
 
 use DateTime;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
 use Doctrine\ORM\Mapping as ORM;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 
 /**
  * Class Execution
