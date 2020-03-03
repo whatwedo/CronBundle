@@ -118,7 +118,7 @@ class ExecutionManager
         $this->logger->debug(sprintf('Checking if execution of %s is needed', get_class($cronJob)));
 
         // Check if cron is disabled.
-        if (false === $cronJob->isActive()) {
+        if (!$cronJob->isActive()) {
             $this->logger->debug(sprintf('%s do not need to run. It\'s disabled.', get_class($cronJob)));
             return false;
         }
