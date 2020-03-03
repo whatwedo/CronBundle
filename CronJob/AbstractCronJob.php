@@ -80,4 +80,9 @@ abstract class AbstractCronJob implements CronJobInterface
     {
         return true;
     }
+
+    public function isActive(): bool
+    {
+        return true;
+    }
 }

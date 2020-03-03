@@ -63,4 +63,9 @@ interface CronJobInterface
      * Allow parallel execution or wait until finished
      */
     public function isParallelAllowed(): bool;
+
+    /**
+     * Returns if the Job is enabled or not
+     */
+    public function isActive(): bool;
 }
