@@ -39,13 +39,10 @@ use whatwedo\CronBundle\CronJob\CronJobInterface;
  */
 class Execution
 {
-    const STATE_RUNNING = 'running';
-
-    const STATE_FINISHED = 'finished';
-
-    const STATE_STALE = 'stale';
-
-    const STATE_TERMINATED = 'terminated';
+    public const STATE_RUNNING = 'running';
+    public const STATE_FINISHED = 'finished';
+    public const STATE_STALE = 'stale';
+    public const STATE_TERMINATED = 'terminated';
 
     /**
      * @var int|null

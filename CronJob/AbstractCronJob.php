@@ -54,8 +54,7 @@ abstract class AbstractCronJob implements CronJobInterface
      */
     public function getDescription(): ?string
     {
-        $command = $this->cronJobManager->getCommandByCronJob($this);
-        return $command->getDescription();
+        return $this->cronJobManager->getCommandByCronJob($this)->getDescription();
     }
 
     /**
