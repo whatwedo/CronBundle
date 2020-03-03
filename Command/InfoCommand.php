@@ -110,7 +110,7 @@ class InfoCommand extends Command
 
     protected function getNextExecutionDateString(CronJobInterface $cronJob): ?string
     {
-        if (false === $cronJob->isActive()) {
+        if (!$cronJob->isActive()) {
             return 'Disabled';
         }
         $nextExecutionDate = $this->executionManager->getNextExecutionDate($cronJob);
