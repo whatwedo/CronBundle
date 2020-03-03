@@ -107,8 +107,9 @@ class ExecutionManager
         if (!$lastExecutionDate) {
             return null;
         }
-        $cron = CronExpression::factory($cronJob->getExpression());
-        return $cron->getNextRunDate($this->getLastExecutionDate($cronJob));
+
+        return CronExpression::factory($cronJob->getExpression())
+                             ->getNextRunDate($this->getLastExecutionDate($cronJob));
     }
 
     public function isRunNeeded(CronJobInterface $cronJob): bool
