@@ -49,17 +49,14 @@ class ExecuteCommand extends Command
      * @var CronJobManager
      */
     protected $cronJobManager;
-
     /**
      * @var EntityManagerInterface
      */
     protected $em;
-
     /**
      * @var string
      */
     protected $projectDir;
-
     /**
      * @var string
      */
@@ -107,12 +104,6 @@ class ExecuteCommand extends Command
             ->setHidden(true);
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition

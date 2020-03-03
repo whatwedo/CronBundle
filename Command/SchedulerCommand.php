@@ -46,12 +46,10 @@ class SchedulerCommand extends Command
      * @var LoggerInterface
      */
     protected $logger;
-
     /**
      * @var EntityManagerInterface
      */
     protected $em;
-
     /**
      * @var ExecutionManager
      */
@@ -79,12 +77,6 @@ class SchedulerCommand extends Command
             ->addOption('max-runtime', null, InputOption::VALUE_OPTIONAL, 'Max runtime of scheduler in secords', 600);
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get max runtime

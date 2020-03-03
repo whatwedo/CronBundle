@@ -42,7 +42,6 @@ class CronJobManager
      * @var Application
      */
     protected $consoleApplication;
-
     /**
      * @var CronJobInterface[]
      */
