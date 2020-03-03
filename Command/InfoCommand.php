@@ -48,7 +48,6 @@ class InfoCommand extends Command
      * @var CronJobManager
      */
     protected $cronJobManager;
-
     /**
      * @var ExecutionManager
      */
@@ -75,12 +74,6 @@ class InfoCommand extends Command
             ->addArgument('cron_job', InputArgument::REQUIRED, 'Class of cron job to execute');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition
@@ -106,9 +99,6 @@ class InfoCommand extends Command
         return 0;
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     */
     protected function getLastExecutionDateString(CronJobInterface $cronJob): ?string
     {
         $lastExecutionDate = $this->executionManager->getLastExecutionDate($cronJob);
@@ -118,9 +108,6 @@ class InfoCommand extends Command
         return $this->getFormattedDate($lastExecutionDate);
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     */
     protected function getNextExecutionDateString(CronJobInterface $cronJob): ?string
     {
         if (false === $cronJob->isActive()) {
@@ -137,9 +124,6 @@ class InfoCommand extends Command
         return $this->getFormattedDate($nextExecutionDate);
     }
 
-    /**
-     * @param \DateTime $date
-     */
     protected function getFormattedDate(DateTime $date): ?string
     {
         if (!$date) {
@@ -148,9 +132,6 @@ class InfoCommand extends Command
         return $date->format('Y-m-d H:i:s');
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     */
     protected function getLockStatus(CronJobInterface $cronJob): string
     {
         if ($cronJob->isParallelAllowed()) {

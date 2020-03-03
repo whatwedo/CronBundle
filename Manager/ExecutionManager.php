@@ -44,22 +44,18 @@ class ExecutionManager
      * @var LoggerInterface
      */
     protected $logger;
-
     /**
      * @var EntityManagerInterface
      */
     protected $em;
-
     /**
      * @var CronJobManager
      */
     protected $cronJobManager;
-
     /**
      * @var string
      */
     protected $projectDir;
-
     /**
      * @var string
      */
@@ -103,7 +99,7 @@ class ExecutionManager
     }
 
     /**
-     * Return date of nxex execution or null if there is no previous run (run needed).
+     * Return date of next execution or null if there is no previous run (run needed).
      */
     public function getNextExecutionDate(CronJobInterface $cronJob): ?DateTime
     {

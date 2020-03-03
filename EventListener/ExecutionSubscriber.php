@@ -44,7 +44,6 @@ class ExecutionSubscriber implements EventSubscriber
      * @var LoggerInterface
      */
     protected $logger;
-
     /**
      * @var CronJobManager
      */

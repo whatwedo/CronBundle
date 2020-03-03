@@ -63,12 +63,6 @@ class ListCommand extends Command
             ->setDescription('List all cron jobs');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);
