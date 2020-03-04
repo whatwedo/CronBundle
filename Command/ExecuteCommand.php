@@ -146,7 +146,7 @@ class ExecuteCommand extends Command
             $this->em->flush($execution);
         }
 
-        if ('' !== $process->getErrorOutput()) {
+        if (!$process->isSuccessful()) {
             $this->eventDispatcher->dispatch(new CronErrorEvent($cronJob, $process->getErrorOutput()), CronErrorEvent::NAME);
         }
 
