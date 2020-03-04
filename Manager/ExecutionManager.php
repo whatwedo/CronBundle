@@ -32,8 +32,8 @@ use Cron\CronExpression;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
 
 /**
  * Class ExecutionManager
@@ -89,7 +89,7 @@ class ExecutionManager
     /**
      * Return date of last execution or null if there is no previous run.
      */
-    public function getLastExecutionDate(CronJobInterface $cronJob): ?DateTime
+    public function getLastExecutionDate(CronInterface $cronJob): ?DateTime
     {
         $lastExecution = $this->getLastExecution($cronJob);
         if (!$lastExecution) {
@@ -101,7 +101,7 @@ class ExecutionManager
     /**
      * Return date of next execution or null if there is no previous run (run needed).
      */
-    public function getNextExecutionDate(CronJobInterface $cronJob): ?DateTime
+    public function getNextExecutionDate(CronInterface $cronJob): ?DateTime
     {
         $lastExecutionDate = $this->getLastExecutionDate($cronJob);
         if (!$lastExecutionDate) {
@@ -112,7 +112,7 @@ class ExecutionManager
                              ->getNextRunDate($this->getLastExecutionDate($cronJob));
     }
 
-    public function isRunNeeded(CronJobInterface $cronJob): bool
+    public function isRunNeeded(CronInterface $cronJob): bool
     {
         // Debug log
         $this->logger->debug(sprintf('Checking if execution of %s is needed', get_class($cronJob)));
@@ -153,12 +153,12 @@ class ExecutionManager
         return true;
     }
 
-    public function getLastExecution(CronJobInterface $cronJob): ?Execution
+    public function getLastExecution(CronInterface $cronJob): ?Execution
     {
         return $this->em->getRepository(Execution::class)->findLastExecution($cronJob);
     }
 
-    protected function schedule(CronJobInterface $cronJob): void
+    protected function schedule(CronInterface $cronJob): void
     {
         $this->logger->info(sprintf('Scheduling execution of %s', get_class($cronJob)));
         $process = new BackgroundProcess($this->projectDir.'/bin/console whatwedo:cron:execute \''.get_class($cronJob).'\' --env='.$this->environment);
