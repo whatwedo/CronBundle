@@ -121,3 +121,13 @@ The command has an optional parameter `--max-runtime [seconds]` that defines how
 For a one off execution of a CronJob use the Command `php bin/console whatwedo:cron:execute [CronJob]`.
 
 > The one of command does not check the CronJob expression. The CronJob will run like a Symfony command.
+
+## Events
+
+The bundle provides 3 events, that will be triggered in different stages of the CronJob execution.
+
+| event                  | stage                                     |
+| ---------------------- | ----------------------------------------- |
+| whatwedo.cron.start    | CronJob execution started                 |
+| whatwedo.cron.finished | CronJob execution finished                |
+| whatwedo.cron.error    | An error occurred while CronJob execution |
