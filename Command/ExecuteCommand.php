@@ -100,9 +100,8 @@ class ExecuteCommand extends Command
     {
         parent::configure();
         $this->setName('whatwedo:cron:execute')
-            ->setDescription('Execute cron job (internal use only)')
-            ->addArgument('cron_job', InputArgument::REQUIRED, 'Class of cron job to execute')
-            ->setHidden(true);
+            ->setDescription('Execute cron job')
+            ->addArgument('cron_job', InputArgument::REQUIRED, 'Class of cron job to execute');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
