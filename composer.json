@@ -19,6 +19,7 @@
         "doctrine/orm": "~2.6",
         "dragonmantank/cron-expression": "~2.2",
         "symfony/console": "*",
+        "symfony/event-dispatcher": "~4.2|~5.0",
         "symfony/framework-bundle": "~4.2|~5.0",
         "symfony/process": "*",
         "symfony/validator": "~4.2|~5.0"

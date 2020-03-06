@@ -33,10 +33,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Event\CronErrorEvent;
+use whatwedo\CronBundle\Event\CronFinishEvent;
+use whatwedo\CronBundle\Event\CronStartEvent;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
@@ -55,6 +59,10 @@ class ExecuteCommand extends Command
      */
     protected $em;
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+    /**
      * @var string
      */
     protected $projectDir;
@@ -66,10 +74,11 @@ class ExecuteCommand extends Command
     /**
      * ExecuteCommand constructor.
      */
-    public function __construct(CronJobManager $cronJobManager, EntityManagerInterface $em, string $projectDir, string $environment)
+    public function __construct(CronJobManager $cronJobManager, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, string $projectDir, string $environment)
     {
         parent::__construct();
         $this->em = $em;
+        $this->eventDispatcher = $eventDispatcher;
         $this->projectDir = $projectDir;
         $this->cronJobManager = $cronJobManager;
         $this->environment = $environment;
@@ -125,6 +134,7 @@ class ExecuteCommand extends Command
         $process->start();
         $execution->setPid($process->getPid());
         $this->em->flush($execution);
+        $this->eventDispatcher->dispatch(new CronStartEvent($cronJob), CronStartEvent::NAME);
 
         // Update command output every 5 seconds
         while ($process->isRunning()) {
@@ -134,6 +144,10 @@ class ExecuteCommand extends Command
             $execution->setStdout($process->getOutput())
                 ->setStderr($process->getErrorOutput());
             $this->em->flush($execution);
+        }
+
+        if (!$process->isSuccessful()) {
+            $this->eventDispatcher->dispatch(new CronErrorEvent($cronJob, $process->getErrorOutput()), CronErrorEvent::NAME);
         }
 
         // Finish execution
@@ -146,6 +160,7 @@ class ExecuteCommand extends Command
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
+        $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
         return 0;
     }
 
