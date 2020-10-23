@@ -167,7 +167,7 @@ class ExecuteCommand extends Command
      * @param string[] $arguments
      */
     protected function applyLastExecutionTimestamp(CronJobInterface $cronJob) {
-        $arguments = $cronJob->getCronArguments();
+        $arguments = $cronJob->getArguments();
         $lastExecution = $this->getLastExecution($cronJob);
         $i = -1;
         if ($arguments && in_array('--last-run', $arguments)) {
@@ -220,6 +220,5 @@ class ExecuteCommand extends Command
         }
 
         return [];
->>>>>>> 76de0f0 (feat: Add interface to allow execution of CronJobs directly from Comands)
     }
 }

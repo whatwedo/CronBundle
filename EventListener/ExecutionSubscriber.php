@@ -28,7 +28,7 @@
 namespace whatwedo\CronBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
 use whatwedo\CronBundle\Entity\Execution;
