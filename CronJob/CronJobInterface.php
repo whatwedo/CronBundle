@@ -39,7 +39,7 @@ interface CronJobInterface
      *
      * @return string
      */
-    public function getDescription(): ?string;
+    public function getDescription();
 
     /**
      * Returns command name
