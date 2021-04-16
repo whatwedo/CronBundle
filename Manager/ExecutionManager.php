@@ -143,6 +143,11 @@ class ExecutionManager
         // Debug log
         $this->logger->debug(sprintf('Checking if execution of %s is needed', get_class($cronJob)));
 
+        if (!$cronJob->getExpression()) {
+            $this->logger->debug(sprintf('%s is not active.', get_class($cronJob)));
+            return false;
+        }
+
         // Get next execution date
         $nextExecutionDate = $this->getNextExecutionDate($cronJob);
         if (!$nextExecutionDate) {
