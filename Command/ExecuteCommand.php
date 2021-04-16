@@ -129,7 +129,8 @@ class ExecuteCommand extends Command
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
 
         // Build command to execute
-        $command = array_merge(['bin/console', $cronJob->getCommand(), '--env='.$this->environment], $cronJob->getArguments());
+        $arguments = $this->prepareArguments($cronJob);
+        $command = array_merge(['bin/console', $cronJob->getCommand(), '--env='.$this->environment], $arguments);
 
         // Create execution
         $execution = new Execution();
@@ -164,5 +165,33 @@ class ExecuteCommand extends Command
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
+    }
+
+    /**
+     * @param string[] $arguments
+     */
+    protected function prepareArguments(CronJobInterface $cronJob) {
+        $arguments = $cronJob->getArguments();
+        $lastExecution = $this->getLastExecution($cronJob);
+        if ($lastExecution && $arguments && in_array('--last-run', $arguments)) {
+            // add last-run timestamp
+            $index = array_search('--last-run', $arguments);
+            array_splice($arguments, $index + 1, 0, $lastExecution->getStartedAt()->getTimestamp());
+        } else if (!$lastExecution && $arguments && in_array('--last-run', $arguments)) {
+            // remove --last-run argument if timestamp not available
+            $index = array_search('--last-run', $arguments);
+            unset($arguments[$index]);
+        }
+        return $arguments;
+    }
+
+    /**
+     * @param CronJobInterface $cronJob
+     *
+     * @return Execution|null
+     */
+    public function getLastExecution(CronJobInterface $cronJob): ?Execution
+    {
+        return $this->em->getRepository(Execution::class)->findLastExecution($cronJob);
     }
 }
