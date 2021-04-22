@@ -129,7 +129,7 @@ class ExecuteCommand extends Command
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
 
         // Build command to execute
-        $arguments = $this->prepareArguments($cronJob);
+        $arguments = $this->applyLastExecutionTimestamp($cronJob);
         $command = array_merge(['bin/console', $cronJob->getCommand(), '--env='.$this->environment], $arguments);
 
         // Create execution

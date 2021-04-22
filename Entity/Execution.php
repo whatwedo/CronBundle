@@ -358,6 +358,16 @@ class Execution
         return $this;
     }
 
+    public function getRuntime(): int
+    {
+        $startedAt = $this->getStartedAt();
+        $finishedAt = $this->getFinishedAt();
+        if ($startedAt && $finishedAt) {
+            return $finishedAt->getTimestamp() - $startedAt->getTimestamp();
+        }
+        return -1;
+    }
+
     /**
      * @return string
      */
