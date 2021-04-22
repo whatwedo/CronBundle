@@ -170,17 +170,23 @@ class ExecuteCommand extends Command
     /**
      * @param string[] $arguments
      */
-    protected function prepareArguments(CronJobInterface $cronJob) {
+    protected function applyLastExecutionTimestamp(CronJobInterface $cronJob) {
         $arguments = $cronJob->getArguments();
         $lastExecution = $this->getLastExecution($cronJob);
-        if ($lastExecution && $arguments && in_array('--last-run', $arguments)) {
-            // add last-run timestamp
-            $index = array_search('--last-run', $arguments);
-            array_splice($arguments, $index + 1, 0, $lastExecution->getStartedAt()->getTimestamp());
+        $i = -1;
+        if ($arguments && in_array('--last-run', $arguments)) {
+            $i = array_search('--last-run', $arguments);
+        }
+        if ($i != -1 && array_key_exists($i + 1, $arguments) && is_numeric($arguments[$i])) {
+            // do nothing because timestamp is allready set
+        } else if ($lastExecution && $arguments && in_array('--last-run', $arguments)) {
+            // add timestamp
+            $i = array_search('--last-run', $arguments);
+            array_splice($arguments, $i + 1, 0, $lastExecution->getStartedAt()->getTimestamp());
         } else if (!$lastExecution && $arguments && in_array('--last-run', $arguments)) {
-            // remove --last-run argument if timestamp not available
-            $index = array_search('--last-run', $arguments);
-            unset($arguments[$index]);
+            // remove --last-run argument if timestamp is not available
+            $i = array_search('--last-run', $arguments);
+            unset($arguments[$i]);
         }
         return $arguments;
     }
