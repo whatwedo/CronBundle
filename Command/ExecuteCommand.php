@@ -129,7 +129,8 @@ class ExecuteCommand extends Command
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
 
         // Build command to execute
-        $command = array_merge(['bin/console', $cronJob->getCommand(), '--env='.$this->environment], $cronJob->getArguments());
+        $arguments = $this->applyLastExecutionTimestamp($cronJob);
+        $command = array_merge(['bin/console', $cronJob->getCommand(), '--env='.$this->environment], $arguments);
 
         // Create execution
         $execution = new Execution();
@@ -164,5 +165,39 @@ class ExecuteCommand extends Command
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
+    }
+
+    /**
+     * @param string[] $arguments
+     */
+    protected function applyLastExecutionTimestamp(CronJobInterface $cronJob) {
+        $arguments = $cronJob->getArguments();
+        $lastExecution = $this->getLastExecution($cronJob);
+        $i = -1;
+        if ($arguments && in_array('--last-run', $arguments)) {
+            $i = array_search('--last-run', $arguments);
+        }
+        if ($i != -1 && array_key_exists($i + 1, $arguments) && is_numeric($arguments[$i])) {
+            // do nothing because timestamp is allready set
+        } else if ($lastExecution && $arguments && in_array('--last-run', $arguments)) {
+            // add timestamp
+            $i = array_search('--last-run', $arguments);
+            array_splice($arguments, $i + 1, 0, $lastExecution->getStartedAt()->getTimestamp());
+        } else if (!$lastExecution && $arguments && in_array('--last-run', $arguments)) {
+            // remove --last-run argument if timestamp is not available
+            $i = array_search('--last-run', $arguments);
+            unset($arguments[$i]);
+        }
+        return $arguments;
+    }
+
+    /**
+     * @param CronJobInterface $cronJob
+     *
+     * @return Execution|null
+     */
+    public function getLastExecution(CronJobInterface $cronJob): ?Execution
+    {
+        return $this->em->getRepository(Execution::class)->findLastExecution($cronJob);
     }
 }
