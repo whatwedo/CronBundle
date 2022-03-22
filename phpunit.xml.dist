@@ -11,7 +11,6 @@
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0"/>
         <env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3306/cron_bundle" />
-
     </php>
     <testsuites>
         <testsuite name="Cron Test Bundle">
