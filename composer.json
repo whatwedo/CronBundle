@@ -4,11 +4,14 @@
     "description": "Run Symfony commands as cron job",
     "license": "MIT",
     "homepage": "https://doc.whatwedo.ch/whatwedo/cronbundle",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Felix Imobersteg",
             "email": "felix@whatwedo.ch"
+        },
+        {
+            "name": "Felix Ammann",
+            "email": "fexu@whatwedo.ch"
         }
     ],
     "require": {
