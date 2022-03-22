@@ -23,7 +23,7 @@ doctrine:
                         is_bundle: false
                         type: annotation
                         dir: '%kernel.project_dir%/Entity'
-                        prefix: 'whatwedo\CrudBundle\Tests\App\Entity'
+                        prefix: 'whatwedo\CronBundle\tests\App\Entity'
                         alias: App
 
                     tree:

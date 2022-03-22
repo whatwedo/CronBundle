@@ -38,11 +38,12 @@ There are 2 ways to create a CronJob.
 By implementing the [CronInterface](../../CronJob/CronInterface.php) interface on a command.
 
 **Example:**
+
 ```php
 <?php
 // src/Command/MyCommand.php
 
-namespace App\Command;
+namespace whatwedo\CronBundle\Tests\App\Command;
 
 use Symfony\Component\Console\Command\Command;
 // ...
@@ -84,11 +85,12 @@ class MyCommand extends Command implements CronInterface
 By creating a CronJob class and extending the [AbstractCronJob](../../CronJob/AbstractCronJob.php).
 
 **Example:**
+
 ```php
 <?php
 // src/CronJob/MyCronJob.php
 
-namespace App\CronJob;
+namespace whatwedo\CronBundle\Tests\App\CronJob;
 
 use whatwedo\CronBundle\CronJob\AbstractCronJob;
 

@@ -21,22 +21,7 @@ return [
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => [
         'all' => true,
     ],
-    whatwedo\CoreBundle\whatwedoCoreBundle::class => [
-        'all' => true,
-    ],
-    whatwedo\CrudBundle\whatwedoCrudBundle::class => [
-        'all' => true,
-    ],
-    whatwedo\TableBundle\whatwedoTableBundle::class => [
-        'all' => true,
-    ],
-    whatwedo\SearchBundle\whatwedoSearchBundle::class => [
-        'all' => true,
-    ],
     Symfony\Bundle\MakerBundle\MakerBundle::class => [
-        'all' => true,
-    ],
-    whatwedo\TwigBootstrapIcons\whatwedoTwigBootstrapIconsBundle::class => [
         'all' => true,
     ],
 ];
