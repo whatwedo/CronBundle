@@ -24,3 +24,7 @@ help:
 ## initialize project
 install:
 	composer update
+
+## PHP Unit
+phpunit:
+	vendor/bin/simple-phpunit
