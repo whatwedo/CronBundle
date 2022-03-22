@@ -47,7 +47,7 @@ class whatwedoCronExtension extends Extension
         $container->registerForAutoconfiguration(CronInterface::class)->addTag('whatwedo.cron.job');
 
         // Load service configuration
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
 }

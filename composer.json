@@ -25,7 +25,8 @@
     },
     "autoload": {
         "psr-4": {
-            "whatwedo\\CronBundle\\": ""
+            "whatwedo\\CronBundle\\": "src/",
+            "whatwedo\\CronBundle\\Tests\\": "tests/"
         }
     }
 }
