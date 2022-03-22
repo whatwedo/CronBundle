@@ -24,4 +24,7 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => [
         'all' => true,
     ],
+    whatwedo\CronBundle\whatwedoCronBundle::class => [
+        'all' => true,
+    ]
 ];
