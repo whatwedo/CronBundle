@@ -17,7 +17,6 @@
     "require": {
         "php": ">=8",
         "ext-posix": "*",
-        "cocur/background-process": "~0.7",
         "doctrine/doctrine-bundle": "~1.9|^2.0",
         "doctrine/orm": "~2.6",
         "dragonmantank/cron-expression": "~3.3",

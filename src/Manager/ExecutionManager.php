@@ -32,6 +32,7 @@ use Cron\CronExpression;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\Process;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
@@ -161,7 +162,7 @@ class ExecutionManager
     protected function schedule(CronInterface $cronJob): void
     {
         $this->logger->info(sprintf('Scheduling execution of %s', get_class($cronJob)));
-        $process = new BackgroundProcess($this->projectDir.'/bin/console whatwedo:cron:execute \''.get_class($cronJob).'\' --env='.$this->environment);
+        $process = new Process([$this->projectDir.'/bin/console whatwedo:cron:execute \''.get_class($cronJob).'\' --env='.$this->environment]);
         $process->run();
         $this->logger->debug(sprintf('Helper process running with PID %d', $process->getPid()));
     }
