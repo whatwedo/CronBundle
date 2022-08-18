@@ -39,9 +39,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class SchedulerCommand
  */
+
+#[AsCommand(name: 'whatwedo:cron:scheduler')]
 class SchedulerCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:scheduler';
     /**
      * @var LoggerInterface
      */

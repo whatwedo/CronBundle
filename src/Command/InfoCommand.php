@@ -42,9 +42,9 @@ use whatwedo\CronBundle\Manager\ExecutionManager;
 /**
  * Class InfoCommand
  */
+#[AsCommand(name: 'whatwedo:cron:info')]
 class InfoCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:info';
     /**
      * @var CronJobManager
      */

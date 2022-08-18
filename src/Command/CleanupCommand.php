@@ -39,9 +39,10 @@ use whatwedo\CronBundle\Repository\ExecutionRepository;
 /**
  * Class SchedulerCommand
  */
+
+#[AsCommand(name: 'whatwedo:cron:cleanup')]
 class CleanupCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:cleanup';
     /**
      * @var ExecutionRepository
      */

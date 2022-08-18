@@ -47,9 +47,9 @@ use whatwedo\CronBundle\Manager\CronJobManager;
 /**
  * Class ExecuteCommand
  */
+#[AsCommand(name: 'whatwedo:cron:execute')]
 class ExecuteCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:execute';
     /**
      * @var CronJobManager
      */

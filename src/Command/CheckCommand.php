@@ -35,9 +35,9 @@ use whatwedo\CronBundle\Manager\ExecutionManager;
 /**
  * Class CheckCommand
  */
+#[AsCommand(name: 'whatwedo:cron:check')]
 class CheckCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:check';
     /**
      * @var ExecutionManager
      */
