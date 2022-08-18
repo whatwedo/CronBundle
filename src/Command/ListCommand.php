@@ -27,18 +27,20 @@
 
 namespace whatwedo\CronBundle\Command;
 
+use Cron\CronExpression;
+use whatwedo\CronBundle\Manager\CronJobManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use whatwedo\CronBundle\Manager\CronJobManager;
 
 /**
  * Class ListCommand
+ *
+ * @package whatwedo\CronBundle\Command
  */
 class ListCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:list';
     /**
      * @var CronJobManager
      */
@@ -46,6 +48,8 @@ class ListCommand extends Command
 
     /**
      * ListCommand constructor.
+     *
+     * @param CronJobManager $cronJobManager
      */
     public function __construct(CronJobManager $cronJobManager)
     {
@@ -63,14 +67,28 @@ class ListCommand extends Command
             ->setDescription('List all cron jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int|void|null
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $table = new Table($output);
-        $table->setHeaders(['Cron job', 'Description']);
+        $table->setHeaders(['Cron job', 'Description','Next Run']);
         foreach ($this->cronJobManager->getCronJobs() as $cronJob) {
-            $table->addRow([get_class($cronJob), $cronJob->getDescription()]);
+
+            $nextRunDate = 'invalid cron expression';
+            if (CronExpression::isValidExpression($cronJob->getExpression())) {
+                $cronExpression = CronExpression::factory($cronJob->getExpression());
+                $nextRunDate = $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
+            }
+
+            $table->addRow([get_class($cronJob), $cronJob->getDescription(), $nextRunDate]);
         }
         $table->render();
-        return 0;
+
+        return Command::SUCCESS;
     }
 }
