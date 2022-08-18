@@ -89,6 +89,6 @@ class ListCommand extends Command
         }
         $table->render();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
