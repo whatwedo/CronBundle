@@ -24,5 +24,5 @@ public function getArguments(): array
     return ['--last-run'];
 }
 ```  
-The the timestamp is automatically added in the following format: `--last-run 1618997197`  
+The timestamp is automatically added in the following format: `--last-run 1618997197`  
 If the timestamp is passed manually, it won't be overwritten.  
