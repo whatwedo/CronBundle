@@ -27,17 +27,24 @@
 
 namespace whatwedo\CronBundle\Repository;
 
+use App\Entity\Insurance;
 use DateTimeInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
 /**
  * Class ExecutionRepository
  */
-class ExecutionRepository extends EntityRepository
+class ExecutionRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Execution::class);
+    }
     /**
      * @return Collection|Execution[]
      */
@@ -74,7 +81,7 @@ class ExecutionRepository extends EntityRepository
             ])
             ->getQuery()
             ->execute()
-        ;
+            ;
     }
 
     public function deleteNotSuccessfulJobs(DateTimeInterface $retention, $limit = null)
@@ -94,6 +101,6 @@ class ExecutionRepository extends EntityRepository
             ])
             ->getQuery()
             ->execute()
-        ;
+            ;
     }
 }
