@@ -76,7 +76,7 @@ class ListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $table = new Table($output);
-        $table->setHeaders(['Cron job', 'Description','Next Run']);
+        $table->setHeaders(['Cron job', 'Description', 'Next Run']);
         foreach ($this->cronJobManager->getCronJobs() as $cronJob) {
 
             $nextRunDate = 'invalid cron expression';
