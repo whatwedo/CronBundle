@@ -27,22 +27,25 @@
 
 namespace whatwedo\CronBundle\Repository;
 
+use App\Entity\Insurance;
 use DateTimeInterface;
-use whatwedo\CronBundle\CronJob\CronJobInterface;
-use whatwedo\CronBundle\Entity\Execution;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use whatwedo\CronBundle\CronJob\CronInterface;
+use whatwedo\CronBundle\Entity\Execution;
 
 /**
  * Class ExecutionRepository
- *
- * @package whatwedo\CronBundle\Repository
  */
-class ExecutionRepository extends EntityRepository
+class ExecutionRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Execution::class);
+    }
     /**
-     * @param string $state
-     *
      * @return Collection|Execution[]
      */
     public function findByState(string $state)
@@ -54,18 +57,13 @@ class ExecutionRepository extends EntityRepository
             ->getResult();
     }
 
-    /**
-     * @param CronJobInterface $cronJob
-     *
-     * @return Execution|null
-     */
-    public function findLastExecution(CronJobInterface $cronJob): ?Execution
+    public function findLastExecution(CronInterface $cronJob): ?Execution
     {
         return $this->createQueryBuilder('e')
-            ->where('e.class = :class')
+            ->where('e.job = :job')
             ->orderBy('e.startedAt', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('class', get_class($cronJob))
+            ->setParameter('job', get_class($cronJob))
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -83,7 +81,7 @@ class ExecutionRepository extends EntityRepository
             ])
             ->getQuery()
             ->execute()
-        ;
+            ;
     }
 
     public function deleteNotSuccessfulJobs(DateTimeInterface $retention, $limit = null)
@@ -103,6 +101,6 @@ class ExecutionRepository extends EntityRepository
             ])
             ->getQuery()
             ->execute()
-        ;
+            ;
     }
 }
