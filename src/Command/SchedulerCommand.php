@@ -77,6 +77,6 @@ class SchedulerCommand extends Command
             gc_collect_cycles();
             sleep(15);
         }
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -86,6 +86,6 @@ class CleanupCommand extends Command
             '- deleted <info>%s</info> not successful job execution logs',
             $deletedNotSuccessful
         ));
-        return 0;
+        return Command::SUCCESS;
     }
 }

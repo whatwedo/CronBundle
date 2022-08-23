@@ -92,7 +92,7 @@ class InfoCommand extends Command
 
         // Render table
         $table->render();
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function getCommand(CronInterface $cronJob): string

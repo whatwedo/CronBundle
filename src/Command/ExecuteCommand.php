@@ -149,7 +149,7 @@ class ExecuteCommand extends Command
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function getCronCommand(CronInterface $cron): string
