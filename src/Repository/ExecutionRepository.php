@@ -27,20 +27,22 @@
 
 namespace whatwedo\CronBundle\Repository;
 
+use App\Entity\Insurance;
 use DateTimeInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
-/**
- * Class ExecutionRepository
- */
-class ExecutionRepository extends EntityRepository
+class ExecutionRepository extends ServiceEntityRepository
 {
-    /**
-     * @return Collection|Execution[]
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Execution::class);
+    }
+
     public function findByState(string $state)
     {
         return $this->createQueryBuilder('e')
@@ -56,11 +58,11 @@ class ExecutionRepository extends EntityRepository
             ->where('e.job = :job')
             ->orderBy('e.startedAt', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('job', get_class($cronJob))
+            ->setParameter('job', $cronJob::class)
             ->getQuery()
             ->getOneOrNullResult();
     }
-
+    
     public function deleteSuccessfulJobs(DateTimeInterface $retention, $limit = null)
     {
         return $this->createQueryBuilder('e')
@@ -74,7 +76,7 @@ class ExecutionRepository extends EntityRepository
             ])
             ->getQuery()
             ->execute()
-        ;
+            ;
     }
 
     public function deleteNotSuccessfulJobs(DateTimeInterface $retention, $limit = null)
@@ -94,6 +96,6 @@ class ExecutionRepository extends EntityRepository
             ])
             ->getQuery()
             ->execute()
-        ;
+            ;
     }
 }

@@ -29,22 +29,13 @@ namespace whatwedo\CronBundle\CronJob;
 
 use whatwedo\CronBundle\Command\CleanupCommand;
 
-/**
- * Class CleanupCronJob
- */
 class CleanupCronJob
 {
-    /**
-     * Returns command name
-     */
     public function getCommand(): string
     {
         return CleanupCommand::getDefaultName();
     }
 
-    /**
-     * Returns cron expression
-     */
     public function getExpression(): string
     {
         return '15 2 * * *';

@@ -47,29 +47,18 @@ use whatwedo\CronBundle\Manager\CronJobManager;
 /**
  * Class ExecuteCommand
  */
+#[AsCommand(name: 'whatwedo:cron:execute')]
 class ExecuteCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:execute';
-    /**
-     * @var CronJobManager
-     */
-    protected $cronJobManager;
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-    /**
-     * @var string
-     */
-    protected $projectDir;
-    /**
-     * @var string
-     */
-    protected $environment;
+    protected CronJobManager $cronJobManager;
+
+    protected EntityManagerInterface $em;
+
+    protected EventDispatcherInterface$eventDispatcher;
+
+    protected string $projectDir;
+
+    protected string $environment;
 
     /**
      * ExecuteCommand constructor.
@@ -160,7 +149,7 @@ class ExecuteCommand extends Command
             ->setExitCode($process->getExitCode());
         $this->em->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function getCronCommand(CronInterface $cron): string

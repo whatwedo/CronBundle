@@ -42,17 +42,12 @@ use whatwedo\CronBundle\Manager\ExecutionManager;
 /**
  * Class InfoCommand
  */
+#[AsCommand(name: 'whatwedo:cron:info')]
 class InfoCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:info';
-    /**
-     * @var CronJobManager
-     */
-    protected $cronJobManager;
-    /**
-     * @var ExecutionManager
-     */
-    protected $executionManager;
+    protected CronJobManager $cronJobManager;
+
+    protected ExecutionManager $executionManager;
 
     /**
      * InfoCommand constructor.
@@ -97,7 +92,7 @@ class InfoCommand extends Command
 
         // Render table
         $table->render();
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function getCommand(CronInterface $cronJob): string

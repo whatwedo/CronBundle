@@ -36,29 +36,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
-/**
- * Class SchedulerCommand
- */
+#[AsCommand(name: 'whatwedo:cron:cleanup')]
 class CleanupCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:cleanup';
-    /**
-     * @var ExecutionRepository
-     */
     protected $executionRepository;
 
-    /**
-     * CleanupCommand constructor.
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct();
         $this->executionRepository = $entityManager->getRepository(Execution::class);
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure(): void
     {
         parent::configure();
@@ -98,6 +86,6 @@ class CleanupCommand extends Command
             '- deleted <info>%s</info> not successful job execution logs',
             $deletedNotSuccessful
         ));
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -32,29 +32,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use whatwedo\CronBundle\Manager\ExecutionManager;
 
-/**
- * Class CheckCommand
- */
+#[AsCommand(name: 'whatwedo:cron:check')]
 class CheckCommand extends Command
 {
-    protected static $defaultName = 'whatwedo:cron:check';
-    /**
-     * @var ExecutionManager
-     */
-    protected $executionManager;
+    protected ExecutionManager $executionManager;
 
-    /**
-     * CheckCommand constructor.
-     */
     public function __construct(ExecutionManager $executionManager)
     {
         parent::__construct();
         $this->executionManager = $executionManager;
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure(): void
     {
         parent::configure();
@@ -62,15 +50,9 @@ class CheckCommand extends Command
             ->setDescription('Check (once) and run cron jobs');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->executionManager->check();
-        return 0;
+        return Command::SUCCESS;
     }
 }
