@@ -36,18 +36,13 @@ use Doctrine\Persistence\ManagerRegistry;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
-/**
- * Class ExecutionRepository
- */
 class ExecutionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Execution::class);
     }
-    /**
-     * @return Collection|Execution[]
-     */
+
     public function findByState(string $state)
     {
         return $this->createQueryBuilder('e')
@@ -63,11 +58,11 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.job = :job')
             ->orderBy('e.startedAt', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('job', get_class($cronJob))
+            ->setParameter('job', $cronJob::class)
             ->getQuery()
             ->getOneOrNullResult();
     }
-
+    
     public function deleteSuccessfulJobs(DateTimeInterface $retention, $limit = null)
     {
         return $this->createQueryBuilder('e')

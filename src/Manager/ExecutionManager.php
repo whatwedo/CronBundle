@@ -161,8 +161,8 @@ class ExecutionManager
 
     protected function schedule(CronInterface $cronJob): void
     {
-        $this->logger->info(sprintf('Scheduling execution of %s', get_class($cronJob)));
-        $process = new Process([$this->projectDir.'/bin/console', 'whatwedo:cron:execute', get_class($cronJob),  '-e', $this->environment]);
+        $this->logger->info(sprintf('Scheduling execution of %s', $cronJob::class));
+        $process = new Process([$this->projectDir.'/bin/console', 'whatwedo:cron:execute', $cronJob::class,  '-e', $this->environment]);
         $process->run();
         $this->logger->debug(sprintf('Helper process running with PID %d', $process->getPid()));
     }
