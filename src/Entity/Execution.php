@@ -39,6 +39,7 @@ use whatwedo\CronBundle\CronJob\CronInterface;
  */
 class Execution
 {
+    public const STATE_PENDING = 'pending';
     public const STATE_RUNNING = 'running';
     public const STATE_FINISHED = 'finished';
     public const STATE_STALE = 'stale';
