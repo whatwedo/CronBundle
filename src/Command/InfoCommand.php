@@ -45,14 +45,9 @@ use whatwedo\CronBundle\Manager\ExecutionManager;
 #[AsCommand(name: 'whatwedo:cron:info')]
 class InfoCommand extends Command
 {
-    /**
-     * @var CronJobManager
-     */
-    protected $cronJobManager;
-    /**
-     * @var ExecutionManager
-     */
-    protected $executionManager;
+    protected CronJobManager $cronJobManager;
+
+    protected ExecutionManager $executionManager;
 
     /**
      * InfoCommand constructor.

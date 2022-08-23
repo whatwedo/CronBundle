@@ -36,30 +36,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
-/**
- * Class SchedulerCommand
- */
-
 #[AsCommand(name: 'whatwedo:cron:cleanup')]
 class CleanupCommand extends Command
 {
-    /**
-     * @var ExecutionRepository
-     */
     protected $executionRepository;
 
-    /**
-     * CleanupCommand constructor.
-     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct();
         $this->executionRepository = $entityManager->getRepository(Execution::class);
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure(): void
     {
         parent::configure();

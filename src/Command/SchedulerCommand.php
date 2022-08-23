@@ -36,29 +36,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class SchedulerCommand
- */
-
 #[AsCommand(name: 'whatwedo:cron:scheduler')]
 class SchedulerCommand extends Command
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-    /**
-     * @var EntityManagerInterface
-     */
-    protected $em;
-    /**
-     * @var ExecutionManager
-     */
-    protected $executionManager;
+    protected LoggerInterface $logger;
 
-    /**
-     * SchedulerCommand constructor.
-     */
+    protected EntityManagerInterface $em;
+
+    protected ExecutionManager $executionManager;
+
     public function __construct(LoggerInterface $logger, EntityManagerInterface $em, ExecutionManager $executionManager)
     {
         parent::__construct();
@@ -67,9 +53,6 @@ class SchedulerCommand extends Command
         $this->executionManager = $executionManager;
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure(): void
     {
         parent::configure();

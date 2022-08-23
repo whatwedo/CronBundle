@@ -36,30 +36,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ListCommand
- *
- * @package whatwedo\CronBundle\Command
  */
 class ListCommand extends Command
 {
-    /**
-     * @var CronJobManager
-     */
-    protected $cronJobManager;
+    protected CronJobManager $cronJobManager;
 
-    /**
-     * ListCommand constructor.
-     *
-     * @param CronJobManager $cronJobManager
-     */
     public function __construct(CronJobManager $cronJobManager)
     {
         parent::__construct();
         $this->cronJobManager = $cronJobManager;
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure(): void
     {
         parent::configure();
@@ -67,13 +54,7 @@ class ListCommand extends Command
             ->setDescription('List all cron jobs');
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     *
-     * @return int|void|null
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $table = new Table($output);
         $table->setHeaders(['Cron job', 'Description', 'Next Run']);
