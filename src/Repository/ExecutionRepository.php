@@ -62,6 +62,49 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findNonPendingExcecution(CronInterface $cronJob)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.job = :job')
+            ->andWhere('e.state != :statePending')
+            ->orderBy('e.startedAt', 'ASC')
+            ->setParameters([
+                'job' => $cronJob::class,
+                'statePending' => Execution::STATE_PENDING,
+            ])
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    public function findPendingExcecution(CronInterface $cronJob)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.job = :job')
+            ->andWhere('e.state = :statePending')
+            ->setParameters([
+                'job' => $cronJob::class,
+                'statePending' => Execution::STATE_PENDING,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function deletePendingJob(CronInterface $cronJob)
+    {
+        return $this->createQueryBuilder('e')
+            ->delete()
+            ->where('e.job = :job')
+            ->andWhere('e.state = :statePending')
+            ->setParameters([
+                'job' => $cronJob::class,
+                'statePending' => Execution::STATE_PENDING,
+            ])
+            ->getQuery()
+            ->execute()
+            ;
+    }
     
     public function deleteSuccessfulJobs(DateTimeInterface $retention, $limit = null)
     {
