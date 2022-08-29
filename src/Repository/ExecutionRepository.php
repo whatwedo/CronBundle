@@ -68,7 +68,7 @@ class ExecutionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
             ->andWhere('e.state != :statePending')
-            ->orderBy('e.startedAt', 'ASC')
+            ->orderBy('e.startedAt', 'DESC')
             ->setParameters([
                 'job' => $cronJob::class,
                 'statePending' => Execution::STATE_PENDING,

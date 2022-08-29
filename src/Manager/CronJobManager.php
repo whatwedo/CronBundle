@@ -57,7 +57,7 @@ class CronJobManager
 
     public function addCronJob(CronInterface $cronJob): self
     {
-        $this->cronJobs[] = $cronJob;
+        $this->cronJobs[$cronJob::class] = $cronJob;
         return $this;
     }
 
@@ -78,7 +78,7 @@ class CronJobManager
         }
         throw new CronJobNotFoundException($class);
     }
-
+    
     public function getCommandByCronJob(CronInterface $cronJob): Command
     {
         return $this->consoleApplication->find($cronJob->getCommand());

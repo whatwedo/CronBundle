@@ -46,83 +46,62 @@ class Execution
     public const STATE_TERMINATED = 'terminated';
 
     /**
-     * @var int|null
-     *
+    *
      * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $state = self::STATE_RUNNING;
+    protected string $state = self::STATE_RUNNING;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $job;
+    protected string $job;
 
     /**
-     * @var string[]|null
-     *
      * @ORM\Column(type="json", nullable=false)
      */
-    protected $command = [];
+    protected ?array $command = [];
 
     /**
-     * @var \DateTime|null
-     *
      * @ORM\Column(type="datetime", nullable=false)
      */
-    protected $startedAt;
+    protected \DateTime $startedAt;
 
     /**
-     * @var \DateTime|null
-     *
      * @ORM\Column(type="datetime", nullable=false)
      */
-    protected $updatedAt;
+    protected \DateTime $updatedAt;
 
     /**
-     * @var \DateTime|null
-     *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $finishedAt;
+    protected ?\DateTime $finishedAt;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $pid;
+    protected ?int $pid;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $exitCode;
+    protected ?int $exitCode;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null
      */
-    protected $stdout;
+    protected ?string $stdout = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null
      */
-    protected $stderr;
+    protected ?string $stderr = null;
 
     /**
      * @var CronInterface|null

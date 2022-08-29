@@ -112,7 +112,7 @@ class ExecuteCommand extends Command
 
         // Create execution
         $execution = new Execution();
-        $execution->setJob(get_class($cronJob))
+        $execution->setJob($cronJob::class)
             ->setCommand($command);
         $this->em->persist($execution);
         $this->em->flush($execution);
