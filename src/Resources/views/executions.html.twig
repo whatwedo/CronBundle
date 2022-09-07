@@ -1,0 +1,50 @@
+{% block content_title %}{{ content_title|trans() }}{% endblock %}
+
+{% block page_actions %}
+    <a class="btn btn-default" href="{{ ea_url()
+        .unsetAll()
+        .setRoute('cronjob_detail', { class: execution.job })
+        .generateUrl() }}
+            ">{{'cronjob.action.back_detail'|trans }}
+    </a>
+{% endblock %}
+
+{% block main %}
+
+    <table class="table datagrid">
+        <tr>
+            <td>Cron Job</td>
+            <td>{{ execution.job}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'cronjob.state'|trans }}</td>
+            <td>{{ execution.state}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'cronjob.command'|trans }}</td>
+            <td>{{ execution.command|join(' ')}}</td>
+        </tr>
+        <tr>
+            <td>{{ 'cronjob.startedAt'|trans }}</td>
+            <td>{{ execution.startedAt|date('d.m.Y H:i') }}</td>
+        </tr>
+        <tr>
+            <td>{{ 'cronjob.finishedAt'|trans }}</td>
+            <td>{{ execution.finishedAt|date('d.m.Y H:i') }}</td>
+        </tr>
+    </table>
+    <br/>
+    <br/>
+    <div>
+        <div style="width: 50%; float: left; padding-right:10px">
+            <h4 class="title">{{ 'cronjob.output.std'|trans }}</h4>
+            <pre>{{ execution.stdout }}</pre>
+        </div>
+        <div style="width: 50%; float: left;">
+            <h4 class="title">{{ 'cronjob.output.stdErr'|trans }}</h4>
+            <pre>{{ execution.stderr }}</pre>
+        </div>
+    </div>
+
+
+{% endblock %}

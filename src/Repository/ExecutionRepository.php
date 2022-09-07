@@ -52,6 +52,16 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByJob(CronInterface $cronJob)
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.job = :job')
+            ->orderBy('e.startedAt', 'DESC')
+            ->setParameter('job', $cronJob::class)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findLastExecution(CronInterface $cronJob): ?Execution
     {
         return $this->createQueryBuilder('e')
@@ -136,6 +146,42 @@ class ExecutionRepository extends ServiceEntityRepository
                     Execution::STATE_TERMINATED,
                     Execution::STATE_TERMINATED
                 ],
+            ])
+            ->getQuery()
+            ->execute()
+            ;
+    }
+
+    public function deleteExecutions(CronInterface $cronJob, string $state)
+    {
+
+        $states = match($state) {
+            'failed', 'successful' => [
+                Execution::STATE_FINISHED,
+                Execution::STATE_TERMINATED,
+                Execution::STATE_TERMINATED
+            ],
+            'pending' => [
+                Execution::STATE_PENDING
+            ],
+        };
+        $exitCode = 0;
+        if ($state == 'failed') {
+            $exitCode = 1;
+        }
+        $queryBuilder = $this->createQueryBuilder('e')
+            ->delete()
+            ->where('e.job = :job')
+            ->andWhere('e.state IN (:states)');
+
+        if ($exitCode) {
+            $queryBuilder
+                ->andWhere('e.exitCode != 0');
+        }
+        return $queryBuilder
+            ->setParameters([
+                'job' => $cronJob::class,
+                'states' => $states,
             ])
             ->getQuery()
             ->execute()

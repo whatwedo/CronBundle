@@ -1,0 +1,89 @@
+
+{% block page_actions %}
+    <a class="btn btn-default" href="{{ path('whatwedo_cronjob_index') }}">
+        {{'cronjob.action.back_list'|trans }}
+    </a>
+
+    {% if activable  %}
+        {% if cronjob.isActive %}
+            <a class="btn btn-default" href="{{ path('whatwedo_cronjob_deactivate', { class: wwd_cron_classFqcn(cronjob) }) }}">
+                {{'cronjob.action.deactivate'|trans }}
+            </a>
+        {% else %}
+            <a class="btn btn-default" href="{{ path('whatwedo_cronjob_activate', { class: wwd_cron_classFqcn(cronjob) }) }}">
+                {{'cronjob.action.activate'|trans }}
+            </a>
+        {% endif %}
+    {% endif %}
+    {% if allwedToRun %}
+        <a class="btn btn-default" href="{{ path('whatwedo_cronjob_run', { class: wwd_cron_classFqcn(cronjob) }) }}">
+            {{'cronjob.action.run'|trans }}
+        </a>
+    {% endif  %}
+{% endblock %}
+
+{% block main %}
+
+    <table class="table datagrid cronjob-list">
+        <tr>
+            <td>{{ 'cronjob.descripton'|trans }}</td>
+            <td>{{ cronjob.description }}</td>
+        </tr>
+        <tr>
+            <td>{{ 'cronjob.expression'|trans }}</td>
+            <td>{{ cronjob.expression }}</td>
+        </tr>
+        <tr>
+            <td>{{ 'cronjob.nextExecution'|trans }}</td>
+            <td>
+                {% if cronjob.isActive %}
+                    <span class="badge badge-info">{{ nextExecutionDate|date('d.m.Y H:i') }}</span>
+                {% else %}
+                    <span class="badge badge-danger">{{ 'cronjob.isDeactivated'|trans }}</span>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    <br/><br/>
+    <h4>{{ 'cronjob.detail.lastExecution'|trans }}</h4>
+    <table class="table datagrid">
+        <thead>
+        <th class="header-for-field-text" dir="ltr">{{ 'cronjob.state'|trans }}</th>
+        <th class="header-for-field-text" dir="ltr">{{ 'cronjob.startedAt'|trans }}</th>
+        <th class="header-for-field-text" dir="ltr">{{ 'cronjob.finishedAt'|trans }}</th>
+        <th class="header-for-field-text text-right" dir="ltr">{{ 'dashboard.panel.actions'|trans }}</th>
+        </thead>
+        <tbody>
+        {% for item in lastExecutions %}
+            <tr>
+                <td>{{ item.state }}</td>
+                <td>{{ item.startedAt|date('d.m.Y H:i') }}</td>
+                <td>{{ item.finishedAt|date('d.m.Y H:i') }}</td>
+                <td class="actions">
+                    <a class="small"
+                       id="show-executions-{{ wwd_cron_classFqcn(cronjob) }}"
+                       href="{{ path('whatwedo_cronjob_excecutions', { 'id': item.id }) }}">
+                        <i class="action-icon fa fa-eye"></i> Show
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="small"
+       id="cleand-failed-executions"
+       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'failed' }) }}">
+        <i class="action-icon fa fa-eye"></i> clean not successfull
+    </a>
+    <a class="small"
+       id="cleand-failed-executions"
+       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'pending' }) }}">
+        <i class="action-icon fa fa-eye"></i> clean pending
+    </a>
+    <a class="small"
+       id="cleand-failed-executions"
+       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'successful' }) }}">
+        <i class="action-icon fa fa-eye"></i> clean successful
+    </a>
+{% endblock %}

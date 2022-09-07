@@ -1,0 +1,22 @@
+whatwedo_cronjob_index:
+  path: /wwd_cronjob
+  controller: whatwedo\CronBundle\Controller\CronJobController::index
+whatwedo_cronjob_show:
+  path: /show/{class}
+  controller: whatwedo\CronBundle\Controller\CronJobController::show
+whatwedo_cronjob_excecutions:
+  path: /excecutions/{id}
+  controller: whatwedo\CronBundle\Controller\CronJobController::executions
+whatwedo_cronjob_run:
+  path: /run/{class}
+  controller: whatwedo\CronBundle\Controller\CronJobController::run
+whatwedo_cronjob_activate:
+  path: /activate/{class}
+  controller: whatwedo\CronBundle\Controller\CronJobController::activate
+whatwedo_cronjob_deactivate:
+  path: /deactivate/{class}
+  controller: whatwedo\CronBundle\Controller\CronJobController::deactivate
+
+whatwedo_cronjob_clean:
+  path: /clean/{state}/{class}
+  controller: whatwedo\CronBundle\Controller\CronJobController::clean
