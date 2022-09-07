@@ -61,9 +61,9 @@ class CronJobController extends AbstractController
         ]);
     }
 
-    public function executions(string $id): Response
+    public function execution(string $id): Response
     {
-        return $this->render('@whatwedoCron/show.executions.html.twig', [
+        return $this->render('@whatwedoCron/execution.html.twig', [
             'content_title' => 'menu.crud.cronjobs.executions',
             'execution' => $this->executionRepository->find($id),
         ]);

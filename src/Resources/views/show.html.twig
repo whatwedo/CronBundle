@@ -1,89 +1,196 @@
+{% extends '@whatwedoCron/base.html.twig' %}
 
-{% block page_actions %}
-    <a class="btn btn-default" href="{{ path('whatwedo_cronjob_index') }}">
-        {{'cronjob.action.back_list'|trans }}
+{% block actions %}
+
+    <a href="{{ path('whatwedo_cronjob_index') }}" class="whatwedo-crud-button--action-neutral" role="menuitem" tabindex="-1">
+        {{ bootstrap_icon('list', { class: 'inline mr-1 h-4 w-4' }) }}
+        {{ 'cronjob.action.back_list'|trans }}
     </a>
 
-    {% if activable  %}
+
+    {% if activable %}
         {% if cronjob.isActive %}
-            <a class="btn btn-default" href="{{ path('whatwedo_cronjob_deactivate', { class: wwd_cron_classFqcn(cronjob) }) }}">
-                {{'cronjob.action.deactivate'|trans }}
+            <a class="btn btn-default"
+               href="{{ path('whatwedo_cronjob_deactivate', { class: wwd_cron_classFqcn(cronjob) }) }}">
+                {{ 'cronjob.action.deactivate'|trans }}
             </a>
         {% else %}
-            <a class="btn btn-default" href="{{ path('whatwedo_cronjob_activate', { class: wwd_cron_classFqcn(cronjob) }) }}">
-                {{'cronjob.action.activate'|trans }}
+            <a class="btn btn-default"
+               href="{{ path('whatwedo_cronjob_activate', { class: wwd_cron_classFqcn(cronjob) }) }}">
+                {{ 'cronjob.action.activate'|trans }}
             </a>
         {% endif %}
     {% endif %}
     {% if allwedToRun %}
-        <a class="btn btn-default" href="{{ path('whatwedo_cronjob_run', { class: wwd_cron_classFqcn(cronjob) }) }}">
-            {{'cronjob.action.run'|trans }}
+        <a href="{{ path('whatwedo_cronjob_run', { class: wwd_cron_classFqcn(cronjob) }) }}" class="whatwedo-crud-button--action" role="menuitem" tabindex="-1">
+            {{ bootstrap_icon('play-fill', { class: 'inline mr-1 h-4 w-4' }) }}
+            {{ 'cronjob.action.run'|trans }}
         </a>
-    {% endif  %}
+    {% endif %}
 {% endblock %}
 
 {% block main %}
 
-    <table class="table datagrid cronjob-list">
-        <tr>
-            <td>{{ 'cronjob.descripton'|trans }}</td>
-            <td>{{ cronjob.description }}</td>
-        </tr>
-        <tr>
-            <td>{{ 'cronjob.expression'|trans }}</td>
-            <td>{{ cronjob.expression }}</td>
-        </tr>
-        <tr>
-            <td>{{ 'cronjob.nextExecution'|trans }}</td>
-            <td>
-                {% if cronjob.isActive %}
-                    <span class="badge badge-info">{{ nextExecutionDate|date('d.m.Y H:i') }}</span>
-                {% else %}
-                    <span class="badge badge-danger">{{ 'cronjob.isDeactivated'|trans }}</span>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
-    <br/><br/>
-    <h4>{{ 'cronjob.detail.lastExecution'|trans }}</h4>
-    <table class="table datagrid">
-        <thead>
-        <th class="header-for-field-text" dir="ltr">{{ 'cronjob.state'|trans }}</th>
-        <th class="header-for-field-text" dir="ltr">{{ 'cronjob.startedAt'|trans }}</th>
-        <th class="header-for-field-text" dir="ltr">{{ 'cronjob.finishedAt'|trans }}</th>
-        <th class="header-for-field-text text-right" dir="ltr">{{ 'dashboard.panel.actions'|trans }}</th>
-        </thead>
-        <tbody>
-        {% for item in lastExecutions %}
-            <tr>
-                <td>{{ item.state }}</td>
-                <td>{{ item.startedAt|date('d.m.Y H:i') }}</td>
-                <td>{{ item.finishedAt|date('d.m.Y H:i') }}</td>
-                <td class="actions">
-                    <a class="small"
-                       id="show-executions-{{ wwd_cron_classFqcn(cronjob) }}"
-                       href="{{ path('whatwedo_cronjob_excecutions', { 'id': item.id }) }}">
-                        <i class="action-icon fa fa-eye"></i> Show
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h1 class="p-4 m-4 text-lg leading-6 font-medium text-neutral-900">CronJon {{ wwd_cron_classFqcn(cronjob) }}</h1>
+    <div class="whatwedo_crud-blocks whatwedo_crud-blocks--show bg-neutral-50 p-4 flex flex-wrap items-baseline">
 
-    <a class="small"
-       id="cleand-failed-executions"
-       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'failed' }) }}">
-        <i class="action-icon fa fa-eye"></i> clean not successfull
-    </a>
-    <a class="small"
-       id="cleand-failed-executions"
-       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'pending' }) }}">
-        <i class="action-icon fa fa-eye"></i> clean pending
-    </a>
-    <a class="small"
-       id="cleand-failed-executions"
-       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'successful' }) }}">
-        <i class="action-icon fa fa-eye"></i> clean successful
-    </a>
+        <div id="wwd-crud-block-wwd_cron_job" class="w-full">
+            <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+                <div class="border-t border-neutral-200 bg-white sm:rounded-b-lg">
+                    <dl>
+
+                        <div id="wwd-crud-block-wwd_cron_job-content-description"
+                             class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-neutral-500"
+                                id="wwd-crud-block-wwd_cron_job-content-description-label">
+                                {{ 'cronjob.descripton'|trans }}
+                            </dt>
+                            <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                                id="wwd-crud-block-wwd_cron_job-content-description-content">
+                                {{ cronjob.description }}
+                            </dd>
+                        </div>
+                        <div id="wwd-crud-block-wwd_cron_job-content-expression"
+                             class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-neutral-500"
+                                id="wwd-crud-block-wwd_cron_job-content-expression-label">
+                                {{ 'cronjob.expression'|trans }}
+                            </dt>
+                            <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                                id="wwd-crud-block-wwd_cron_job-content-expression-content">
+                                {{ cronjob.expression }}
+                            </dd>
+                        </div>
+                        <div id="wwd-crud-block-wwd_cron_job-content-nextExecution"
+                             class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-neutral-500"
+                                id="wwd-crud-block-wwd_cron_job-content-nextExecution-label">
+                                {{ 'cronjob.nextExecution'|trans }}
+                            </dt>
+                            <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                                id="wwd-crud-block-wwd_cron_job-content-nextExecution-content">
+                                {% if cronjob.isActive %}
+                                    {{ nextExecutionDate|date('d.m.Y H:i') }}
+                                {% else %}
+                                    {{ 'cronjob.isDeactivated'|trans }}
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div id="wwd-crud-block-wwd_cron_job" class="w-full">
+            <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+
+                <div class="px-4 py-5 sm:px-6">
+
+                    <h3 class="text-lg leading-6 font-medium text-neutral-900">
+                        {{ 'cronjob.detail.lastExecution'|trans }}
+                    </h3>
+
+                    <div class="relative flex justify-end items-center">
+                    <a href="{{ path('whatwedo_cronjob_run', { class: wwd_cron_classFqcn(cronjob) }) }}" class="whatwedo-crud-button--action" role="menuitem" tabindex="-1">
+                        {{ bootstrap_icon('play-fill', { class: 'inline mr-1 h-4 w-4' }) }}
+                        {{ 'cronjob.action.run'|trans }}
+                    </a>
+                    <a  class="whatwedo-crud-button--action" role="menuitem" tabindex="-1"
+                       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'failed' }) }}">
+                        {{ bootstrap_icon('eraser', { class: 'inline mr-1 h-4 w-4' }) }} clean not successfull
+                    </a>
+                    <a  class="whatwedo-crud-button--action" role="menuitem" tabindex="-1"
+                       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'pending' }) }}">
+                        {{ bootstrap_icon('x-octagon', { class: 'inline mr-1 h-4 w-4' }) }} clean pending
+                    </a>
+                    <a  class="whatwedo-crud-button--action" role="menuitem" tabindex="-1"
+                       href="{{ path('whatwedo_cronjob_clean', { class: wwd_cron_classFqcn(cronjob), state: 'successful' }) }}">
+                        {{ bootstrap_icon('trash', { class: 'inline mr-1 h-4 w-4' }) }}
+                        <i class="action-icon fa fa-eye"></i> clean successful
+                    </a>
+                    </div>
+
+                </div>
+                <div class="border-t border-neutral-200 bg-white sm:rounded-b-lg">
+                    <div class="whatwedo_table:table__wrapper align-middle inline-block min-w-full border-b border-neutral-200">
+                        <table
+                                class="min-w-full" {{ stimulus_target('whatwedo/table-bundle/table', 'table') }}>
+
+                            <thead class="whatwedo_table:table__head">
+                            <tr class="border-b border-neutral-200 bg-neutral-50 text-xs font-medium text-neutral-500 text-left uppercase tracking-wider">
+
+
+                                <th class="px-3 py-3 align-top">{{ 'cronjob.state'|trans }}</th>
+                                <th class="px-3 py-3 align-top">{{ 'cronjob.startedAt'|trans }}</th>
+                                <th class="px-3 py-3 align-top">{{ 'cronjob.finishedAt'|trans }}</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <tbody
+                                    class="whatwedo_table:table__body bg-white text-sm text-neutral-500 font-medium divide-y divide-neutral-100">
+                            {% if lastExecutions is empty %}
+                                <tr class="whatwedo_table:table__row hover:bg-neutral-50 transition duration-500 color">
+                                    <td class="px-3 py-2 font-normal">
+                                        {{ 'Keine Elemente verfügbar' }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% for item in lastExecutions %}
+                                <tr class="whatwedo_table:table__row hover:bg-neutral-50 transition duration-500 color align-top">
+
+                                    <td class="px-3 py-2 whitespace-nowrap text-neutral-900">
+                                        <a href="{{ path('whatwedo_cronjob_excecution', { 'id': item.id }) }}">
+                                            {{ item.state }}
+                                        </a>
+                                    </td>
+                                    <td class="px-3 py-2">{{ item.startedAt|date('d.m.Y H:i') }}</td>
+                                    <td class="px-3 py-2">{{ item.finishedAt|date('d.m.Y H:i') }}</td>
+                                    <td class="whatwedo_table:table__actions pr-6 align-top">
+                                        <div
+                                                class="relative flex justify-end items-center" {{ stimulus_controller('whatwedo/core-bundle/dropdown') }}>
+                                            <button
+                                                    class="whatwedo_table-actions"
+                                                    {{ stimulus_action({'whatwedo/core-bundle/dropdown': ['toggle', {'click@window': 'hide'}]}) }}
+                                                    type="button"
+                                            >
+                                                <span class="sr-only">Optionen</span>
+                                                {{ bootstrap_icon('three-dots-vertical', { class: 'h-4 w-4' }) }}
+                                            </button>
+                                            <div
+                                                    {{ stimulus_target('whatwedo/core-bundle/dropdown', 'menu') }}
+                                                    class="z-50 hidden transition duration-300 origin-top-right mx-3 origin-top-right absolute right-7 top-0 w-48 -mt-1 rounded-md shadow-lg z-10 bg-white ring-1 ring-black ring-opacity-5 divide-y divide-neutral-200 focus:outline-none"
+                                                    data-transition-enter-from="opacity-0 scale-95"
+                                                    data-transition-enter-to="opacity-100 scale-100"
+                                                    data-transition-leave-from="opacity-100 scale-100"
+                                                    data-transition-leave-to="opacity-0 scale-95"
+                                                    tabindex="-1"
+                                            >
+                                                <div class="py-1" role="none">
+
+                                            <span class="block hover:bg-neutral-50">
+                                                <a href="{{ path('whatwedo_cronjob_excecution', { 'id': item.id }) }}" class="text-neutral-700 group flex items-center px-4 py-2 text-sm" tabindex="-1">
+                                                    {{ bootstrap_icon('eye', { class: 'inline mr-3 h-5 w-5 text-neutral-400 group-hover:text-neutral-500' }) }}
+                                                    show
+                                                </a>
+                                            </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
 {% endblock %}
