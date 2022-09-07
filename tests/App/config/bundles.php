@@ -26,5 +26,5 @@ return [
     ],
     whatwedo\CronBundle\whatwedoCronBundle::class => [
         'all' => true,
-    ]
+    ],
 ];

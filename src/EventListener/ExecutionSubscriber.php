@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -35,23 +37,18 @@ use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
-/**
- * Class ExecutionSubscriber
- */
 class ExecutionSubscriber implements EventSubscriber
 {
     /**
      * @var LoggerInterface
      */
     protected $logger;
+
     /**
      * @var CronJobManager
      */
     protected $cronJobManager;
 
-    /**
-     * ExecutionSubscriber constructor.
-     */
     public function __construct(LoggerInterface $logger, CronJobManager $cronJobManager)
     {
         $this->logger = $logger;
@@ -74,7 +71,7 @@ class ExecutionSubscriber implements EventSubscriber
     {
         // Only apply on entities which are instance of Execution
         $entity = $args->getObject();
-        if (!$entity instanceof Execution) {
+        if (! $entity instanceof Execution) {
             return;
         }
 

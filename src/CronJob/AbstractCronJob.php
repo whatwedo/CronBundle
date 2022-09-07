@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -29,9 +31,6 @@ namespace whatwedo\CronBundle\CronJob;
 
 use whatwedo\CronBundle\Manager\CronJobManager;
 
-/**
- * Class AbstractCronJob
- */
 abstract class AbstractCronJob implements CronJobInterface
 {
     /**
@@ -39,18 +38,13 @@ abstract class AbstractCronJob implements CronJobInterface
      */
     protected $cronJobManager;
 
-    /**
-     * AbstractCronJob constructor.
-     *
-     * @param CronJobManager $cronJobManager
-     */
     public function __construct(CronJobManager $cronJobManager)
     {
         $this->cronJobManager = $cronJobManager;
     }
 
     /**
-     * Returns command description
+     * Returns command description.
      */
     public function getDescription(): ?string
     {
@@ -58,7 +52,7 @@ abstract class AbstractCronJob implements CronJobInterface
     }
 
     /**
-     * Returns command arguments
+     * Returns command arguments.
      *
      * @return string[]
      */
@@ -68,7 +62,7 @@ abstract class AbstractCronJob implements CronJobInterface
     }
 
     /**
-     * Returns max runtime in seconds
+     * Returns max runtime in seconds.
      */
     public function getMaxRuntime(): ?int
     {

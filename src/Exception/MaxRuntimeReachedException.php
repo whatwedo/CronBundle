@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,18 +29,11 @@
 
 namespace whatwedo\CronBundle\Exception;
 
-use Throwable;
 use whatwedo\CronBundle\Entity\Execution;
 
-/**
- * Class MaxRuntimeReachedException
- */
 class MaxRuntimeReachedException extends CronException
 {
-    /**
-     * MaxRuntimeReachedException constructor.
-     */
-    public function __construct(Execution $execution, int $code = 0, Throwable $previous = null)
+    public function __construct(Execution $execution, int $code = 0, \Throwable $previous = null)
     {
         parent::__construct(sprintf('Execution %s reached max runtime', $execution), $code, $previous);
     }

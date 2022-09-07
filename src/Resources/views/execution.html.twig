@@ -1,0 +1,119 @@
+{% extends '@whatwedoCron/base.html.twig' %}
+
+{% block title %}{{ content_title|trans() }}{% endblock %}
+
+{% block actions %}
+    <a href="{{ path('whatwedo_cronjob_show', { class: execution.job }) }}" class="whatwedo-crud-button--action-neutral" role="menuitem" tabindex="-1">
+        {{ bootstrap_icon('eye', { class: 'inline mr-1 h-4 w-4' }) }}
+        {{'cronjob.action.back_detail'|trans }}
+    </a>
+{% endblock %}
+
+{% block main %}
+    <h1 class="p-4 m-4 text-lg leading-6 font-medium text-neutral-900">Execution {{ execution.job }}</h1>
+    <div id="wwd-crud-block-wwd_cron_execution" class="w-full">
+        <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+            <div class="border-t border-neutral-200 bg-white sm:rounded-b-lg">
+                <dl>
+
+                    <div id="wwd-crud-block-wwd_cron_execution-content-job"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-job-label">
+                            Cron Job
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-job-content">
+                            {{ execution.job}}
+                        </dd>
+                    </div>
+                    <div id="wwd-crud-block-wwd_cron_execution-content-state"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-state-label">
+                            {{ 'cronjob.state'|trans }}
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-state-content">
+                            {{ execution.state}}
+                        </dd>
+                    </div>
+                    <div id="wwd-crud-block-wwd_cron_execution-content-command"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-command-label">
+                            {{ 'cronjob.command'|trans }}
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-command-content">
+                            {{ execution.command|join(' ')}}
+                        </dd>
+                    </div>
+                    <div id="wwd-crud-block-wwd_cron_execution-content-startedAt"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-startedAt-label">
+                            {{ 'cronjob.startedAt'|trans }}
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-startedAt-content">
+                            {{ execution.startedAt|date('d.m.Y H:i') }}
+                        </dd>
+                    </div>
+                    <div id="wwd-crud-block-wwd_cron_execution-content-finishedAt"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-finishedAt-label">
+                            {{ 'cronjob.finishedAt'|trans }}
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-finishedAt-content">
+                            {{ execution.finishedAt|date('d.m.Y H:i') }}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div id="wwd-crud-block-wwd_cron_execution" class="w-full">
+        <div class="bg-neutral-50 shadow sm:rounded-lg m-4">
+            <div class="px-4 py-5 sm:px-6">
+
+                <h3 class="text-lg leading-6 font-medium text-neutral-900">
+                    {{ 'cronjob.output'|trans }}
+                </h3>
+
+
+            </div>
+            <div class="border-t border-neutral-200 bg-white sm:rounded-b-lg">
+                <dl>
+
+                    <div id="wwd-crud-block-wwd_cron_execution-content-description"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-stdout-label">
+                            {{ 'cronjob.output.std'|trans }}
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-stdout-content">
+                            <pre>{{ execution.stdout }}</pre>
+                        </dd>
+                    </div>
+                    <div id="wwd-crud-block-wwd_cron_execution-content-expression"
+                         class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-neutral-500"
+                            id="wwd-crud-block-wwd_cron_execution-content-stderr-label">
+                            {{ 'cronjob.output.stdErr'|trans }}
+                        </dt>
+                        <dd class="mt-1 text-sm text-neutral-900 sm:mt-0 sm:col-span-2"
+                            id="wwd-crud-block-wwd_cron_execution-content-stderr-content">
+                            <pre>{{ execution.stderr }}</pre>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

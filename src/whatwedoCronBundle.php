@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,13 +29,10 @@
 
 namespace whatwedo\CronBundle;
 
-use whatwedo\CronBundle\DependencyInjection\Compiler\CronJobPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use whatwedo\CronBundle\DependencyInjection\Compiler\CronJobPass;
 
-/**
- * Class whatwedoCronBundle
- */
 class whatwedoCronBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void

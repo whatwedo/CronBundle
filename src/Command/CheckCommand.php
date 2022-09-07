@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,8 +29,8 @@
 
 namespace whatwedo\CronBundle\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use whatwedo\CronBundle\Manager\ExecutionManager;
@@ -44,6 +46,7 @@ class CheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->executionManager->check();
+
         return Command::SUCCESS;
     }
 }

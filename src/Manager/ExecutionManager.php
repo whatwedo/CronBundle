@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,18 +29,13 @@
 
 namespace whatwedo\CronBundle\Manager;
 
-use Cocur\BackgroundProcess\BackgroundProcess;
 use Cron\CronExpression;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
-/**
- * Class ExecutionManager
- */
 class ExecutionManager
 {
     protected LoggerInterface $logger;
@@ -76,27 +73,28 @@ class ExecutionManager
     /**
      * Return date of last execution or null if there is no previous run.
      */
-    public function getLastExecutionDate(CronInterface $cronJob): ?DateTime
+    public function getLastExecutionDate(CronInterface $cronJob): ?\DateTime
     {
         $lastExecution = $this->getLastExecution($cronJob);
-        if (!$lastExecution) {
+        if (! $lastExecution) {
             return null;
         }
+
         return $lastExecution->getStartedAt();
     }
 
     /**
      * Return date of next execution or null if there is no previous run (run needed).
      */
-    public function getNextExecutionDate(CronInterface $cronJob): ?DateTime
+    public function getNextExecutionDate(CronInterface $cronJob): ?\DateTime
     {
         $lastExecutionDate = $this->getLastExecutionDate($cronJob);
-        if (!$lastExecutionDate) {
+        if (! $lastExecutionDate) {
             return null;
         }
 
         return CronExpression::factory($cronJob->getExpression())
-                             ->getNextRunDate($this->getLastExecutionDate($cronJob));
+            ->getNextRunDate($this->getLastExecutionDate($cronJob));
     }
 
     public function isRunNeeded(CronInterface $cronJob): bool
@@ -105,8 +103,9 @@ class ExecutionManager
         $this->logger->debug(sprintf('Checking if execution of %s is needed', $cronJob::class));
 
         // Check if cron is disabled.
-        if (!$cronJob->isActive()) {
+        if (! $cronJob->isActive()) {
             $this->logger->debug(sprintf('%s do not need to run. It\'s disabled.', $cronJob::class));
+
             return false;
         }
 
@@ -115,36 +114,42 @@ class ExecutionManager
         if ($pendingExcecution) {
             $this->logger->debug(sprintf('%s has pending exection. Scheduling it now.', $cronJob::class));
             $this->cleanupPending($cronJob);
+
             return true;
         }
 
         // Get next execution date
         $nextExecutionDate = $this->getNextExecutionDate($cronJob);
-        if (!$nextExecutionDate) {
+        if (! $nextExecutionDate) {
             $this->logger->debug(sprintf('%s has no previous run. Scheduling it now.', $cronJob::class));
+
             return true;
         }
 
         // Check if run needed
-        $now = new DateTime();
+        $now = new \DateTime();
         if ($nextExecutionDate > $now) {
             $this->logger->debug(sprintf('%s do not need to run. Next run at %s', $cronJob::class, $nextExecutionDate->format('Y-m-d H:i:s')));
+
             return false;
         }
 
         // Check if parallel execution allowed
         if ($cronJob->isParallelAllowed()) {
             $this->logger->debug(sprintf('%s needs to run, Parallel execution is allowed.', $cronJob::class));
+
             return true;
         }
 
         // Check if previous execution still running
         $lastExecution = $this->getLastExecution($cronJob);
-        if ($lastExecution->getState() == Execution::STATE_RUNNING) {
+        if ($lastExecution->getState() === Execution::STATE_RUNNING) {
             $this->logger->debug(sprintf('%s has a still running previous execution. Skipping it until previous execution finished.', $cronJob::class));
+
             return false;
         }
         $this->logger->debug(sprintf('%s needs to run, Parallel execution is not allowed', $cronJob::class));
+
         return true;
     }
 
@@ -161,7 +166,7 @@ class ExecutionManager
     protected function schedule(CronInterface $cronJob): void
     {
         $this->logger->info(sprintf('Scheduling execution of %s', $cronJob::class));
-        $process = new Process([$this->projectDir.'/bin/console', 'whatwedo:cron:execute', $cronJob::class,  '-e', $this->environment]);
+        $process = new Process([$this->projectDir . '/bin/console', 'whatwedo:cron:execute', $cronJob::class,  '-e', $this->environment]);
         $process->run();
         $this->logger->debug(sprintf('Helper process running with PID %d', $process->getPid()));
     }
@@ -177,7 +182,7 @@ class ExecutionManager
         $executions = $this->em->getRepository(Execution::class)->findByState(Execution::STATE_RUNNING);
         foreach ($executions as $execution) {
             $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getJob()));
-            if (!posix_kill($execution->getPid(), 0)) {
+            if (! posix_kill($execution->getPid(), 0)) {
                 $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getJob()));
                 $execution
                     ->setState(Execution::STATE_STALE)

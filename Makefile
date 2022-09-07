@@ -25,6 +25,10 @@ help:
 install:
 	composer update
 
+## Fix PHP Styles
+ecs:
+	vendor/bin/ecs --fix
+
 ## PHP Unit
 phpunit:
 	vendor/bin/simple-phpunit

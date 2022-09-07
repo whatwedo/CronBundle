@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,12 +29,11 @@
 
 namespace whatwedo\CronBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use whatwedo\CronBundle\CronJob\CronInterface;
 
 /**
- * Class Execution
+ * Class Execution.
  *
  * @ORM\Table(name="whatwedo_cron_execution")
  * @ORM\Entity(repositoryClass="whatwedo\CronBundle\Repository\ExecutionRepository")
@@ -40,13 +41,16 @@ use whatwedo\CronBundle\CronJob\CronInterface;
 class Execution
 {
     public const STATE_PENDING = 'pending';
+
     public const STATE_RUNNING = 'running';
+
     public const STATE_FINISHED = 'finished';
+
     public const STATE_STALE = 'stale';
+
     public const STATE_TERMINATED = 'terminated';
 
     /**
-    *
      * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -108,13 +112,10 @@ class Execution
      */
     protected $cronJob;
 
-    /**
-     * Execution constructor.
-     */
     public function __construct()
     {
-        $this->startedAt = new DateTime();
-        $this->updatedAt = new DateTime();
+        $this->startedAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -130,6 +131,7 @@ class Execution
     public function setState(?string $state): self
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -141,6 +143,7 @@ class Execution
     public function setJob(?string $job): self
     {
         $this->job = $job;
+
         return $this;
     }
 
@@ -158,39 +161,43 @@ class Execution
     public function setCommand(?array $command): self
     {
         $this->command = $command;
+
         return $this;
     }
 
-    public function getStartedAt(): ?DateTime
+    public function getStartedAt(): ?\DateTime
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(?DateTime $startedAt): self
+    public function setStartedAt(?\DateTime $startedAt): self
     {
         $this->startedAt = $startedAt;
+
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
-    public function getFinishedAt(): ?DateTime
+    public function getFinishedAt(): ?\DateTime
     {
         return $this->finishedAt;
     }
 
-    public function setFinishedAt(?DateTime $finishedAt): self
+    public function setFinishedAt(?\DateTime $finishedAt): self
     {
         $this->finishedAt = $finishedAt;
+
         return $this;
     }
 
@@ -202,6 +209,7 @@ class Execution
     public function setPid(?int $pid): self
     {
         $this->pid = $pid;
+
         return $this;
     }
 
@@ -213,6 +221,7 @@ class Execution
     public function setExitCode(?int $exitCode): self
     {
         $this->exitCode = $exitCode;
+
         return $this;
     }
 
@@ -224,6 +233,7 @@ class Execution
     public function setStdout(?string $stdout): self
     {
         $this->stdout = $stdout;
+
         return $this;
     }
 
@@ -235,6 +245,7 @@ class Execution
     public function setStderr(?string $stderr): self
     {
         $this->stderr = $stderr;
+
         return $this;
     }
 
@@ -246,11 +257,12 @@ class Execution
     public function setCronJob(?CronInterface $cronJob): self
     {
         $this->cronJob = $cronJob;
+
         return $this;
     }
 
     public function __toString(): string
     {
-        return '#'.str_pad($this->getId(), 6, '0', STR_PAD_LEFT);
+        return '#' . str_pad($this->getId(), 6, '0', STR_PAD_LEFT);
     }
 }

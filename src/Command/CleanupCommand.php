@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,14 +29,11 @@
 
 namespace whatwedo\CronBundle\Command;
 
-use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Attribute\AsCommand;
-use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 #[AsCommand(name: 'whatwedo:cron:cleanup', description: 'Cleans up jobs which exceed the maximum retention time')]
@@ -42,8 +41,7 @@ class CleanupCommand extends Command
 {
     public function __construct(
         protected ExecutionRepository $executionRepository
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -64,7 +62,7 @@ class CleanupCommand extends Command
         $perCall = (int) $input->getOption('per-call');
 
         $deletedSuccessful = $this->executionRepository->deleteSuccessfulJobs(
-            new DateTimeImmutable('-' . $input->getOption('max-retention-successful')),
+            new \DateTimeImmutable('-' . $input->getOption('max-retention-successful')),
             $perCall
         );
 
@@ -74,7 +72,7 @@ class CleanupCommand extends Command
         ));
 
         $deletedNotSuccessful = $this->executionRepository->deleteNotSuccessfulJobs(
-            new DateTimeImmutable('-' . $input->getOption('max-retention')),
+            new \DateTimeImmutable('-' . $input->getOption('max-retention')),
             $perCall
         );
 
@@ -82,6 +80,7 @@ class CleanupCommand extends Command
             '- deleted <info>%s</info> not successful job execution logs',
             $deletedNotSuccessful
         ));
+
         return Command::SUCCESS;
     }
 }

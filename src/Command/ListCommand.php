@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -28,29 +30,27 @@
 namespace whatwedo\CronBundle\Command;
 
 use Cron\CronExpression;
-use whatwedo\CronBundle\Manager\CronJobManager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Attribute\AsCommand;
+use whatwedo\CronBundle\Manager\CronJobManager;
 
 #[AsCommand(name: 'whatwedo:cron:list', description: 'List all cron jobs')]
 class ListCommand extends Command
 {
     public function __construct(
         protected CronJobManager $cronJobManager
-    )
-    {
+    ) {
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);
         $table->setHeaders(['Command', 'Description', 'Next Run']);
         foreach ($this->cronJobManager->getCronJobs() as $cronJob) {
-
             $nextRunDate = 'invalid cron expression';
             if (CronExpression::isValidExpression($cronJob->getExpression())) {
                 $cronExpression = CronExpression::factory($cronJob->getExpression());
