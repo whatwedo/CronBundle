@@ -33,31 +33,22 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
-/**
- * Class ListCommand
- */
+#[AsCommand(name: 'whatwedo:cron:list', description: 'List all cron jobs')]
 class ListCommand extends Command
 {
-    protected CronJobManager $cronJobManager;
-
-    public function __construct(CronJobManager $cronJobManager)
+    public function __construct(
+        protected CronJobManager $cronJobManager
+    )
     {
         parent::__construct();
-        $this->cronJobManager = $cronJobManager;
-    }
-
-    protected function configure(): void
-    {
-        parent::configure();
-        $this->setName('whatwedo:cron:list')
-            ->setDescription('List all cron jobs');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $table = new Table($output);
-        $table->setHeaders(['Cron job', 'Description', 'Next Run']);
+        $table->setHeaders(['Command', 'Description', 'Next Run']);
         foreach ($this->cronJobManager->getCronJobs() as $cronJob) {
 
             $nextRunDate = 'invalid cron expression';

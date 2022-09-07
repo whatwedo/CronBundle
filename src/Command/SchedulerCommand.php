@@ -35,8 +35,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
-#[AsCommand(name: 'whatwedo:cron:scheduler')]
+#[AsCommand(name: 'whatwedo:cron:scheduler', description: 'Run scheduler process')]
 class SchedulerCommand extends Command
 {
     protected LoggerInterface $logger;
@@ -55,9 +56,7 @@ class SchedulerCommand extends Command
 
     protected function configure(): void
     {
-        parent::configure();
-        $this->setName('whatwedo:cron:scheduler')
-            ->setDescription('Run scheduler process')
+        $this
             ->addOption('max-runtime', null, InputOption::VALUE_OPTIONAL, 'Max runtime of scheduler in secords', 600);
     }
 

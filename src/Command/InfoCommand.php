@@ -33,16 +33,14 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Manager\CronJobManager;
 use whatwedo\CronBundle\Manager\ExecutionManager;
 
-/**
- * Class InfoCommand
- */
-#[AsCommand(name: 'whatwedo:cron:info')]
+#[AsCommand(name: 'whatwedo:cron:info', description: 'Print information about the given cron job')]
 class InfoCommand extends Command
 {
     protected CronJobManager $cronJobManager;
@@ -64,9 +62,7 @@ class InfoCommand extends Command
      */
     protected function configure(): void
     {
-        parent::configure();
-        $this->setName('whatwedo:cron:info')
-            ->setDescription('Print information about the given cron job')
+        $this
             ->addArgument('cron_job', InputArgument::REQUIRED, 'Class of cron job to execute');
     }
 

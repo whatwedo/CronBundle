@@ -35,6 +35,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Attribute\AsCommand;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
@@ -44,33 +45,17 @@ use whatwedo\CronBundle\Event\CronStartEvent;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
-/**
- * Class ExecuteCommand
- */
-#[AsCommand(name: 'whatwedo:cron:execute')]
+#[AsCommand(name: 'whatwedo:cron:execute', description: 'Execute cron job')]
 class ExecuteCommand extends Command
 {
-    protected CronJobManager $cronJobManager;
-
-    protected EntityManagerInterface $em;
-
-    protected EventDispatcherInterface$eventDispatcher;
-
-    protected string $projectDir;
-
-    protected string $environment;
-
-    /**
-     * ExecuteCommand constructor.
-     */
-    public function __construct(CronJobManager $cronJobManager, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, string $projectDir, string $environment)
+    public function __construct(
+        protected CronJobManager $cronJobManager,
+        protected EntityManagerInterface $entityManager,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected string $projectDir,
+        protected string $environment)
     {
         parent::__construct();
-        $this->em = $em;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->projectDir = $projectDir;
-        $this->cronJobManager = $cronJobManager;
-        $this->environment = $environment;
     }
 
     public function checkMaxRuntime(Execution $execution, CronInterface $cronJob, Process $process): void
@@ -86,19 +71,14 @@ class ExecuteCommand extends Command
                 ->setPid(null)
                 ->setStdout($process->getOutput())
                 ->setStderr($process->getErrorOutput());
-            $this->em->flush($execution);
+            $this->entityManager->flush($execution);
             throw new MaxRuntimeReachedException($execution);
         }
     }
 
-    /**
-     * Configures the current command.
-     */
     protected function configure(): void
     {
-        parent::configure();
-        $this->setName('whatwedo:cron:execute')
-            ->setDescription('Execute cron job')
+        $this
             ->addArgument('cron_job', InputArgument::REQUIRED, 'Class of cron job to execute');
     }
 
@@ -114,14 +94,14 @@ class ExecuteCommand extends Command
         $execution = new Execution();
         $execution->setJob($cronJob::class)
             ->setCommand($command);
-        $this->em->persist($execution);
-        $this->em->flush($execution);
+        $this->entityManager->persist($execution);
+        $this->entityManager->flush($execution);
 
         // Run command
         $process = new Process($command, $this->projectDir);
         $process->start();
         $execution->setPid($process->getPid());
-        $this->em->flush($execution);
+        $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronStartEvent($cronJob), CronStartEvent::NAME);
 
         // Update command output every 5 seconds
@@ -131,7 +111,7 @@ class ExecuteCommand extends Command
             sleep(5);
             $execution->setStdout($process->getOutput())
                 ->setStderr($process->getErrorOutput());
-            $this->em->flush($execution);
+            $this->entityManager->flush($execution);
         }
 
         if (!$process->isSuccessful()) {
@@ -147,7 +127,7 @@ class ExecuteCommand extends Command
             ->setStdout($process->getOutput())
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
-        $this->em->flush($execution);
+        $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
         return Command::SUCCESS;
     }
