@@ -28,26 +28,17 @@
 namespace whatwedo\CronBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use whatwedo\CronBundle\Manager\ExecutionManager;
 
-#[AsCommand(name: 'whatwedo:cron:check')]
+#[AsCommand(name: 'whatwedo:cron:check', description: 'Check (once) and run cron jobs')]
 class CheckCommand extends Command
 {
-    protected ExecutionManager $executionManager;
-
-    public function __construct(ExecutionManager $executionManager)
+    public function __construct(protected ExecutionManager $executionManager)
     {
         parent::__construct();
-        $this->executionManager = $executionManager;
-    }
-
-    protected function configure(): void
-    {
-        parent::configure();
-        $this->setName('whatwedo:cron:check')
-            ->setDescription('Check (once) and run cron jobs');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

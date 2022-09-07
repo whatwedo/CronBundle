@@ -33,27 +33,23 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
-#[AsCommand(name: 'whatwedo:cron:cleanup')]
+#[AsCommand(name: 'whatwedo:cron:cleanup', description: 'Cleans up jobs which exceed the maximum retention time')]
 class CleanupCommand extends Command
 {
-    protected $executionRepository;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(
+        protected ExecutionRepository $executionRepository
+    )
     {
         parent::__construct();
-        $this->executionRepository = $entityManager->getRepository(Execution::class);
     }
 
     protected function configure(): void
     {
-        parent::configure();
-
         $this
-            ->setName('whatwedo:cron:cleanup')
-            ->setDescription('Cleans up jobs which exceed the maximum retention time')
             ->addOption('max-retention', null, InputOption::VALUE_REQUIRED, 'The maximum retention time (will be parsed by DateTime).', '1 month')
             ->addOption('max-retention-successful', null, InputOption::VALUE_REQUIRED, 'The maximum retention time for succeeded jobs (will be parsed by DateTime).', '7 days')
             ->addOption('per-call', null, InputOption::VALUE_REQUIRED, 'The maximum number of jobs to clean-up per call.', 1000)
