@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,13 +29,12 @@
 
 namespace whatwedo\CronBundle\Command;
 
-use DateTime;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Attribute\AsCommand;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
@@ -47,9 +48,6 @@ class InfoCommand extends Command
 
     protected ExecutionManager $executionManager;
 
-    /**
-     * InfoCommand constructor.
-     */
     public function __construct(CronJobManager $cronJobManager, ExecutionManager $executionManager)
     {
         parent::__construct();
@@ -82,12 +80,13 @@ class InfoCommand extends Command
             ['Arguments', $this->getArgumentString($cronJob)],
             ['Last execution', $this->getLastExecutionDateString($cronJob)],
             ['Next execution', $this->getNextExecutionDateString($cronJob)],
-            ['Max runtime', $cronJob->getMaxRuntime().' seconds'],
+            ['Max runtime', $cronJob->getMaxRuntime() . ' seconds'],
             ['Lock status', $this->getLockStatus($cronJob)],
         ]);
 
         // Render table
         $table->render();
+
         return Command::SUCCESS;
     }
 
@@ -116,33 +115,36 @@ class InfoCommand extends Command
     protected function getLastExecutionDateString(CronInterface $cronJob): ?string
     {
         $lastExecutionDate = $this->executionManager->getLastExecutionDate($cronJob);
-        if (!$lastExecutionDate) {
+        if (! $lastExecutionDate) {
             return null;
         }
+
         return $this->getFormattedDate($lastExecutionDate);
     }
 
     protected function getNextExecutionDateString(CronInterface $cronJob): ?string
     {
-        if (!$cronJob->isActive()) {
+        if (! $cronJob->isActive()) {
             return 'Disabled';
         }
         $nextExecutionDate = $this->executionManager->getNextExecutionDate($cronJob);
-        if (!$nextExecutionDate) {
+        if (! $nextExecutionDate) {
             return null;
         }
-        $now = new DateTime();
+        $now = new \DateTime();
         if ($nextExecutionDate < $now) {
             return 'Now';
         }
+
         return $this->getFormattedDate($nextExecutionDate);
     }
 
-    protected function getFormattedDate(DateTime $date): ?string
+    protected function getFormattedDate(\DateTime $date): ?string
     {
-        if (!$date) {
+        if (! $date) {
             return null;
         }
+
         return $date->format('Y-m-d H:i:s');
     }
 
@@ -153,9 +155,10 @@ class InfoCommand extends Command
         }
 
         $lastExecution = $this->executionManager->getLastExecution($cronJob);
-        if ($lastExecution && $lastExecution->getState() == Execution::STATE_RUNNING) {
+        if ($lastExecution && $lastExecution->getState() === Execution::STATE_RUNNING) {
             return 'Locked';
         }
+
         return 'Not locked';
     }
 }

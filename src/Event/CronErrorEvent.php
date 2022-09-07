@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2020, whatwedo GmbH
  * All rights reserved
@@ -25,7 +27,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 namespace whatwedo\CronBundle\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
@@ -34,10 +35,12 @@ use whatwedo\CronBundle\CronJob\CronInterface;
 class CronErrorEvent extends Event
 {
     public const NAME = 'whatwedo.cron.error';
+
     /**
      * @var CronInterface
      */
     protected $cron;
+
     /**
      * @var string
      */

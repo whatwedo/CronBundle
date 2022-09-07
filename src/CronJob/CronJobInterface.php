@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -28,44 +30,44 @@
 namespace whatwedo\CronBundle\CronJob;
 
 /**
- * Interface CronJobInterface
+ * Interface CronJobInterface.
  */
 interface CronJobInterface extends CronInterface
 {
     /**
-     * Returns command description
+     * Returns command description.
      */
     public function getDescription(): ?string;
 
     /**
-     * Returns command name
+     * Returns command name.
      */
     public function getCommand(): string;
 
     /**
-     * Returns cron expression
+     * Returns cron expression.
      */
     public function getExpression(): string;
 
     /**
-     * Returns command arguments
+     * Returns command arguments.
      *
      *  @return string[]
      */
     public function getArguments(): array;
 
     /**
-     * Returns max runtime in seconds
+     * Returns max runtime in seconds.
      */
     public function getMaxRuntime(): ?int;
 
     /**
-     * Allow parallel execution or wait until finished
+     * Allow parallel execution or wait until finished.
      */
     public function isParallelAllowed(): bool;
 
     /**
-     * Returns if the Job is enabled or not
+     * Returns if the Job is enabled or not.
      */
     public function isActive(): bool;
 }

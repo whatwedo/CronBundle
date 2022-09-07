@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -33,23 +35,18 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 
-/**
- * Class CronJobManager
- */
 class CronJobManager
 {
     /**
      * @var Application
      */
     protected $consoleApplication;
+
     /**
      * @var CronInterface[]
      */
     protected $cronJobs = [];
 
-    /**
-     * CronJobManager constructor.
-     */
     public function __construct(KernelInterface $kernel)
     {
         $this->consoleApplication = new Application($kernel);
@@ -58,6 +55,7 @@ class CronJobManager
     public function addCronJob(CronInterface $cronJob): self
     {
         $this->cronJobs[$cronJob::class] = $cronJob;
+
         return $this;
     }
 
@@ -78,7 +76,7 @@ class CronJobManager
         }
         throw new CronJobNotFoundException($class);
     }
-    
+
     public function getCommandByCronJob(CronInterface $cronJob): Command
     {
         return $this->consoleApplication->find($cronJob->getCommand());

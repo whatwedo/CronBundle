@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace whatwedo\CronBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
-class CronExtension extends AbstractExtension   
+class CronExtension extends AbstractExtension
 {
     public function getFunctions()
     {

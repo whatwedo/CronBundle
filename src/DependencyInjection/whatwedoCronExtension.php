@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -33,14 +35,8 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use whatwedo\CronBundle\CronJob\CronInterface;
 
-/**
- * Class whatwedoCronExtension
- */
 class whatwedoCronExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         // Auto tag cron jobs

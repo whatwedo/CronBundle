@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace whatwedo\CronBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Manager\CronJobManager;
@@ -138,7 +139,7 @@ class CronJobController extends AbstractController
     {
         $cronJob = $this->cronJobManager->getCronJob($class);
 
-        if (!$cronJob) {
+        if (! $cronJob) {
             throw new \Exception('Job not found');
         }
 
@@ -152,5 +153,4 @@ class CronJobController extends AbstractController
 
         return $this->redirect($url);
     }
-
 }

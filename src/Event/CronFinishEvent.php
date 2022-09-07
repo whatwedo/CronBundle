@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2020, whatwedo GmbH
  * All rights reserved
@@ -33,6 +35,7 @@ use whatwedo\CronBundle\CronJob\CronInterface;
 class CronFinishEvent extends Event
 {
     public const NAME = 'whatwedo.cron.finish';
+
     /**
      * @var CronInterface
      */

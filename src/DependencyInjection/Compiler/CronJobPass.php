@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -32,9 +34,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
-/**
- * Class CronJobPass
- */
 class CronJobPass implements CompilerPassInterface
 {
     /**
@@ -42,7 +41,7 @@ class CronJobPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has(CronJobManager::class)) {
+        if (! $container->has(CronJobManager::class)) {
             return;
         }
         $definition = $container->findDefinition(CronJobManager::class);

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,17 +29,9 @@
 
 namespace whatwedo\CronBundle\Exception;
 
-use Throwable;
-
-/**
- * Class CronJobNotFoundException
- */
 class CronJobNotFoundException extends CronException
 {
-    /**
-     * CronJobNotFoundException constructor.
-     */
-    public function __construct(string $class, int $code = 0, Throwable $previous = null)
+    public function __construct(string $class, int $code = 0, \Throwable $previous = null)
     {
         parent::__construct(sprintf('Cron job with class %s not found', $class), $code, $previous);
     }

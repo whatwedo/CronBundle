@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,15 +29,14 @@
 
 namespace whatwedo\CronBundle\Command;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Console\Attribute\AsCommand;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
@@ -53,17 +54,17 @@ class ExecuteCommand extends Command
         protected EntityManagerInterface $entityManager,
         protected EventDispatcherInterface $eventDispatcher,
         protected string $projectDir,
-        protected string $environment)
-    {
+        protected string $environment
+    ) {
         parent::__construct();
     }
 
     public function checkMaxRuntime(Execution $execution, CronInterface $cronJob, Process $process): void
     {
-        if (!$cronJob->getMaxRuntime()) {
+        if (! $cronJob->getMaxRuntime()) {
             return;
         }
-        $now = new DateTime();
+        $now = new \DateTime();
         $diff = $now->getTimestamp() - $execution->getStartedAt()->getTimestamp();
         if ($diff > $cronJob->getMaxRuntime()) {
             $execution
@@ -88,7 +89,7 @@ class ExecuteCommand extends Command
         $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
 
         // Build command to execute
-        $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env='.$this->environment], $this->getCronArguments($cronJob));
+        $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env=' . $this->environment], $this->getCronArguments($cronJob));
 
         // Create execution
         $execution = new Execution();
@@ -114,21 +115,22 @@ class ExecuteCommand extends Command
             $this->entityManager->flush($execution);
         }
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             $this->eventDispatcher->dispatch(new CronErrorEvent($cronJob, $process->getErrorOutput()), CronErrorEvent::NAME);
         }
 
         // Finish execution
-        $output->writeln('Execution finished with exit code '.$process->getExitCode());
+        $output->writeln('Execution finished with exit code ' . $process->getExitCode());
         $execution
             ->setState(Execution::STATE_FINISHED)
-            ->setFinishedAt(new DateTime())
+            ->setFinishedAt(new \DateTime())
             ->setPid(null)
             ->setStdout($process->getOutput())
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
         $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
+
         return Command::SUCCESS;
     }
 

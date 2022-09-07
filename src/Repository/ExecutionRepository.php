@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -27,11 +29,7 @@
 
 namespace whatwedo\CronBundle\Repository;
 
-use App\Entity\Insurance;
-use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
@@ -85,7 +83,6 @@ class ExecutionRepository extends ServiceEntityRepository
             ])
             ->getQuery()
             ->getResult();
-
     }
 
     public function findPendingExcecution(CronInterface $cronJob)
@@ -115,8 +112,8 @@ class ExecutionRepository extends ServiceEntityRepository
             ->execute()
             ;
     }
-    
-    public function deleteSuccessfulJobs(DateTimeInterface $retention, $limit = null)
+
+    public function deleteSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -132,7 +129,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ;
     }
 
-    public function deleteNotSuccessfulJobs(DateTimeInterface $retention, $limit = null)
+    public function deleteNotSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -144,7 +141,7 @@ class ExecutionRepository extends ServiceEntityRepository
                 'stateSuccessful' => [
                     Execution::STATE_FINISHED,
                     Execution::STATE_TERMINATED,
-                    Execution::STATE_TERMINATED
+                    Execution::STATE_TERMINATED,
                 ],
             ])
             ->getQuery()
@@ -154,19 +151,18 @@ class ExecutionRepository extends ServiceEntityRepository
 
     public function deleteExecutions(CronInterface $cronJob, string $state)
     {
-
-        $states = match($state) {
+        $states = match ($state) {
             'failed', 'successful' => [
                 Execution::STATE_FINISHED,
                 Execution::STATE_TERMINATED,
-                Execution::STATE_TERMINATED
+                Execution::STATE_TERMINATED,
             ],
             'pending' => [
-                Execution::STATE_PENDING
+                Execution::STATE_PENDING,
             ],
         };
         $exitCode = 0;
-        if ($state == 'failed') {
+        if ($state === 'failed') {
             $exitCode = 1;
         }
         $queryBuilder = $this->createQueryBuilder('e')
@@ -178,6 +174,7 @@ class ExecutionRepository extends ServiceEntityRepository
             $queryBuilder
                 ->andWhere('e.exitCode != 0');
         }
+
         return $queryBuilder
             ->setParameters([
                 'job' => $cronJob::class,
