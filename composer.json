@@ -35,7 +35,6 @@
         "symfony/config": "~6.0.0",
         "symfony/dependency-injection": "~6.0.0",
         "symfony/yaml": "~6.0.0",
-        "symfony/framework-bundle": "~6.0.0",
         "symfony/validator": "~6.0.0",
         "symfony/maker-bundle": "^1.0.0",
         "symfony/orm-pack": "^1.0",
@@ -46,8 +45,10 @@
         "symfony/dotenv": "~6.0.0",
         "gedmo/doctrine-extensions": "^3.5",
         "whatwedo/php-coding-standard": "dev-develop",
+        "whatwedo/twig-bootstrap-icons": "^1.0",
         "zenstruck/foundry": "^1.21",
-        "zenstruck/console-test": "^v1.3.0"
+        "zenstruck/console-test": "^v1.3.0",
+        "zenstruck/browser": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -66,5 +67,19 @@
             "allow-contrib": false,
             "require": "6.0.*"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "twbs/icons",
+                "version": "1.4.1",
+                "source": {
+                    "url": "https://github.com/twbs/icons",
+                    "type": "git",
+                    "reference": "tags/v1.4.1"
+                }
+            }
+        }
+    ]
 }
