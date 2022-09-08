@@ -50,6 +50,8 @@ class Execution
 
     public const STATE_TERMINATED = 'terminated';
 
+    public const STATE_ERROR = 'error';
+
     /**
      * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
      * @ORM\Id
