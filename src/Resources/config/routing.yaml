@@ -1,11 +1,11 @@
 whatwedo_cronjob_index:
-  path: /wwd_cronjob
+  path: /index
   controller: whatwedo\CronBundle\Controller\CronJobController::index
 whatwedo_cronjob_show:
   path: /show/{class}
   controller: whatwedo\CronBundle\Controller\CronJobController::show
 whatwedo_cronjob_excecution:
-  path: /excecutions/{id}
+  path: /excecution/{id}
   controller: whatwedo\CronBundle\Controller\CronJobController::execution
 whatwedo_cronjob_run:
   path: /run/{class}

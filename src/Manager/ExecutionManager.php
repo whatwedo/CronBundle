@@ -35,26 +35,18 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 class ExecutionManager
 {
-    protected LoggerInterface $logger;
-
-    protected EntityManagerInterface $em;
-
-    protected CronJobManager $cronJobManager;
-
-    protected string $projectDir;
-
-    protected string $environment;
-
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $em, CronJobManager $cronJobManager, string $projectDir, string $environment)
-    {
-        $this->logger = $logger;
-        $this->em = $em;
-        $this->cronJobManager = $cronJobManager;
-        $this->projectDir = $projectDir;
-        $this->environment = $environment;
+    public function __construct(
+        protected LoggerInterface $logger,
+        protected EntityManagerInterface $em,
+        protected ExecutionRepository $repository,
+        protected CronJobManager $cronJobManager,
+        protected string $projectDir,
+        protected string $environment
+    ) {
     }
 
     public function check(): void
@@ -155,12 +147,12 @@ class ExecutionManager
 
     public function getLastExecution(CronInterface $cronJob): ?Execution
     {
-        return $this->em->getRepository(Execution::class)->findLastExecution($cronJob);
+        return $this->repository->findLastExecution($cronJob);
     }
 
     public function getPendingExecution(CronInterface $cronJob)
     {
-        return $this->em->getRepository(Execution::class)->findPendingExcecution($cronJob);
+        return $this->repository->findPendingExcecution($cronJob);
     }
 
     protected function schedule(CronInterface $cronJob): void
@@ -173,13 +165,13 @@ class ExecutionManager
 
     protected function cleanupPending(CronInterface $cronJob): void
     {
-        $this->em->getRepository(Execution::class)->deletePendingJob($cronJob);
+        $this->repository->deletePendingJob($cronJob);
         $this->em->flush();
     }
 
     protected function cleanupStale(): void
     {
-        $executions = $this->em->getRepository(Execution::class)->findByState(Execution::STATE_RUNNING);
+        $executions = $this->repository->findByState(Execution::STATE_RUNNING);
         foreach ($executions as $execution) {
             $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getJob()));
             if (! posix_kill($execution->getPid(), 0)) {

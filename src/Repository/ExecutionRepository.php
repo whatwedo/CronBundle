@@ -41,6 +41,9 @@ class ExecutionRepository extends ServiceEntityRepository
         parent::__construct($registry, Execution::class);
     }
 
+    /**
+     * @return Execution[]
+     */
     public function findByState(string $state)
     {
         return $this->createQueryBuilder('e')
@@ -152,28 +155,22 @@ class ExecutionRepository extends ServiceEntityRepository
     public function deleteExecutions(CronInterface $cronJob, string $state)
     {
         $states = match ($state) {
-            'failed', 'successful' => [
+            'successful' => [
                 Execution::STATE_FINISHED,
                 Execution::STATE_TERMINATED,
-                Execution::STATE_TERMINATED,
+            ],
+            'failed', => [
+                Execution::STATE_ERROR,
             ],
             'pending' => [
                 Execution::STATE_PENDING,
             ],
         };
-        $exitCode = 0;
-        if ($state === 'failed') {
-            $exitCode = 1;
-        }
+
         $queryBuilder = $this->createQueryBuilder('e')
             ->delete()
             ->where('e.job = :job')
             ->andWhere('e.state IN (:states)');
-
-        if ($exitCode) {
-            $queryBuilder
-                ->andWhere('e.exitCode != 0');
-        }
 
         return $queryBuilder
             ->setParameters([

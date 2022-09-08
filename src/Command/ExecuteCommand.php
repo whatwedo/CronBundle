@@ -128,6 +128,11 @@ class ExecuteCommand extends Command
             ->setStdout($process->getOutput())
             ->setStderr($process->getErrorOutput())
             ->setExitCode($process->getExitCode());
+
+        if ($execution->getExitCode() !== 0) {
+            $execution->setState(Execution::STATE_ERROR);
+        }
+
         $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
 

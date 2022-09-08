@@ -27,4 +27,7 @@ return [
     whatwedo\CronBundle\whatwedoCronBundle::class => [
         'all' => true,
     ],
+    whatwedo\TwigBootstrapIcons\whatwedoTwigBootstrapIconsBundle::class => [
+        'all' => true,
+    ],
 ];
