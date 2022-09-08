@@ -28,7 +28,6 @@ return [
         'all' => true,
     ],
     whatwedo\TwigBootstrapIcons\whatwedoTwigBootstrapIconsBundle::class => [
-        'all'
-         => true,
+        'all' => true,
     ],
 ];
