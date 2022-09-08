@@ -1,0 +1,30 @@
+whatwedo_cronjob.state: Status
+whatwedo_cronjob.action.back_detail: Zum Detail
+whatwedo_cronjob.action.back_list: Zur Übersicht
+whatwedo_cronjob.action.deactivate: Deaktivieren
+whatwedo_cronjob.action.activate: Aktivieren
+whatwedo_cronjob.action.run: Ausführen
+whatwedo_cronjob.action.show: Anzeigen
+whatwedo_cronjob.action.cleanFailed: Fehlerhafte löschen
+whatwedo_cronjob.action.cleanPending: Anstehende löschen
+whatwedo_cronjob.action.cleanSuccessful: Erfolgreiche löschen
+whatwedo_cronjob.command: Befehl
+whatwedo_cronjob.startedAt: gestartet am
+whatwedo_cronjob.finishedAt: beendet am
+whatwedo_cronjob.output: Ausgabe
+whatwedo_cronjob.output.std: StdOut
+whatwedo_cronjob.output.stdErr: StdErr
+whatwedo_cronjob.name: Name
+whatwedo_cronjob.isActive: Aktiv
+whatwedo_cronjob.description: Beschreibung
+whatwedo_cronjob.lastExecution: Letzte Ausführung
+whatwedo_cronjob.expression: Cron Ausdruck
+whatwedo_cronjob.nextExecution: Nächste Ausführung
+whatwedo_cronjob.isDeactivated: Deaktiviert
+whatwedo_cronjob.list_no_item: Keine Elemente verfügbar
+whatwedo_cronjob.options: Optionen
+whatwedo_cronjob.yes: Ja
+whatwedo_cronjob.nein: Nein
+whatwedo_cronjob.cronJobs: cronJobs
+whatwedo_cronjob.cronJob: cronJob
+whatwedo_cronjob.execution: Ausführung
