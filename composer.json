@@ -67,19 +67,5 @@
             "allow-contrib": false,
             "require": "6.0.*"
         }
-    },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "twbs/icons",
-                "version": "1.4.1",
-                "source": {
-                    "url": "https://github.com/twbs/icons",
-                    "type": "git",
-                    "reference": "tags/v1.4.1"
-                }
-            }
-        }
-    ]
+    }
 }
