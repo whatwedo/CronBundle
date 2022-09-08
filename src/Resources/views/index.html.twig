@@ -4,14 +4,9 @@
     <div class="whatwedo_table:wrapper bg-white" {{ stimulus_controller('whatwedo/table-bundle/filter') }}>
         <header class="whatwedo_table:header border-b border-neutral-200 px-4 py-4 sm:flex sm:items-center sm:justify-between">
             <div class="whatwedo_table:header__title flex-1 min-w-0 text-lg font-medium leading-6 text-neutral-900 sm:truncate">
-
                     <h1>
-                        CronJobs
+                        {{ 'whatwedo_cronjob.cronJobs'|trans }}
                     </h1>
-
-            </div>
-            <div class="mt-4 flex sm:mt-0 sm:ml-4">
-
             </div>
         </header>
 
@@ -23,16 +18,13 @@
 
                         <thead class="whatwedo_table:table__head">
                         <tr class="border-b border-neutral-200 bg-neutral-50 text-xs font-medium text-neutral-500 text-left uppercase tracking-wider">
-
-
-                            <th class="px-3 py-3 align-top">{{ 'cronjob.name'|trans }}</th>
-                            <th class="px-3 py-3 align-top">{{ 'cronjob.isActive'|trans  }}</th>
-                            <th class="px-3 py-3 align-top">{{ 'cronjob.descripton'|trans  }}</th>
-                            <th class="px-3 py-3 align-top">{{ 'cronjob.lastExecution'|trans }}</th>
+                            <th class="px-3 py-3 align-top">{{ 'whatwedo_cronjob.name'|trans }}</th>
+                            <th class="px-3 py-3 align-top">{{ 'whatwedo_cronjob.isActive'|trans  }}</th>
+                            <th class="px-3 py-3 align-top">{{ 'whatwedo_cronjob.description'|trans  }}</th>
+                            <th class="px-3 py-3 align-top">{{ 'whatwedo_cronjob.lastExecution'|trans }}</th>
                             <th></th>
                         </tr>
                         </thead>
-
                         <tbody
                                 class="whatwedo_table:table__body bg-white text-sm text-neutral-500 font-medium divide-y divide-neutral-100">
                         {% if list is empty %}
@@ -52,9 +44,9 @@
                                 </td>
                                 <td class="px-3 py-2">
                                     {% if item.cronjob.isActive %}
-                                        yes
+                                        {{ 'whatwedo_cronjob.yes'|trans }}
                                     {% else %}
-                                        no
+                                        {{ 'whatwedo_cronjob.no'|trans }}
                                     {% endif %}
                                 </td>
                                 <td class="px-3 py-2">{{ item.cronjob.description }}</td>
@@ -67,7 +59,7 @@
                                                 {{ stimulus_action({'whatwedo/core-bundle/dropdown': ['toggle', {'click@window': 'hide'}]}) }}
                                                 type="button"
                                         >
-                                            <span class="sr-only">Optionen</span>
+                                            <span class="sr-only">{{ 'whatwedo_cronjob.options'|trans }}</span>
                                             {{ bootstrap_icon('three-dots-vertical', { class: 'h-4 w-4' }) }}
                                         </button>
                                         <div
@@ -84,7 +76,7 @@
                                             <span class="block hover:bg-neutral-50">
                                                 <a href="{{ path('whatwedo_cronjob_show', { 'class': wwd_cron_classFqcn(item.cronjob) }) }}" class="text-neutral-700 group flex items-center px-4 py-2 text-sm" tabindex="-1">
                                                     {{ bootstrap_icon('eye', { class: 'inline mr-3 h-5 w-5 text-neutral-400 group-hover:text-neutral-500' }) }}
-                                                    show
+                                                    {{ 'whatwedo_cronjob.action.show'|trans }}
                                                 </a>
                                             </span>
                                             </div>
