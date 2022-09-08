@@ -159,26 +159,18 @@ class ExecutionRepository extends ServiceEntityRepository
                 Execution::STATE_FINISHED,
                 Execution::STATE_TERMINATED,
             ],
-            'failed',=> [
+            'failed', => [
                 Execution::STATE_ERROR,
             ],
             'pending' => [
                 Execution::STATE_PENDING,
             ],
         };
-        $exitCode = 0;
-        if ($state === 'failed') {
-            $exitCode = 1;
-        }
+
         $queryBuilder = $this->createQueryBuilder('e')
             ->delete()
             ->where('e.job = :job')
             ->andWhere('e.state IN (:states)');
-
-        if ($exitCode) {
-            $queryBuilder
-                ->andWhere('e.exitCode != 0');
-        }
 
         return $queryBuilder
             ->setParameters([
