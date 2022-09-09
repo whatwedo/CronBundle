@@ -85,7 +85,9 @@ class ExecutionManager
             return null;
         }
 
-        return CronExpression::factory($cronJob->getExpression())
+        $cronExpression = new CronExpression($cronJob->getExpression());
+
+        return $cronExpression
             ->getNextRunDate($this->getLastExecutionDate($cronJob));
     }
 
@@ -150,7 +152,10 @@ class ExecutionManager
         return $this->repository->findLastExecution($cronJob);
     }
 
-    public function getPendingExecution(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function getPendingExecution(CronInterface $cronJob): array
     {
         return $this->repository->findPendingExcecution($cronJob);
     }
@@ -179,7 +184,7 @@ class ExecutionManager
                 $execution
                     ->setState(Execution::STATE_STALE)
                     ->setPid(null);
-                $this->em->flush($execution);
+                $this->em->flush();
             }
         }
     }

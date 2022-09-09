@@ -70,6 +70,7 @@ class Execution
     protected string $job;
 
     /**
+     * @var string[]
      * @ORM\Column(type="json", nullable=false)
      */
     protected ?array $command = [];
@@ -265,6 +266,6 @@ class Execution
 
     public function __toString(): string
     {
-        return '#' . str_pad($this->getId(), 6, '0', STR_PAD_LEFT);
+        return '#' . str_pad((string) $this->getId(), 6, '0', STR_PAD_LEFT);
     }
 }

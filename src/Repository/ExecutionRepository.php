@@ -44,7 +44,7 @@ class ExecutionRepository extends ServiceEntityRepository
     /**
      * @return Execution[]
      */
-    public function findByState(string $state)
+    public function findByState(string $state): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.state = :state')
@@ -53,7 +53,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByJob(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function findByJob(CronInterface $cronJob): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
@@ -74,7 +77,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findNonPendingExcecution(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function findNonPendingExcecution(CronInterface $cronJob): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
@@ -88,7 +94,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findPendingExcecution(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function findPendingExcecution(CronInterface $cronJob): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
@@ -101,7 +110,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function deletePendingJob(CronInterface $cronJob)
+    public function deletePendingJob(CronInterface $cronJob): int
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -116,7 +125,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ;
     }
 
-    public function deleteSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
+    public function deleteSuccessfulJobs(\DateTimeInterface $retention): int
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -132,7 +141,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ;
     }
 
-    public function deleteNotSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
+    public function deleteNotSuccessfulJobs(\DateTimeInterface $retention): int
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -152,7 +161,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ;
     }
 
-    public function deleteExecutions(CronInterface $cronJob, string $state)
+    public function deleteExecutions(CronInterface $cronJob, string $state): void
     {
         $states = match ($state) {
             'successful' => [
@@ -165,6 +174,7 @@ class ExecutionRepository extends ServiceEntityRepository
             'pending' => [
                 Execution::STATE_PENDING,
             ],
+            default => throw new \Exception(),
         };
 
         $queryBuilder = $this->createQueryBuilder('e')
@@ -172,7 +182,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.job = :job')
             ->andWhere('e.state IN (:states)');
 
-        return $queryBuilder
+        $queryBuilder
             ->setParameters([
                 'job' => $cronJob::class,
                 'states' => $states,

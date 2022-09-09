@@ -72,7 +72,7 @@ class ExecuteCommand extends Command
                 ->setPid(null)
                 ->setStdout($process->getOutput())
                 ->setStderr($process->getErrorOutput());
-            $this->entityManager->flush($execution);
+            $this->entityManager->flush();
             throw new MaxRuntimeReachedException($execution);
         }
     }
@@ -96,13 +96,11 @@ class ExecuteCommand extends Command
         $execution->setJob($cronJob::class)
             ->setCommand($command);
         $this->entityManager->persist($execution);
-        $this->entityManager->flush($execution);
 
         // Run command
         $process = new Process($command, $this->projectDir);
         $process->start();
         $execution->setPid($process->getPid());
-        $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronStartEvent($cronJob), CronStartEvent::NAME);
 
         // Update command output every 5 seconds
@@ -112,7 +110,6 @@ class ExecuteCommand extends Command
             sleep(5);
             $execution->setStdout($process->getOutput())
                 ->setStderr($process->getErrorOutput());
-            $this->entityManager->flush($execution);
         }
 
         if (! $process->isSuccessful()) {
@@ -133,7 +130,7 @@ class ExecuteCommand extends Command
             $execution->setState(Execution::STATE_ERROR);
         }
 
-        $this->entityManager->flush($execution);
+        $this->entityManager->flush();
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
 
         return Command::SUCCESS;
