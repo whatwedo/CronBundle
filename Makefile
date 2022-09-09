@@ -25,9 +25,17 @@ help:
 install:
 	composer update
 
+test:
+	make ecs
+	make phpstan
+	make phpunit
+
 ## Fix PHP Styles
 ecs:
 	vendor/bin/ecs --fix
+
+phpstan:
+	vendor/bin/phpstan
 
 ## PHP Unit
 phpunit:

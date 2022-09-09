@@ -11,7 +11,7 @@ class CronBundleCommandTest extends KernelTestCase
 {
     use InteractsWithConsole;
 
-    public function testListCommand()
+    public function testListCommand(): void
     {
         $this->executeConsoleCommand('whatwedo:cron:list')
             ->assertSuccessful() // command exit code is 0
@@ -19,35 +19,35 @@ class CronBundleCommandTest extends KernelTestCase
         ;
     }
 
-    public function testInfoCommand()
+    public function testInfoCommand(): void
     {
-        $this->executeConsoleCommand("whatwedo:cron:info whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\DemoCron")
+        $this->executeConsoleCommand("whatwedo:cron:info whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\ListCron")
             ->assertSuccessful() // command exit code is 0
         ;
     }
 
-    public function testExecuteCommand()
+    public function testExecuteCommand(): void
     {
-        $this->executeConsoleCommand("whatwedo:cron:execute whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\DemoCron")
+        $this->executeConsoleCommand("whatwedo:cron:execute whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\ListCron")
             ->assertSuccessful() // command exit code is 0
         ;
     }
 
-    public function testCheckCommand()
+    public function testCheckCommand(): void
     {
         $this->executeConsoleCommand('whatwedo:cron:check')
             ->assertSuccessful() // command exit code is 0
         ;
     }
 
-    public function testCleanupCommand()
+    public function testCleanupCommand(): void
     {
         $this->executeConsoleCommand('whatwedo:cron:cleanup')
             ->assertSuccessful() // command exit code is 0
         ;
     }
 
-    public function testSchedulerCommand()
+    public function testSchedulerCommand(): void
     {
         $this->executeConsoleCommand('whatwedo:cron:scheduler --max-runtime 60')
             ->assertSuccessful() // command exit code is 0

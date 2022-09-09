@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Manager\CronJobManager;
 use whatwedo\CronBundle\Manager\ExecutionManager;
+use whatwedo\CronBundle\Model\CronJobActivable;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 class CronJobController extends AbstractController
@@ -138,10 +139,6 @@ class CronJobController extends AbstractController
     public function clean(string $class, string $state): Response
     {
         $cronJob = $this->cronJobManager->getCronJob($class);
-
-        if (! $cronJob) {
-            throw new \Exception('Job not found');
-        }
 
         $this->executionRepository->deleteExecutions($cronJob, $state);
 

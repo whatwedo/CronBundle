@@ -139,7 +139,7 @@ class InfoCommand extends Command
         return $this->getFormattedDate($nextExecutionDate);
     }
 
-    protected function getFormattedDate(\DateTime $date): ?string
+    protected function getFormattedDate(?\DateTime $date): ?string
     {
         if (! $date) {
             return null;

@@ -38,7 +38,10 @@ use whatwedo\CrudBundle\DependencyInjection\Configuration;
 
 class whatwedoCronExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    /**
+     * @param string[] $configs
+     */
+    public function load(array $configs, ContainerBuilder $container): void
     {
         // Auto tag cron jobs
         $container->registerForAutoconfiguration(CronInterface::class)->addTag('whatwedo.cron.job');

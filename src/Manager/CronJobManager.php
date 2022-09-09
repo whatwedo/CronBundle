@@ -32,7 +32,7 @@ namespace whatwedo\CronBundle\Manager;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
-use whatwedo\CronBundle\CronJob\CronInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 
 class CronJobManager
@@ -43,7 +43,7 @@ class CronJobManager
     protected $consoleApplication;
 
     /**
-     * @var CronInterface[]
+     * @var CronJobInterface[]
      */
     protected $cronJobs = [];
 
@@ -52,7 +52,7 @@ class CronJobManager
         $this->consoleApplication = new Application($kernel);
     }
 
-    public function addCronJob(CronInterface $cronJob): self
+    public function addCronJob(CronJobInterface $cronJob): self
     {
         $this->cronJobs[$cronJob::class] = $cronJob;
 
@@ -60,14 +60,14 @@ class CronJobManager
     }
 
     /**
-     * @return CronInterface[]
+     * @return CronJobInterface[]
      */
     public function getCronJobs(): array
     {
         return $this->cronJobs;
     }
 
-    public function getCronJob(string $class): CronInterface
+    public function getCronJob(string $class): CronJobInterface
     {
         foreach ($this->cronJobs as $cronJob) {
             if ($cronJob instanceof $class) {
@@ -77,7 +77,7 @@ class CronJobManager
         throw new CronJobNotFoundException($class);
     }
 
-    public function getCommandByCronJob(CronInterface $cronJob): Command
+    public function getCommandByCronJob(CronJobInterface $cronJob): Command
     {
         return $this->consoleApplication->find($cronJob->getCommand());
     }

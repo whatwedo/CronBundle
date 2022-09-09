@@ -50,7 +50,6 @@ class CleanupCommand extends Command
         $this
             ->addOption('max-retention', null, InputOption::VALUE_REQUIRED, 'The maximum retention time (will be parsed by DateTime).', '1 month')
             ->addOption('max-retention-successful', null, InputOption::VALUE_REQUIRED, 'The maximum retention time for succeeded jobs (will be parsed by DateTime).', '7 days')
-            ->addOption('per-call', null, InputOption::VALUE_REQUIRED, 'The maximum number of jobs to clean-up per call.', 1000)
         ;
     }
 
@@ -59,11 +58,8 @@ class CleanupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $perCall = (int) $input->getOption('per-call');
-
         $deletedSuccessful = $this->executionRepository->deleteSuccessfulJobs(
-            new \DateTimeImmutable('-' . $input->getOption('max-retention-successful')),
-            $perCall
+            new \DateTimeImmutable('-' . $input->getOption('max-retention-successful'))
         );
 
         $output->writeln(sprintf(
@@ -72,8 +68,7 @@ class CleanupCommand extends Command
         ));
 
         $deletedNotSuccessful = $this->executionRepository->deleteNotSuccessfulJobs(
-            new \DateTimeImmutable('-' . $input->getOption('max-retention')),
-            $perCall
+            new \DateTimeImmutable('-' . $input->getOption('max-retention'))
         );
 
         $output->writeln(sprintf(

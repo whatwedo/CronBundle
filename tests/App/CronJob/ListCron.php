@@ -6,7 +6,7 @@ namespace whatwedo\CronBundle\Tests\App\CronJob;
 
 use whatwedo\CronBundle\CronJob\AbstractCronJob;
 
-class DemoCron extends AbstractCronJob
+class ListCron extends AbstractCronJob
 {
     public function getDescription(): ?string
     {
@@ -20,7 +20,7 @@ class DemoCron extends AbstractCronJob
 
     public function getCommand(): string
     {
-        return 'list';
+        return 'app:list';
     }
 
     public function getExpression(): string

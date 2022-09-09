@@ -32,18 +32,27 @@ namespace whatwedo\CronBundle\Manager;
 use Cron\CronExpression;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\Process;
 use whatwedo\CronBundle\CronJob\CronInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Event\CronErrorEvent;
+use whatwedo\CronBundle\Event\CronFinishEvent;
+use whatwedo\CronBundle\Event\CronStartEvent;
+use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 class ExecutionManager
 {
     public function __construct(
         protected LoggerInterface $logger,
-        protected EntityManagerInterface $em,
+        protected EntityManagerInterface $entityManager,
         protected ExecutionRepository $repository,
         protected CronJobManager $cronJobManager,
+        protected EventDispatcherInterface $eventDispatcher,
         protected string $projectDir,
         protected string $environment
     ) {
@@ -85,7 +94,9 @@ class ExecutionManager
             return null;
         }
 
-        return CronExpression::factory($cronJob->getExpression())
+        $cronExpression = new CronExpression($cronJob->getExpression());
+
+        return $cronExpression
             ->getNextRunDate($this->getLastExecutionDate($cronJob));
     }
 
@@ -150,9 +161,78 @@ class ExecutionManager
         return $this->repository->findLastExecution($cronJob);
     }
 
-    public function getPendingExecution(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function getPendingExecution(CronInterface $cronJob): array
     {
         return $this->repository->findPendingExcecution($cronJob);
+    }
+
+    public function execute(\whatwedo\CronBundle\CronJob\CronJobInterface $cronJob, OutputInterface $output): void
+    {
+        // Build command to execute
+        $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env=' . $this->environment], $this->getCronArguments($cronJob));
+
+        // Create execution
+        $execution = new Execution();
+        $execution->setJob($cronJob::class)
+            ->setCommand($command);
+        $this->entityManager->persist($execution);
+
+        // Run command
+        $process = new Process($command, $this->projectDir);
+        $process->start();
+        $execution->setPid($process->getPid());
+        $this->eventDispatcher->dispatch(new CronStartEvent($cronJob), CronStartEvent::NAME);
+
+        // Update command output every 5 seconds
+        while ($process->isRunning()) {
+            $this->checkMaxRuntime($execution, $cronJob, $process);
+            $output->writeln(sprintf('Process %s is running...', $process->getCommandLine()));
+            sleep(5);
+            $execution->setStdout($process->getOutput())
+                ->setStderr($process->getErrorOutput());
+        }
+
+        if (! $process->isSuccessful()) {
+            $this->eventDispatcher->dispatch(new CronErrorEvent($cronJob, $process->getErrorOutput()), CronErrorEvent::NAME);
+        }
+
+        // Finish execution
+        $output->writeln('Execution finished with exit code ' . $process->getExitCode());
+        $execution
+            ->setState(Execution::STATE_FINISHED)
+            ->setFinishedAt(new \DateTime())
+            ->setPid(null)
+            ->setStdout($process->getOutput())
+            ->setStderr($process->getErrorOutput())
+            ->setExitCode($process->getExitCode());
+
+        if ($execution->getExitCode() !== 0) {
+            $execution->setState(Execution::STATE_ERROR);
+        }
+
+        $this->entityManager->flush();
+        $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
+    }
+
+    public function checkMaxRuntime(Execution $execution, CronInterface $cronJob, Process $process): void
+    {
+        if (! $cronJob->getMaxRuntime()) {
+            return;
+        }
+        $now = new \DateTime();
+        $diff = $now->getTimestamp() - $execution->getStartedAt()->getTimestamp();
+        if ($diff > $cronJob->getMaxRuntime()) {
+            $execution
+                ->setState(Execution::STATE_TERMINATED)
+                ->setPid(null)
+                ->setStdout($process->getOutput())
+                ->setStderr($process->getErrorOutput());
+            $this->entityManager->flush();
+            throw new MaxRuntimeReachedException($execution);
+        }
     }
 
     protected function schedule(CronInterface $cronJob): void
@@ -166,7 +246,7 @@ class ExecutionManager
     protected function cleanupPending(CronInterface $cronJob): void
     {
         $this->repository->deletePendingJob($cronJob);
-        $this->em->flush();
+        $this->entityManager->flush();
     }
 
     protected function cleanupStale(): void
@@ -179,8 +259,33 @@ class ExecutionManager
                 $execution
                     ->setState(Execution::STATE_STALE)
                     ->setPid(null);
-                $this->em->flush($execution);
+                $this->entityManager->flush();
             }
         }
+    }
+
+    protected function getCronCommand(CronInterface $cron): string
+    {
+        if ($cron instanceof CronJobInterface) {
+            return $cron->getCommand();
+        }
+
+        if ($cron instanceof Command) {
+            return $cron->getDefaultName();
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getCronArguments(CronInterface $cron): array
+    {
+        if ($cron instanceof CronJobInterface) {
+            return $cron->getArguments();
+        }
+
+        return [];
     }
 }
