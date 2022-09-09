@@ -21,14 +21,14 @@ class CronBundleCommandTest extends KernelTestCase
 
     public function testInfoCommand(): void
     {
-        $this->executeConsoleCommand("whatwedo:cron:info whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\DemoCron")
+        $this->executeConsoleCommand("whatwedo:cron:info whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\ListCron")
             ->assertSuccessful() // command exit code is 0
         ;
     }
 
     public function testExecuteCommand(): void
     {
-        $this->executeConsoleCommand("whatwedo:cron:execute whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\DemoCron")
+        $this->executeConsoleCommand("whatwedo:cron:execute whatwedo\\\CronBundle\\\Tests\\\App\\\CronJob\\\ListCron")
             ->assertSuccessful() // command exit code is 0
         ;
     }

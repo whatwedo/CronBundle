@@ -7,7 +7,7 @@ namespace whatwedo\CronBundle\Tests\Browser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use whatwedo\CronBundle\Entity\Execution;
-use whatwedo\CronBundle\Tests\App\CronJob\DemoCron;
+use whatwedo\CronBundle\Tests\App\CronJob\ListCron;
 use Zenstruck\Browser\Test\HasBrowser;
 
 class ControllerTest extends KernelTestCase
@@ -25,7 +25,7 @@ class ControllerTest extends KernelTestCase
     public function testShow(): void
     {
         $this->browser()
-            ->visit('/show/' . DemoCron::class)
+            ->visit('/show/' . ListCron::class)
             ->assertSuccessful()
         ;
     }
@@ -34,7 +34,7 @@ class ControllerTest extends KernelTestCase
     {
         $execution = new Execution();
         $execution->setState(Execution::STATE_FINISHED);
-        $execution->setJob(DemoCron::class);
+        $execution->setJob(ListCron::class);
         $execution->setExitCode(0);
 
         /** @var EntityManagerInterface $entityManager */

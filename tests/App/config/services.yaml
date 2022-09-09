@@ -9,6 +9,9 @@ services:
     whatwedo\CronBundle\Tests\App\CronJob\:
         resource: '../CronJob'
 
+    whatwedo\CronBundle\Tests\App\Command\:
+        resource: '../Command'
+
     gedmo.listener.tree:
         class: Gedmo\Tree\TreeListener
         tags:

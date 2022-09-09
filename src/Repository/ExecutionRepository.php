@@ -147,13 +147,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->delete()
             ->where('e.startedAt < :retention')
             ->andWhere('e.state IN (:stateSuccessful)')
-            ->andWhere('e.exitCode != 0')
             ->setParameters([
                 'retention' => $retention,
                 'stateSuccessful' => [
-                    Execution::STATE_FINISHED,
-                    Execution::STATE_TERMINATED,
-                    Execution::STATE_TERMINATED,
+                    Execution::STATE_ERROR,
                 ],
             ])
             ->getQuery()
@@ -161,7 +158,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ;
     }
 
-    public function deleteExecutions(CronInterface $cronJob, string $state): void
+    public function deleteExecutions(CronInterface $cronJob, string $state): int
     {
         $states = match ($state) {
             'successful' => [
@@ -182,7 +179,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.job = :job')
             ->andWhere('e.state IN (:states)');
 
-        $queryBuilder
+        return $queryBuilder
             ->setParameters([
                 'job' => $cronJob::class,
                 'states' => $states,
