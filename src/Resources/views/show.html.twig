@@ -147,7 +147,7 @@
                                                 class="relative flex justify-end items-center" {{ stimulus_controller('whatwedo/core-bundle/dropdown') }}>
                                             <button
                                                     class="whatwedo_table-actions"
-                                                    {{ stimulus_action({'whatwedo/core-bundle/dropdown': ['toggle', {'click@window': 'hide'}]}) }}
+                                                    {{ stimulus_action('whatwedo/core-bundle/dropdown', 'toggle') | stimulus_action('whatwedo/core-bundle/dropdown', 'click@window', 'hide') }}
                                                     type="button"
                                             >
                                                 <span class="sr-only">{{ 'whatwedo_cronjob.options'|trans }}</span>
