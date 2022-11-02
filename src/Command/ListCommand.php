@@ -53,7 +53,7 @@ class ListCommand extends Command
         foreach ($this->cronJobManager->getCronJobs() as $cronJob) {
             $nextRunDate = 'invalid cron expression';
             if (CronExpression::isValidExpression($cronJob->getExpression())) {
-                $cronExpression = CronExpression::factory($cronJob->getExpression());
+                $cronExpression = new CronExpression($cronJob->getExpression());
                 $nextRunDate = $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
             }
 
