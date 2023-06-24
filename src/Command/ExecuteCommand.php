@@ -100,6 +100,7 @@ class ExecuteCommand extends Command
 
         // Run command
         $process = new Process($command, $this->projectDir);
+        $process->setTimeout($cronJob->getMaxRuntime());
         $process->start();
         $execution->setPid($process->getPid());
         $this->entityManager->flush($execution);
