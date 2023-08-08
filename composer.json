@@ -19,8 +19,8 @@
         "doctrine/orm": "~2.6",
         "dragonmantank/cron-expression": "~3.0",
         "symfony/console": "*",
-        "symfony/event-dispatcher": "~4.2|~5.0",
-        "symfony/framework-bundle": "~4.2|~5.0",
+        "symfony/event-dispatcher": "~4.2|~5.0|~6.0",
+        "symfony/framework-bundle": "~4.2|~5.0|~6.0",
         "symfony/process": "*"
     },
     "autoload": {
