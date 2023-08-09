@@ -78,12 +78,11 @@ class ExecutionManager
     /**
      * Return date of next execution or null if there is no previous run (run needed).
      */
-    public function getNextExecutionDate(CronInterface $cronJob): \DateTime
+    public function getNextExecutionDate(CronInterface $cronJob): ?\DateTime
     {
         $lastExecutionDate = $this->getLastExecutionDate($cronJob);
         if (! $lastExecutionDate) {
-            return (new CronExpression($cronJob->getExpression()))
-                ->getNextRunDate();
+            return null;
         }
 
         return (new CronExpression($cronJob->getExpression()))
@@ -114,9 +113,9 @@ class ExecutionManager
         // Get next execution date
         $nextExecutionDate = $this->getNextExecutionDate($cronJob);
         if (!$nextExecutionDate) {
-            $this->logger->debug(sprintf('%s do not need to run. Next run at %s', $cronJob::class, $nextExecutionDate->format('Y-m-d H:i:s')));
+            $this->logger->debug(sprintf('%s has no previous run. Scheduling it now.', $cronJob::class));
 
-            return false;
+            return true;
         }
 
         // Check if parallel execution allowed
