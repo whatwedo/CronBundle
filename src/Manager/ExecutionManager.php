@@ -113,8 +113,7 @@ class ExecutionManager
 
         // Get next execution date
         $nextExecutionDate = $this->getNextExecutionDate($cronJob);
-        $now = new \DateTime();
-        if ($nextExecutionDate > $now) {
+        if (!$nextExecutionDate) {
             $this->logger->debug(sprintf('%s do not need to run. Next run at %s', $cronJob::class, $nextExecutionDate->format('Y-m-d H:i:s')));
 
             return false;
@@ -129,7 +128,7 @@ class ExecutionManager
 
         // Check if previous execution still running
         $lastExecution = $this->getLastExecution($cronJob);
-        if ($lastExecution->getState() === Execution::STATE_RUNNING) {
+        if ($lastExecution && $lastExecution->getState() === Execution::STATE_RUNNING) {
             $this->logger->debug(sprintf('%s has a still running previous execution. Skipping it until previous execution finished.', $cronJob::class));
 
             return false;
