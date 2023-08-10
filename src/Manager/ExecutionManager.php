@@ -86,7 +86,7 @@ class ExecutionManager
         }
 
         return (new CronExpression($cronJob->getExpression()))
-            ->getNextRunDate($this->getLastExecutionDate($cronJob));
+            ->getNextRunDate();
     }
 
     public function isRunNeeded(CronInterface $cronJob): bool
@@ -134,7 +134,25 @@ class ExecutionManager
         }
         $this->logger->debug(sprintf('%s needs to run, Parallel execution is not allowed', $cronJob::class));
 
-        return true;
+
+        $diff = $nextExecutionDate->diff(new \DateTime());
+        if (
+            ($diff->y === 0
+            || $diff->m === 0
+            || $diff->d === 0
+            || $diff->h === 0
+            || $diff->i === 0)
+            &&
+            ( 15 > $diff->s
+            || $diff->s < -15)
+        ) {
+            $this->logger->debug(sprintf('%s needs to run, Parallel execution is not allowed', $cronJob::class));
+
+            return  true;
+        }
+
+
+        return false;
     }
 
     public function getLastExecution(CronInterface $cronJob): ?Execution
