@@ -45,6 +45,7 @@ use whatwedo\CronBundle\Event\CronFinishEvent;
 use whatwedo\CronBundle\Event\CronStartEvent;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
 use whatwedo\CronBundle\Manager\CronJobManager;
+use function _PHPStan_4d77e98e1\RingCentral\Psr7\str;
 
 #[AsCommand(name: 'whatwedo:cron:execute', description: 'Execute cron job')]
 class ExecuteCommand extends Command
@@ -86,7 +87,9 @@ class ExecuteCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Get job definition
-        $cronJob = $this->cronJobManager->getCronJob($input->getArgument('cron_job'));
+        $argument = str_replace('\\\\', '\\', $input->getArgument('cron_job'));
+
+        $cronJob = $this->cronJobManager->getCronJob($argument);
 
         // Build command to execute
         $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env=' . $this->environment], $this->getCronArguments($cronJob));
