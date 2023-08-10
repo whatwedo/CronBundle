@@ -73,10 +73,11 @@ class SchedulerCommand extends Command
 
         // Check cron jobs every 15s
         while ($runUntil > time()) {
-            $this->executionManager->check();
+            $checkIntervall = 15;
+            $this->executionManager->check($checkIntervall);
             $this->em->clear();
             gc_collect_cycles();
-            sleep(15);
+            sleep($checkIntervall);
         }
 
         return Command::SUCCESS;

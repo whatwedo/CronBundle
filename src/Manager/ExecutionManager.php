@@ -49,14 +49,14 @@ class ExecutionManager
     ) {
     }
 
-    public function check(): void
+    public function check(int $checkIntervall): void
     {
         // Cleanup stale
         $this->cleanupStale();
 
         // Check all cron jobs
         foreach ($this->cronJobManager->getCronJobs() as $cronJob) {
-            if ($this->isRunNeeded($cronJob)) {
+            if ($this->isRunNeeded($cronJob, $checkIntervall)) {
                 $this->schedule($cronJob);
             }
         }
@@ -89,7 +89,7 @@ class ExecutionManager
             ->getNextRunDate();
     }
 
-    public function isRunNeeded(CronInterface $cronJob): bool
+    public function isRunNeeded(CronInterface $cronJob, int $checkInterval = 15): bool
     {
         // Debug log
         $this->logger->debug(sprintf('Checking if execution of %s is needed', $cronJob::class));
@@ -101,54 +101,41 @@ class ExecutionManager
             return false;
         }
 
-        // Check for pending
-        $pendingExcecution = $this->getPendingExecution($cronJob);
-        if ($pendingExcecution) {
-            $this->logger->debug(sprintf('%s has pending exection. Scheduling it now.', $cronJob::class));
-            $this->cleanupPending($cronJob);
+        $nextExecutionDate =  (new CronExpression($cronJob->getExpression()))
+            ->getNextRunDate('-' . $checkInterval .' seconds');
 
-            return true;
-        }
+        $currentTime = new \DateTimeImmutable();
 
-        // Get next execution date
-        $nextExecutionDate = $this->getNextExecutionDate($cronJob);
-        if (!$nextExecutionDate) {
-            $this->logger->debug(sprintf('%s has no previous run. Scheduling it now.', $cronJob::class));
+        $interval = $currentTime->diff($nextExecutionDate);
 
-            return true;
-        }
-
-        // Check if parallel execution allowed
-        if ($cronJob->isParallelAllowed()) {
-            $this->logger->debug(sprintf('%s needs to run, Parallel execution is allowed.', $cronJob::class));
-
-            return true;
-        }
-
-        // Check if previous execution still running
-        $lastExecution = $this->getLastExecution($cronJob);
-        if ($lastExecution && $lastExecution->getState() === Execution::STATE_RUNNING) {
-            $this->logger->debug(sprintf('%s has a still running previous execution. Skipping it until previous execution finished.', $cronJob::class));
-
-            return false;
-        }
-        $this->logger->debug(sprintf('%s needs to run, Parallel execution is not allowed', $cronJob::class));
-
-
-        $diff = $nextExecutionDate->diff(new \DateTime());
         if (
-            ($diff->y === 0
-            || $diff->m === 0
-            || $diff->d === 0
-            || $diff->h === 0
-            || $diff->i === 0)
-            &&
-            ( 15 > $diff->s
-            || $diff->s < -15)
+            $interval->y === 0
+            && $interval->m === 0
+            && $interval->d === 0
+            && $interval->h === 0
+            && $interval->i === 0
+            && $interval->invert === 1
         ) {
-            $this->logger->debug(sprintf('%s needs to run, Parallel execution is not allowed', $cronJob::class));
 
-            return  true;
+            // Check if parallel execution allowed
+
+            if ($cronJob->isParallelAllowed()) {
+                $this->logger->debug(sprintf('%s needs to run, Parallel execution is allowed.', $cronJob::class));
+
+                return true;
+            }
+
+            // Check if previous execution still running
+            $lastExecution = $this->getLastExecution($cronJob);
+            if ($lastExecution && $lastExecution->getState() === Execution::STATE_RUNNING) {
+                $this->logger->debug(sprintf('%s has a still running previous execution. Skipping it until previous execution finished.', $cronJob::class));
+
+                return false;
+            }
+
+                $this->logger->debug(sprintf('%s needs to run', $cronJob::class));
+                return  true;
+
         }
 
 
