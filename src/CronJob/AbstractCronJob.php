@@ -71,7 +71,7 @@ abstract class AbstractCronJob implements CronJobInterface
 
     public function isParallelAllowed(): bool
     {
-        return true;
+        return false;
     }
 
     public function isActive(): bool
