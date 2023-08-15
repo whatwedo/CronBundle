@@ -96,6 +96,16 @@ class ExecutionManager
             return false;
         }
 
+        // Check for pending
+        $pendingExcecution = $this->getPendingExecution($cronJob);
+        if ($pendingExcecution) {
+            $this->logger->debug(sprintf('%s has pending exection. Scheduling it now.', $cronJob::class));
+            $this->cleanupPending($cronJob);
+
+            return true;
+        }
+
+
         $nextExecutionDate =  (new CronExpression($cronJob->getExpression()))
             ->getNextRunDate('-' . $checkInterval .' seconds');
 
