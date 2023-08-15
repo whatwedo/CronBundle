@@ -80,11 +80,6 @@ class ExecutionManager
      */
     public function getNextExecutionDate(CronInterface $cronJob): ?\DateTime
     {
-        $lastExecutionDate = $this->getLastExecutionDate($cronJob);
-        if (! $lastExecutionDate) {
-            return null;
-        }
-
         return (new CronExpression($cronJob->getExpression()))
             ->getNextRunDate();
     }
