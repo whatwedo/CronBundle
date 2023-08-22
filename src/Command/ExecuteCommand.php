@@ -97,6 +97,7 @@ class ExecuteCommand extends Command
         // Create execution
         $execution = new Execution();
         $execution->setJob($cronJob::class)
+            ->setState(Execution::STATE_RUNNING)
             ->setCommand($command);
         $this->entityManager->persist($execution);
         $this->entityManager->flush($execution);

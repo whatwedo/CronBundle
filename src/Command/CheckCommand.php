@@ -45,7 +45,7 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->executionManager->check();
+        $this->executionManager->check(15);
 
         return Command::SUCCESS;
     }
