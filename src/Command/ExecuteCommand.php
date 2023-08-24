@@ -141,6 +141,40 @@ class ExecuteCommand extends Command
         $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
 
+
+        // cleanup Executions
+        foreach ($cronJob->getExecutionRetention() as $state  => $maxRetained) {
+            $expr = $this->entityManager->getExpressionBuilder();
+
+            $topIds =  $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
+                ->select('execution.id')
+                ->where('execution.job = :jobClass')
+                ->andWhere('execution.state = :state')
+                ->orderBy('execution.startedAt', 'DESC')
+                ->setMaxResults($maxRetained)
+                ->setParameter('jobClass', $cronJob::class)
+                ->setParameter('state', $state)
+                ->getQuery()
+                ->getScalarResult();
+
+            if (empty($topIds)) {
+                continue;
+            }
+
+            $topIds = array_map(fn($item) => $item['id'], $topIds);
+
+            $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
+                ->delete()
+                ->where('execution.job = :jobClass')
+                ->andWhere('execution.state = :state')
+                ->andWhere('execution.id NOT IN (:topIds)')
+                ->setParameter('jobClass', $cronJob::class)
+                ->setParameter('state', $state)
+                ->setParameter('topIds', $topIds)
+                ->getQuery()
+                ->execute();
+        }
+
         return Command::SUCCESS;
     }
 

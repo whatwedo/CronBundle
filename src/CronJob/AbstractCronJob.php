@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace whatwedo\CronBundle\CronJob;
 
+use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
 abstract class AbstractCronJob implements CronJobInterface
@@ -77,5 +78,15 @@ abstract class AbstractCronJob implements CronJobInterface
     public function isActive(): bool
     {
         return true;
+    }
+
+    public function getExecutionRetention(): array
+    {
+        return [
+            Execution::STATE_ERROR => 10,
+            Execution::STATE_FINISHED => 10,
+            Execution::STATE_STALE => 10,
+            Execution::STATE_TERMINATED => 10,
+        ];
     }
 }
