@@ -159,10 +159,13 @@ class ExecutionManager
 
     protected function schedule(CronInterface $cronJob): void
     {
-        $this->logger->info(sprintf('Scheduling execution of %s', $cronJob::class));
-        $process = new Process([$this->projectDir . '/bin/console', 'whatwedo:cron:execute', str_replace('\\', '\\\\', $cronJob::class),  '-e', $this->environment]);
-        $process->run();
-        $this->logger->debug(sprintf('Helper process running with PID %d', $process->getPid()));
+        $this->logger->debug(sprintf('Scheduling execution of %s', $cronJob::class));
+        $command = [$this->projectDir . '/bin/console', 'whatwedo:cron:execute', str_replace('\\', '\\\\', $cronJob::class), '-e', $this->environment];
+        $this->logger->debug(sprintf('Scheduling execution of %s Command: %s', $cronJob::class, implode(' ', $command) ));
+
+        // https://www.geeksforgeeks.org/how-to-execute-a-background-process-in-php/
+        $processId = shell_exec(implode(' ', $command) . '  > /dev/null 2>&1 & echo $!');
+        $this->logger->debug(sprintf('Execute process running: PID: %s', $processId));
     }
 
     protected function cleanupPending(CronInterface $cronJob): void
