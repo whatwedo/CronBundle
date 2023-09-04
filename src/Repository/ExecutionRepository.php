@@ -50,6 +50,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.state = :state')
             ->setParameter('state', $state)
             ->getQuery()
+            ->disableResultCache()
             ->getResult();
     }
 
@@ -60,6 +61,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->orderBy('e.startedAt', 'DESC')
             ->setParameter('job', $cronJob::class)
             ->getQuery()
+            ->disableResultCache()
             ->getResult();
     }
 
@@ -71,6 +73,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->setParameter('job', $cronJob::class)
             ->getQuery()
+            ->disableResultCache()
             ->getOneOrNullResult();
     }
 
@@ -85,6 +88,7 @@ class ExecutionRepository extends ServiceEntityRepository
                 'statePending' => Execution::STATE_PENDING,
             ])
             ->getQuery()
+            ->disableResultCache()
             ->getResult();
     }
 
@@ -98,6 +102,7 @@ class ExecutionRepository extends ServiceEntityRepository
                 'statePending' => Execution::STATE_PENDING,
             ])
             ->getQuery()
+            ->disableResultCache()
             ->getResult();
     }
 

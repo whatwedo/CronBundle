@@ -177,14 +177,14 @@ class ExecutionManager
         foreach ($executions as $execution) {
             $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getJob()));
             if (! posix_kill($execution->getPid(), 0)) {
-                                                    $this->em->refresh($execution);
-                                                                    if ($execution->getState() === Execution::STATE_RUNNING) {
-                                                                        $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getJob()));
-                                                                        $execution
-                                                                            ->setState(Execution::STATE_STALE)
-                                                                            ->setPid(null);
-                                                                        $this->em->flush($execution);
-                                                                    }
+                $this->em->refresh($execution);
+                if ($execution->getState() === Execution::STATE_RUNNING) {
+                    $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getJob()));
+                    $execution
+                        ->setState(Execution::STATE_STALE)
+                        ->setPid(null);
+                    $this->em->flush($execution);
+                }
             }
         }
     }

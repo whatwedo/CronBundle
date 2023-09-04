@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace whatwedo\CronBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -54,6 +55,7 @@ class ExecuteCommand extends Command
         protected CronJobManager $cronJobManager,
         protected EntityManagerInterface $entityManager,
         protected EventDispatcherInterface $eventDispatcher,
+        protected LoggerInterface $logger,
         protected string $projectDir,
         protected string $environment
     ) {
@@ -68,6 +70,7 @@ class ExecuteCommand extends Command
         $now = new \DateTime();
         $diff = $now->getTimestamp() - $execution->getStartedAt()->getTimestamp();
         if ($diff > $cronJob->getMaxRuntime()) {
+            $this->logger->info(sprintf('execute: max RunTime reached PID:%s', $process->getPid()));
             $execution
                 ->setState(Execution::STATE_TERMINATED)
                 ->setPid(null)
@@ -86,6 +89,8 @@ class ExecuteCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
+        $logId = md5(uniqid('', true));
         // Get job definition
         $argument = str_replace('\\\\', '\\', $input->getArgument('cron_job'));
 
@@ -93,6 +98,9 @@ class ExecuteCommand extends Command
 
         // Build command to execute
         $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env=' . $this->environment], $this->getCronArguments($cronJob));
+
+
+        $this->logger->info(sprintf('execute %s: Executing %s', $logId, implode(' ', $command)));
 
         // Create execution
         $execution = new Execution();
@@ -107,18 +115,21 @@ class ExecuteCommand extends Command
         $process->setTimeout($cronJob->getMaxRuntime());
         $process->start();
         $execution->setPid($process->getPid());
+        $this->logger->info(sprintf('execute %s: PID:%s', $logId, $execution->getPid()));
         $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronStartEvent($cronJob), CronStartEvent::NAME);
 
         // Update command output every 5 seconds
         while ($process->isRunning()) {
             $this->checkMaxRuntime($execution, $cronJob, $process);
-            $output->writeln(sprintf('Process %s is running...', $process->getCommandLine()));
+            $output->writeln(sprintf('Process %s is running...', $execution->getCommandLine()));
+            $this->logger->info(sprintf('execute %s: is running PID:%s', $logId, $process->getPid()));
             sleep(5);
             $execution->setStdout($process->getOutput())
                 ->setStderr($process->getErrorOutput());
             $this->entityManager->flush($execution);
         }
+        $this->logger->info(sprintf('execute %s: is finisched PID:%s', $logId, $execution->getPid()));
 
         if (! $process->isSuccessful()) {
             $this->eventDispatcher->dispatch(new CronErrorEvent($cronJob, $process->getErrorOutput()), CronErrorEvent::NAME);
@@ -126,12 +137,14 @@ class ExecuteCommand extends Command
 
         // Finish execution
         $output->writeln('Execution finished with exit code ' . $process->getExitCode());
+        $this->logger->info(sprintf('execute %s: is finisched PID:%s exitCode:', $logId, $execution->getPid(), $process->getExitCode()));
+
         $execution
             ->setState(Execution::STATE_FINISHED)
             ->setFinishedAt(new \DateTime())
             ->setPid(null)
-            ->setStdout($process->getOutput())
-            ->setStderr($process->getErrorOutput())
+            ->setStdout($process->getOutput() . '#')
+            ->setStderr($process->getErrorOutput() . '#')
             ->setExitCode($process->getExitCode());
 
         if ($execution->getExitCode() !== 0) {
@@ -155,6 +168,7 @@ class ExecuteCommand extends Command
                 ->setParameter('jobClass', $cronJob::class)
                 ->setParameter('state', $state)
                 ->getQuery()
+                ->disableResultCache()
                 ->getScalarResult();
 
             if (empty($topIds)) {
@@ -172,6 +186,7 @@ class ExecuteCommand extends Command
                 ->setParameter('state', $state)
                 ->setParameter('topIds', $topIds)
                 ->getQuery()
+                ->disableResultCache()
                 ->execute();
         }
 
