@@ -122,7 +122,10 @@ class ExecuteCommand extends Command
         // Update command output every 5 seconds
         while ($process->isRunning()) {
             $this->checkMaxRuntime($execution, $cronJob, $process);
-            $output->writeln(sprintf('Process %s is running...', $execution->getCommandLine()));
+            $output->writeln(sprintf(
+                'Process %s is running...',
+                implode( ' ', $execution->getCommand())
+            ));
             $this->logger->info(sprintf('execute %s: is running PID:%s', $logId, $process->getPid()));
             sleep(5);
             $execution->setStdout($process->getOutput())
