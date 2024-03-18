@@ -83,10 +83,8 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.job = :job')
             ->andWhere('e.state != :statePending')
             ->orderBy('e.startedAt', 'DESC')
-            ->setParameters([
-                'job' => $cronJob::class,
-                'statePending' => Execution::STATE_PENDING,
-            ])
+            ->setParameter('job', $cronJob::class)
+            ->setParameter('statePending', Execution::STATE_PENDING)
             ->getQuery()
             ->disableResultCache()
             ->getResult();
@@ -97,10 +95,8 @@ class ExecutionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
             ->andWhere('e.state = :statePending')
-            ->setParameters([
-                'job' => $cronJob::class,
-                'statePending' => Execution::STATE_PENDING,
-            ])
+            ->setParameter('job', $cronJob::class)
+            ->setParameter('statePending', Execution::STATE_PENDING)
             ->getQuery()
             ->disableResultCache()
             ->getResult();
@@ -112,13 +108,11 @@ class ExecutionRepository extends ServiceEntityRepository
             ->delete()
             ->where('e.job = :job')
             ->andWhere('e.state = :statePending')
-            ->setParameters([
-                'job' => $cronJob::class,
-                'statePending' => Execution::STATE_PENDING,
-            ])
+            ->setParameter('job', $cronJob::class)
+            ->setParameter('statePending', Execution::STATE_PENDING)
             ->getQuery()
             ->execute()
-            ;
+        ;
     }
 
     public function deleteSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
@@ -128,13 +122,11 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.startedAt < :retention')
             ->andWhere('e.state = :stateSuccessful')
             ->andWhere('e.exitCode = 0')
-            ->setParameters([
-                'retention' => $retention,
-                'stateSuccessful' => Execution::STATE_FINISHED,
-            ])
+            ->setParameter('retention', $retention)
+            ->setParameter('stateSuccessful', Execution::STATE_FINISHED)
             ->getQuery()
             ->execute()
-            ;
+        ;
     }
 
     public function deleteNotSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
@@ -144,17 +136,15 @@ class ExecutionRepository extends ServiceEntityRepository
             ->where('e.startedAt < :retention')
             ->andWhere('e.state IN (:stateSuccessful)')
             ->andWhere('e.exitCode != 0')
-            ->setParameters([
-                'retention' => $retention,
-                'stateSuccessful' => [
-                    Execution::STATE_FINISHED,
-                    Execution::STATE_TERMINATED,
-                    Execution::STATE_TERMINATED,
-                ],
+            ->setParameter('retention', $retention)
+            ->setParameter('stateSuccessful', [
+                Execution::STATE_FINISHED,
+                Execution::STATE_TERMINATED,
+                Execution::STATE_TERMINATED,
             ])
             ->getQuery()
             ->execute()
-            ;
+        ;
     }
 
     public function deleteExecutions(CronInterface $cronJob, string $state)
@@ -178,12 +168,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->andWhere('e.state IN (:states)');
 
         return $queryBuilder
-            ->setParameters([
-                'job' => $cronJob::class,
-                'states' => $states,
-            ])
+            ->setParameter('job', $cronJob::class)
+            ->setParameter('states', $states)
             ->getQuery()
             ->execute()
-            ;
+        ;
     }
 }

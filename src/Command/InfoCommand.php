@@ -80,7 +80,7 @@ class InfoCommand extends Command
             ['Arguments', $this->getArgumentString($cronJob)],
             ['Last execution', $this->getLastExecutionDateString($cronJob)],
             ['Next execution', $this->getNextExecutionDateString($cronJob)],
-            ['Max runtime', $cronJob->getMaxRuntime() . ' seconds'],
+            ['Max runtime', $cronJob->getMaxRuntime().' seconds'],
             ['Lock status', $this->getLockStatus($cronJob)],
         ]);
 

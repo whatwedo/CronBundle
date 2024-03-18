@@ -46,7 +46,6 @@ use whatwedo\CronBundle\Event\CronFinishEvent;
 use whatwedo\CronBundle\Event\CronStartEvent;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
 use whatwedo\CronBundle\Manager\CronJobManager;
-use function _PHPStan_4d77e98e1\RingCentral\Psr7\str;
 
 #[AsCommand(name: 'whatwedo:cron:execute', description: 'Execute cron job')]
 class ExecuteCommand extends Command
@@ -89,7 +88,6 @@ class ExecuteCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         $logId = md5(uniqid('', true));
         // Get job definition
         $argument = str_replace('\\\\', '\\', $input->getArgument('cron_job'));
@@ -97,8 +95,7 @@ class ExecuteCommand extends Command
         $cronJob = $this->cronJobManager->getCronJob($argument);
 
         // Build command to execute
-        $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env=' . $this->environment], $this->getCronArguments($cronJob));
-
+        $command = array_merge(['bin/console', $this->getCronCommand($cronJob), '--env='.$this->environment], $this->getCronArguments($cronJob));
 
         $this->logger->info(sprintf('execute %s: Executing %s', $logId, implode(' ', $command)));
 
@@ -124,7 +121,7 @@ class ExecuteCommand extends Command
             $this->checkMaxRuntime($execution, $cronJob, $process);
             $output->writeln(sprintf(
                 'Process %s is running...',
-                implode( ' ', $execution->getCommand())
+                implode(' ', $execution->getCommand())
             ));
             $this->logger->info(sprintf('execute %s: is running PID:%s', $logId, $process->getPid()));
             sleep(5);
@@ -139,15 +136,15 @@ class ExecuteCommand extends Command
         }
 
         // Finish execution
-        $output->writeln('Execution finished with exit code ' . $process->getExitCode());
+        $output->writeln('Execution finished with exit code '.$process->getExitCode());
         $this->logger->info(sprintf('execute %s: is finisched PID:%s exitCode:', $logId, $execution->getPid(), $process->getExitCode()));
 
         $execution
             ->setState(Execution::STATE_FINISHED)
             ->setFinishedAt(new \DateTime())
             ->setPid(null)
-            ->setStdout($process->getOutput() . '#')
-            ->setStderr($process->getErrorOutput() . '#')
+            ->setStdout($process->getOutput().'#')
+            ->setStderr($process->getErrorOutput().'#')
             ->setExitCode($process->getExitCode());
 
         if ($execution->getExitCode() !== 0) {
@@ -157,12 +154,11 @@ class ExecuteCommand extends Command
         $this->entityManager->flush($execution);
         $this->eventDispatcher->dispatch(new CronFinishEvent($cronJob), CronFinishEvent::NAME);
 
-
         // cleanup Executions
-        foreach ($cronJob->getExecutionRetention() as $state  => $maxRetained) {
+        foreach ($cronJob->getExecutionRetention() as $state => $maxRetained) {
             $expr = $this->entityManager->getExpressionBuilder();
 
-            $topIds =  $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
+            $topIds = $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
                 ->select('execution.id')
                 ->where('execution.job = :jobClass')
                 ->andWhere('execution.state = :state')
@@ -178,7 +174,7 @@ class ExecuteCommand extends Command
                 continue;
             }
 
-            $topIds = array_map(fn($item) => $item['id'], $topIds);
+            $topIds = array_map(fn ($item) => $item['id'], $topIds);
 
             $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
                 ->delete()

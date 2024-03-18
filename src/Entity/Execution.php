@@ -29,15 +29,13 @@ declare(strict_types=1);
 
 namespace whatwedo\CronBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use whatwedo\CronBundle\CronJob\CronInterface;
+use whatwedo\CronBundle\Repository\ExecutionRepository;
 
-/**
- * Class Execution.
- *
- * @ORM\Table(name="whatwedo_cron_execution")
- * @ORM\Entity(repositoryClass="whatwedo\CronBundle\Repository\ExecutionRepository")
- */
+#[ORM\Table(name: 'whatwedo_cron_execution')]
+#[ORM\Entity(repositoryClass: ExecutionRepository::class)]
 class Execution
 {
     public const STATE_PENDING = 'pending';
@@ -52,67 +50,44 @@ class Execution
 
     public const STATE_ERROR = 'error';
 
-    /**
-     * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(type: Types::BIGINT, nullable: false, options: [
+        'unsigned' => true,
+    ])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $state = self::STATE_RUNNING;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $job;
 
-    /**
-     * @ORM\Column(type="json", nullable=false)
-     */
+    #[ORM\Column(type: Types::JSON, nullable: false)]
     protected ?array $command = [];
 
-    /**
-     * @ORM\Column(type="datetime", nullable=false)
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     protected \DateTime $startedAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=false)
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     protected \DateTime $updatedAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTime $finishedAt;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     protected ?int $pid;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     protected ?int $exitCode;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $stdout = null;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $stderr = null;
 
-    /**
-     * @var CronInterface|null
-     */
-    protected $cronJob;
+    protected ?CronInterface $cronJob;
 
     public function __construct()
     {
@@ -265,6 +240,6 @@ class Execution
 
     public function __toString(): string
     {
-        return '#' . str_pad($this->getId(), 6, '0', STR_PAD_LEFT);
+        return '#'.str_pad((string)$this->getId(), 6, '0', STR_PAD_LEFT);
     }
 }

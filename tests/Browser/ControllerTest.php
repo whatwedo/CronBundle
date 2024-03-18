@@ -25,7 +25,7 @@ class ControllerTest extends KernelTestCase
     public function testShow()
     {
         $this->browser()
-            ->visit('/show/' . DemoCron::class)
+            ->visit('/show/'.DemoCron::class)
             ->assertSuccessful()
         ;
     }
@@ -41,7 +41,7 @@ class ControllerTest extends KernelTestCase
         self::getContainer()->get(EntityManagerInterface::class)->flush();
 
         $this->browser()
-            ->visit('/excecution/' . $execution->getId())
+            ->visit('/excecution/'.$execution->getId())
             ->assertSuccessful()
         ;
     }

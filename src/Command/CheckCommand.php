@@ -38,8 +38,9 @@ use whatwedo\CronBundle\Manager\ExecutionManager;
 #[AsCommand(name: 'whatwedo:cron:check', description: 'Check (once) and run cron jobs')]
 class CheckCommand extends Command
 {
-    public function __construct(protected ExecutionManager $executionManager)
-    {
+    public function __construct(
+        protected ExecutionManager $executionManager
+    ) {
         parent::__construct();
     }
 

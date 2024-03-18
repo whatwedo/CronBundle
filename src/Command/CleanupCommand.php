@@ -62,7 +62,7 @@ class CleanupCommand extends Command
         $perCall = (int) $input->getOption('per-call');
 
         $deletedSuccessful = $this->executionRepository->deleteSuccessfulJobs(
-            new \DateTimeImmutable('-' . $input->getOption('max-retention-successful')),
+            new \DateTimeImmutable('-'.$input->getOption('max-retention-successful')),
             $perCall
         );
 
@@ -72,7 +72,7 @@ class CleanupCommand extends Command
         ));
 
         $deletedNotSuccessful = $this->executionRepository->deleteNotSuccessfulJobs(
-            new \DateTimeImmutable('-' . $input->getOption('max-retention')),
+            new \DateTimeImmutable('-'.$input->getOption('max-retention')),
             $perCall
         );
 

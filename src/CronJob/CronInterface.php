@@ -53,6 +53,6 @@ interface CronInterface
      * Returns if the Job is enabled or not.
      */
     public function isActive(): bool;
-    
+
     public function getExecutionRetention(): array;
 }

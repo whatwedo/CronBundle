@@ -30,4 +30,7 @@ return [
     whatwedo\TwigBootstrapIcons\whatwedoTwigBootstrapIconsBundle::class => [
         'all' => true,
     ],
+    Symfony\UX\StimulusBundle\StimulusBundle::class => [
+        'all' => true,
+    ],
 ];
