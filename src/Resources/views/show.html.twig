@@ -110,7 +110,7 @@
                 <div class="border-t border-neutral-200 bg-white sm:rounded-b-lg">
                     <div class="whatwedo_table:table__wrapper align-middle inline-block min-w-full border-b border-neutral-200">
                         <table
-                                class="min-w-full" {{ stimulus_target('whatwedo/table-bundle/table', 'table') }}>
+                                class="min-w-full" {{ stimulus_target('araise/table-bundle/table', 'table') }}>
 
                             <thead class="whatwedo_table:table__head">
                             <tr class="border-b border-neutral-200 bg-neutral-50 text-xs font-medium text-neutral-500 text-left uppercase tracking-wider">
@@ -144,17 +144,17 @@
                                     <td class="px-3 py-2">{{ item.finishedAt|date('d.m.Y H:i') }}</td>
                                     <td class="whatwedo_table:table__actions pr-6 align-top">
                                         <div
-                                                class="relative flex justify-end items-center" {{ stimulus_controller('whatwedo/core-bundle/dropdown') }}>
+                                                class="relative flex justify-end items-center" {{ stimulus_controller('araise/core-bundle/dropdown') }}>
                                             <button
                                                     class="whatwedo_table-actions"
-                                                    {{ stimulus_action('whatwedo/core-bundle/dropdown', 'toggle') | stimulus_action('whatwedo/core-bundle/dropdown', 'click@window', 'hide') }}
+                                                    {{ stimulus_action('araise/core-bundle/dropdown', 'toggle') | stimulus_action('araise/core-bundle/dropdown', 'click@window', 'hide') }}
                                                     type="button"
                                             >
                                                 <span class="sr-only">{{ 'whatwedo_cronjob.options'|trans }}</span>
                                                 {{ bootstrap_icon('three-dots-vertical', { class: 'h-4 w-4' }) }}
                                             </button>
                                             <div
-                                                    {{ stimulus_target('whatwedo/core-bundle/dropdown', 'menu') }}
+                                                    {{ stimulus_target('araise/core-bundle/dropdown', 'menu') }}
                                                     class="z-50 hidden transition duration-300 origin-top-right mx-3 origin-top-right absolute right-7 top-0 w-48 -mt-1 rounded-md shadow-lg z-10 bg-white ring-1 ring-black ring-opacity-5 divide-y divide-neutral-200 focus:outline-none"
                                                     data-transition-enter-from="opacity-0 scale-95"
                                                     data-transition-enter-to="opacity-100 scale-100"
