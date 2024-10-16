@@ -54,5 +54,8 @@ interface CronInterface
      */
     public function isActive(): bool;
 
+    /**
+     * @return array<string, int>
+     */
     public function getExecutionRetention(): array;
 }

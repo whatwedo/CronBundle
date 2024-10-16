@@ -147,9 +147,12 @@ class ExecutionManager
         return $this->repository->findLastExecution($cronJob);
     }
 
-    public function getPendingExecution(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function getPendingExecution(CronInterface $cronJob): array
     {
-        return $this->repository->findPendingExcecution($cronJob);
+        return $this->repository->findPendingExecution($cronJob);
     }
 
     protected function schedule(CronInterface $cronJob): void
@@ -174,14 +177,14 @@ class ExecutionManager
         $executions = $this->repository->findByState(Execution::STATE_RUNNING);
         foreach ($executions as $execution) {
             $this->logger->debug(sprintf('Checking execution state with id %d. (%s)', $execution->getPid(), $execution->getJob()));
-            if (! posix_kill($execution->getPid(), 0)) {
+            if ($execution->getPid() && ! posix_kill($execution->getPid(), 0)) {
                 $this->em->refresh($execution);
                 if ($execution->getState() === Execution::STATE_RUNNING) {
                     $this->logger->warning(sprintf('Marking execution with id %d as stale. (%s)', $execution->getPid(), $execution->getJob()));
                     $execution
                         ->setState(Execution::STATE_STALE)
                         ->setPid(null);
-                    $this->em->flush($execution);
+                    $this->em->flush();
                 }
             }
         }

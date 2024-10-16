@@ -64,6 +64,9 @@ class Execution
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $job;
 
+    /**
+     * @var string[]|null
+     */
     #[ORM\Column(type: Types::JSON, nullable: false)]
     protected ?array $command = [];
 
@@ -106,7 +109,7 @@ class Execution
         return $this->state;
     }
 
-    public function setState(?string $state): self
+    public function setState(string $state): self
     {
         $this->state = $state;
 
@@ -118,7 +121,7 @@ class Execution
         return $this->job;
     }
 
-    public function setJob(?string $job): self
+    public function setJob(string $job): self
     {
         $this->job = $job;
 
@@ -148,7 +151,7 @@ class Execution
         return $this->startedAt;
     }
 
-    public function setStartedAt(?\DateTime $startedAt): self
+    public function setStartedAt(\DateTime $startedAt): self
     {
         $this->startedAt = $startedAt;
 
@@ -160,7 +163,7 @@ class Execution
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

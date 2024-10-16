@@ -31,4 +31,8 @@ ecs:
 
 ## PHP Unit
 phpunit:
-	vendor/bin/simple-phpunit
+	vendor/bin/simple-phpunit -v
+
+## PHP Stan
+phpstan:
+	vendor/bin/phpstan analyse

@@ -12,17 +12,21 @@
         {
             "name": "Felix Ammann",
             "email": "fexu@whatwedo.ch"
+        },
+        {
+            "name": "whatwedo GmbH",
+            "email": "welove@whatwedo.ch"
         }
     ],
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.3",
         "ext-posix": "*",
         "dragonmantank/cron-expression": "~3.3",
-        "symfony/console": "^7.0|^6.4|^5.4",
-        "symfony/event-dispatcher": "^7.0|^6.4|^5.4",
-        "symfony/security-bundle":  "^7.0|^6.4|^5.4",
-        "symfony/framework-bundle": "^7.0|^6.4|^5.4",
-        "symfony/process": "^7.0|^6.4|^5.4",
+        "symfony/console": "^7.1|^6.4",
+        "symfony/event-dispatcher": "^7.1|^6.4",
+        "symfony/security-bundle":  "^7.1|^6.4",
+        "symfony/framework-bundle": "^7.1|^6.4",
+        "symfony/process": "^7.1|^6.4",
         "symfony/webpack-encore-bundle": "^1.14|^2.1",
         "symfony/stimulus-bundle": "^2.16"
     },
@@ -30,25 +34,26 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/orm": "^2.11|3.0",
         "doctrine/annotations": "^1.13.2|^2.0",
-        "symfony/phpunit-bridge": "^7.0",
-        "symfony/http-kernel": "^7.0",
-        "symfony/config": "^7.0",
-        "symfony/dependency-injection": "^7.0",
-        "symfony/yaml": "^7.0",
-        "symfony/validator": "^7.0",
+        "symfony/phpunit-bridge": "^7.1",
+        "symfony/http-kernel": "^7.1",
+        "symfony/config": "^7.1",
+        "symfony/dependency-injection": "^7.1",
+        "symfony/yaml": "^7.1",
+        "symfony/validator": "^7.1",
         "symfony/maker-bundle": "^1.0.0",
         "symfony/orm-pack": "^2.4",
-        "symfony/translation": "^7.0",
-        "symfony/twig-bundle": "^7.0",
+        "symfony/translation": "^7.1",
+        "symfony/twig-bundle": "^7.1",
         "symfony/test-pack": "^1.0",
-        "symfony/runtime": "^7.0",
-        "symfony/dotenv": "^7.0",
+        "symfony/runtime": "^7.1",
+        "symfony/dotenv": "^7.1",
         "gedmo/doctrine-extensions": "^3.5",
-        "whatwedo/php-coding-standard": "dev-develop",
+        "whatwedo/php-coding-standard": "^1.2",
         "whatwedo/twig-bootstrap-icons": "^1.0",
-        "zenstruck/foundry": "^1.21",
+        "zenstruck/foundry": "^2.1",
         "zenstruck/console-test": "^v1.3.0",
-        "zenstruck/browser": "^1.2"
+        "zenstruck/browser": "^1.2",
+        "phpstan/phpstan": "^1.12"
     },
     "autoload": {
         "psr-4": {

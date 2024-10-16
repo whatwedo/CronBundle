@@ -30,7 +30,7 @@ declare(strict_types=1);
 namespace whatwedo\CronBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
 use whatwedo\CronBundle\Entity\Execution;
@@ -67,7 +67,7 @@ class ExecutionSubscriber implements EventSubscriber
         ];
     }
 
-    public function postLoad(LifecycleEventArgs $args): void
+    public function postLoad(PostLoadEventArgs $args): void
     {
         // Only apply on entities which are instance of Execution
         $entity = $args->getObject();
@@ -77,7 +77,7 @@ class ExecutionSubscriber implements EventSubscriber
 
         // Load cron job
         try {
-            $entity->setCronJob($this->cronJobManager->getCronJob($entity->getJob()));
+            $entity->setCronJob($this->cronJobManager->getCronJob($entity->getJob() ?? ''));
         } catch (CronJobNotFoundException $ex) {
             $this->logger->warning($ex->getMessage());
         }

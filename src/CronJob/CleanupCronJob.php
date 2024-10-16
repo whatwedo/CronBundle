@@ -35,7 +35,7 @@ class CleanupCronJob
 {
     public function getCommand(): string
     {
-        return CleanupCommand::getDefaultName();
+        return CleanupCommand::getDefaultName() ?? throw new \RuntimeException('Command name not found');
     }
 
     public function getExpression(): string

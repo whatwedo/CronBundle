@@ -33,6 +33,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
 use whatwedo\CronBundle\CronJob\CronInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 
 class CronJobManager
@@ -77,7 +78,7 @@ class CronJobManager
         throw new CronJobNotFoundException($class);
     }
 
-    public function getCommandByCronJob(CronInterface $cronJob): Command
+    public function getCommandByCronJob(CronJobInterface $cronJob): Command
     {
         return $this->consoleApplication->find($cronJob->getCommand());
     }
