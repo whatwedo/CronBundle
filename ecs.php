@@ -5,7 +5,6 @@ use PHP_CodeSniffer\Standards\Squiz\Sniffs\Classes\ValidClassNameSniff;
 use PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting\ClassCommentSniff;
 use PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting\FileCommentSniff;
 use PHP_CodeSniffer\Standards\Squiz\Sniffs\Commenting\FunctionCommentThrowTagSniff;
-use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return static function (ECSConfig $ecsConfig): void {
@@ -13,10 +12,8 @@ return static function (ECSConfig $ecsConfig): void {
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ]);
-
     $ecsConfig->import('vendor/whatwedo/php-coding-standard/config/whatwedo-symfony.php');
-
-    $ecsConfig->parameters()->set(Option::SKIP, [
+    $ecsConfig->skip([
         FileCommentSniff::class,
         ClassCommentSniff::class,
         FunctionCommentThrowTagSniff::class,
@@ -26,6 +23,5 @@ return static function (ECSConfig $ecsConfig): void {
         ],
     ]);
 
-
-    $ecsConfig->parameters()->set(Option::PARALLEL, true);
+    $ecsConfig->parallel();
 };

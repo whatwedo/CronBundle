@@ -3,10 +3,12 @@ name: cronBundle
 on:
   push:
     branches:
-      - 1.0-dev
+      - develop
+      - main
   pull_request:
     branches:
-      - 1.0-dev
+      - develop
+      - main
 
 jobs:
   phpunit:
@@ -14,7 +16,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
         with:
-          php-version: '8.2'
+          php-version: '8.3'
       - uses: samin/mysql-action@v1.3
         with:
           mysql root password: root
@@ -25,3 +27,5 @@ jobs:
         run: vendor/bin/ecs
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/simple-phpunit
+      - name: Check with phpstan
+        run: vendor/bin/phpstan analyse

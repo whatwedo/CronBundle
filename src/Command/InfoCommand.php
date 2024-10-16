@@ -74,7 +74,7 @@ class InfoCommand extends Command
         $table->setHeaders(['Name', 'Value']);
         $table->addRows([
             ['Cron job', get_class($cronJob)],
-            ['Description', $cronJob->getDescription()],
+            ['Description', $cronJob instanceof CronJobInterface ? $cronJob->getDescription() : $cronJob::class],
             ['Expression', $cronJob->getExpression()],
             ['Command', $this->getCommand($cronJob)],
             ['Arguments', $this->getArgumentString($cronJob)],
@@ -97,7 +97,7 @@ class InfoCommand extends Command
         }
 
         if ($cronJob instanceof Command) {
-            return $cronJob->getDefaultName();
+            return $cronJob->getDefaultName() ?? '';
         }
 
         return '';
@@ -139,7 +139,7 @@ class InfoCommand extends Command
         return $this->getFormattedDate($nextExecutionDate);
     }
 
-    protected function getFormattedDate(\DateTime $date): ?string
+    protected function getFormattedDate(?\DateTime $date): ?string
     {
         if (! $date) {
             return null;

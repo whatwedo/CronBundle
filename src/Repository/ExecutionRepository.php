@@ -34,6 +34,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use whatwedo\CronBundle\CronJob\CronInterface;
 use whatwedo\CronBundle\Entity\Execution;
 
+/**
+ * @extends ServiceEntityRepository<Execution>
+ */
 class ExecutionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -44,7 +47,7 @@ class ExecutionRepository extends ServiceEntityRepository
     /**
      * @return Execution[]
      */
-    public function findByState(string $state)
+    public function findByState(string $state): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.state = :state')
@@ -54,7 +57,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByJob(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function findByJob(CronInterface $cronJob): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
@@ -77,20 +83,10 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findNonPendingExcecution(CronInterface $cronJob)
-    {
-        return $this->createQueryBuilder('e')
-            ->where('e.job = :job')
-            ->andWhere('e.state != :statePending')
-            ->orderBy('e.startedAt', 'DESC')
-            ->setParameter('job', $cronJob::class)
-            ->setParameter('statePending', Execution::STATE_PENDING)
-            ->getQuery()
-            ->disableResultCache()
-            ->getResult();
-    }
-
-    public function findPendingExcecution(CronInterface $cronJob)
+    /**
+     * @return Execution[]
+     */
+    public function findPendingExecution(CronInterface $cronJob): array
     {
         return $this->createQueryBuilder('e')
             ->where('e.job = :job')
@@ -102,7 +98,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function deletePendingJob(CronInterface $cronJob)
+    public function deletePendingJob(CronInterface $cronJob): int
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -115,7 +111,7 @@ class ExecutionRepository extends ServiceEntityRepository
         ;
     }
 
-    public function deleteSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
+    public function deleteSuccessfulJobs(\DateTimeInterface $retention): int
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -129,7 +125,7 @@ class ExecutionRepository extends ServiceEntityRepository
         ;
     }
 
-    public function deleteNotSuccessfulJobs(\DateTimeInterface $retention, $limit = null)
+    public function deleteNotSuccessfulJobs(\DateTimeInterface $retention): int
     {
         return $this->createQueryBuilder('e')
             ->delete()
@@ -147,7 +143,7 @@ class ExecutionRepository extends ServiceEntityRepository
         ;
     }
 
-    public function deleteExecutions(CronInterface $cronJob, string $state)
+    public function deleteExecutions(CronInterface $cronJob, string $state): int
     {
         $states = match ($state) {
             'successful' => [
@@ -160,6 +156,7 @@ class ExecutionRepository extends ServiceEntityRepository
             'pending' => [
                 Execution::STATE_PENDING,
             ],
+            default => [],
         };
 
         $queryBuilder = $this->createQueryBuilder('e')

@@ -1,0 +1,7 @@
+parameters:
+#	excludePaths:
+#		- %rootDir%/../../../src/Migrations/*
+	level: 8
+	paths:
+		- src
+		- tests

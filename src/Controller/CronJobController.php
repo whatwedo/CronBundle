@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use whatwedo\CronBundle\Entity\Execution;
+use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 use whatwedo\CronBundle\Manager\CronJobManager;
 use whatwedo\CronBundle\Manager\ExecutionManager;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
@@ -53,10 +54,9 @@ class CronJobController extends AbstractController
         }
 
         return $this->render('@whatwedoCron/show.html.twig', [
-            'content_title' => $cronJob->getCommand(),
+            'content_title' => $cronJob::class,
             'cronjob' => $cronJob,
             'lastExecutions' => $lastExecutions,
-            'activable' => $cronJob instanceof CronJobActivable,
             'allwedToRun' => $allowedToRun,
             'nextExecutionDate' => $this->executionManager->getNextExecutionDate($cronJob),
         ]);
@@ -102,45 +102,12 @@ class CronJobController extends AbstractController
         ]));
     }
 
-    public function activate(string $class): Response
-    {
-        $cronJob = $this->cronJobManager->getCronJob($class);
-        if (! $cronJob instanceof CronJobActivable) {
-            throw new \Exception('Job not deactivable in Frontend');
-        }
-
-        $this->addFlash('success', 'cronjob.activate');
-
-        $url = $this->generateUrl('whatwedo_cronjob_show', [
-            'class' => $class,
-        ]);
-
-        return $this->redirect($url);
-    }
-
-    public function deactivate(string $class): Response
-    {
-        $cronJob = $this->cronJobManager->getCronJob($class);
-
-        if (! $cronJob instanceof CronJobActivable) {
-            throw new \Exception('Job not deactivable in Frontend');
-        }
-
-        $this->addFlash('success', 'cronjob.deactivate');
-
-        $url = $this->generateUrl('whatwedo_cronjob_show', [
-            'class' => $class,
-        ]);
-
-        return $this->redirect($url);
-    }
-
     public function clean(string $class, string $state): Response
     {
-        $cronJob = $this->cronJobManager->getCronJob($class);
-
-        if (! $cronJob) {
-            throw new \Exception('Job not found');
+        try {
+            $cronJob = $this->cronJobManager->getCronJob($class);
+        } catch (CronJobNotFoundException) {
+            throw $this->createNotFoundException();
         }
 
         $this->executionRepository->deleteExecutions($cronJob, $state);

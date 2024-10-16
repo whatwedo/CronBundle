@@ -5,19 +5,6 @@
         {{ bootstrap_icon('list', { class: 'inline mr-1 h-4 w-4' }) }}
         {{ 'whatwedo_cronjob.action.back_list'|trans }}
     </a>
-    {% if activable %}
-        {% if cronjob.isActive %}
-            <a class="btn btn-default"
-               href="{{ path('whatwedo_cronjob_deactivate', { class: wwd_cron_classFqcn(cronjob) }) }}">
-                {{ 'whatwedo_cronjob.action.deactivate'|trans }}
-            </a>
-        {% else %}
-            <a class="btn btn-default"
-               href="{{ path('whatwedo_cronjob_activate', { class: wwd_cron_classFqcn(cronjob) }) }}">
-                {{ 'whatwedo_cronjob.action.activate'|trans }}
-            </a>
-        {% endif %}
-    {% endif %}
     {% if allwedToRun %}
         <a href="{{ path('whatwedo_cronjob_run', { class: wwd_cron_classFqcn(cronjob) }) }}" class="whatwedo-crud-button--action" role="menuitem" tabindex="-1">
             {{ bootstrap_icon('play-fill', { class: 'inline mr-1 h-4 w-4' }) }}

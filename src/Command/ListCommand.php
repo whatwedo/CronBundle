@@ -35,6 +35,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use whatwedo\CronBundle\CronJob\CronJobInterface;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
 #[AsCommand(name: 'whatwedo:cron:list', description: 'List all cron jobs')]
@@ -57,7 +58,8 @@ class ListCommand extends Command
                 $nextRunDate = $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
             }
 
-            $table->addRow([get_class($cronJob), $cronJob->getDescription(), $nextRunDate]);
+            $description = $cronJob instanceof CronJobInterface ? $cronJob->getDescription() : $cronJob::class;
+            $table->addRow([get_class($cronJob), $description, $nextRunDate]);
         }
         $table->render();
 
