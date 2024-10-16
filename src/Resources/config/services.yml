@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $projectDir: '%kernel.project_dir%'
+            $environment: '%kernel.environment%'
+
+    whatwedo\CronBundle\:
+        resource: '../../*'
+        exclude: '../../{DependencyInjection,Entity,Kernel.php}'
+
+    whatwedo\CronBundle\EventListener\ExecutionSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
