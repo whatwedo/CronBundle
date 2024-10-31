@@ -82,7 +82,23 @@ class ExecutionRepository extends ServiceEntityRepository
             ->disableResultCache()
             ->getOneOrNullResult();
     }
-
+    
+    /**
+     * @return Execution[]
+     */
+    public function findNonPendingExcecution(CronInterface $cronJob): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.job = :job')
+            ->andWhere('e.state != :statePending')
+            ->orderBy('e.startedAt', 'DESC')
+            ->setParameter('job', $cronJob::class)
+            ->setParameter('statePending', Execution::STATE_PENDING)
+            ->getQuery()
+            ->disableResultCache()
+            ->getResult();
+    }
+    
     /**
      * @return Execution[]
      */
