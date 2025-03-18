@@ -23,6 +23,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install Suggested Dependencies
+        run: composer require symfony/stimulus-bundle symfony/webpack-encore-bundle
       - name: Check Code Styles
         run: vendor/bin/ecs
       - name: Execute tests (Unit and Feature tests) via PHPUnit

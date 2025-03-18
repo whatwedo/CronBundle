@@ -25,7 +25,7 @@ class ControllerTest extends KernelTestCase
     public function testShow(): void
     {
         $this->browser()
-            ->visit('/show/'.DemoCron::class)
+            ->visit('/show/'.urlencode(DemoCron::class))
             ->assertSuccessful()
         ;
     }
