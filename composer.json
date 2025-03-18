@@ -26,9 +26,7 @@
         "symfony/event-dispatcher": "^7.1|^6.4",
         "symfony/security-bundle":  "^7.1|^6.4",
         "symfony/framework-bundle": "^7.1|^6.4",
-        "symfony/process": "^7.1|^6.4",
-        "symfony/webpack-encore-bundle": "^1.14|^2.1",
-        "symfony/stimulus-bundle": "^2.16"
+        "symfony/process": "^7.1|^6.4"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.5",
@@ -54,6 +52,10 @@
         "zenstruck/console-test": "^v1.3.0",
         "zenstruck/browser": "^1.2",
         "phpstan/phpstan": "^1.12"
+    },
+    "suggest": {
+        "symfony/stimulus-bundle": "^2.16",
+        "symfony/webpack-encore-bundle": "^1.14|^2.1"
     },
     "autoload": {
         "psr-4": {
