@@ -70,7 +70,7 @@ class Execution
     #[ORM\Column(type: Types::JSON, nullable: false)]
     protected ?array $command = [];
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\Column(name: 'started_at', type: Types::DATETIME_MUTABLE, nullable: false)]
     protected \DateTime $startedAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
