@@ -33,7 +33,7 @@ use whatwedo\CronBundle\Entity\Execution;
 
 class MaxRuntimeReachedException extends CronException
 {
-    public function __construct(Execution $execution, int $code = 0, \Throwable $previous = null)
+    public function __construct(Execution $execution, int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct(sprintf('Execution %s reached max runtime', $execution), $code, $previous);
     }
