@@ -36,7 +36,10 @@ use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 #[ORM\Table(name: 'whatwedo_cron_execution')]
 #[ORM\Entity(repositoryClass: ExecutionRepository::class)]
-#[ORM\Index(name: 'whatwedo_cron_execution_started_at', columns: ['started_at'])]
+#[ORM\Index(name: 'whatwedo_cron_execution_state', columns: ['state'])]
+#[ORM\Index(name: 'whatwedo_cron_execution_job_started_at', columns: ['job', 'started_at'])]
+#[ORM\Index(name: 'whatwedo_cron_execution_job_state_started_at', columns: ['job', 'state', 'started_at'])]
+#[ORM\Index(name: 'whatwedo_cron_execution_state_exit_code_started_at', columns: ['state', 'exit_code', 'started_at'])]
 class Execution
 {
     public const STATE_PENDING = 'pending';
