@@ -159,6 +159,19 @@ class ExecutionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function deleteStaleJobs(\DateTimeInterface $retention): int
+    {
+        return $this->createQueryBuilder('e')
+            ->delete()
+            ->where('e.startedAt < :retention')
+            ->andWhere('e.state = :stateStale')
+            ->setParameter('retention', $retention)
+            ->setParameter('stateStale', Execution::STATE_STALE)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
     public function deleteExecutions(CronInterface $cronJob, string $state): int
     {
         $states = match ($state) {

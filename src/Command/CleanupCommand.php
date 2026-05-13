@@ -50,6 +50,7 @@ class CleanupCommand extends Command
         $this
             ->addOption('max-retention', null, InputOption::VALUE_REQUIRED, 'The maximum retention time (will be parsed by DateTime).', '1 month')
             ->addOption('max-retention-successful', null, InputOption::VALUE_REQUIRED, 'The maximum retention time for succeeded jobs (will be parsed by DateTime).', '7 days')
+            ->addOption('max-retention-stale', null, InputOption::VALUE_REQUIRED, 'The maximum retention time for stale jobs (will be parsed by DateTime).', '1 month')
         ;
     }
 
@@ -74,6 +75,15 @@ class CleanupCommand extends Command
         $output->writeln(sprintf(
             '- deleted <info>%s</info> not successful job execution logs',
             $deletedNotSuccessful
+        ));
+
+        $deletedStale = $this->executionRepository->deleteStaleJobs(
+            new \DateTimeImmutable('-'.$input->getOption('max-retention-stale'))
+        );
+
+        $output->writeln(sprintf(
+            '- deleted <info>%s</info> stale job execution logs',
+            $deletedStale
         ));
 
         return Command::SUCCESS;
