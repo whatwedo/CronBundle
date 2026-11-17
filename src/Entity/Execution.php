@@ -60,7 +60,7 @@ class Execution
     ])]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected ?int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $state = self::STATE_RUNNING;
@@ -84,10 +84,10 @@ class Execution
     protected ?\DateTimeImmutable $finishedAt = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    protected ?int $pid;
+    protected ?int $pid = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    protected ?int $exitCode;
+    protected ?int $exitCode = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $stdout = null;
@@ -95,7 +95,7 @@ class Execution
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $stderr = null;
 
-    protected ?CronInterface $cronJob;
+    protected ?CronInterface $cronJob = null;
 
     public function __construct()
     {
