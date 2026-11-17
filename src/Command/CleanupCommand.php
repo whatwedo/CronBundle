@@ -36,9 +36,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use whatwedo\CronBundle\Repository\ExecutionRepository;
 
-#[AsCommand(name: 'whatwedo:cron:cleanup', description: 'Cleans up jobs which exceed the maximum retention time')]
+#[AsCommand(name: self::NAME, description: 'Cleans up jobs which exceed the maximum retention time')]
 class CleanupCommand extends Command
 {
+    public const NAME = 'whatwedo:cron:cleanup';
+
     public function __construct(
         protected ExecutionRepository $executionRepository
     ) {

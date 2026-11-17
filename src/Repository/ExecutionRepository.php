@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -62,25 +63,43 @@ class ExecutionRepository extends ServiceEntityRepository
      */
     public function findByJob(CronInterface $cronJob): array
     {
-        return $this->createQueryBuilder('e')
-            ->where('e.job = :job')
-            ->orderBy('e.startedAt', 'DESC')
-            ->setParameter('job', $cronJob::class)
-            ->getQuery()
-            ->disableResultCache()
-            ->getResult();
+        // findBy() keeps accepting string sort directions on every ORM version,
+        // whereas QueryBuilder::orderBy() wants \SortDirection since ORM 3.6.
+        return $this->findBy([
+            'job' => $cronJob::class,
+        ], [
+            'startedAt' => 'DESC',
+        ]);
     }
 
     public function findLastExecution(CronInterface $cronJob): ?Execution
     {
-        return $this->createQueryBuilder('e')
-            ->where('e.job = :job')
-            ->orderBy('e.startedAt', 'DESC')
-            ->setMaxResults(1)
+        return $this->findOneBy([
+            'job' => $cronJob::class,
+        ], [
+            'startedAt' => 'DESC',
+        ]);
+    }
+
+    /**
+     * Returns the ids of the newest executions of a job in the given state.
+     *
+     * @return int[]
+     */
+    public function findNewestIdsByJobAndState(CronInterface $cronJob, string $state, int $limit): array
+    {
+        // Select only the ids, the executions' output columns can be large.
+        $rows = $this->getEntityManager()
+            ->createQuery(sprintf(
+                'SELECT e.id FROM %s e WHERE e.job = :job AND e.state = :state ORDER BY e.startedAt DESC',
+                Execution::class,
+            ))
             ->setParameter('job', $cronJob::class)
-            ->getQuery()
-            ->disableResultCache()
-            ->getOneOrNullResult();
+            ->setParameter('state', $state)
+            ->setMaxResults($limit)
+            ->getScalarResult();
+
+        return array_map(static fn(array $row): int => (int) $row['id'], $rows);
     }
     
     /**
@@ -88,14 +107,13 @@ class ExecutionRepository extends ServiceEntityRepository
      */
     public function findNonPendingExcecution(CronInterface $cronJob): array
     {
-        return $this->createQueryBuilder('e')
-            ->where('e.job = :job')
-            ->andWhere('e.state != :statePending')
-            ->orderBy('e.startedAt', 'DESC')
+        return $this->getEntityManager()
+            ->createQuery(sprintf(
+                'SELECT e FROM %s e WHERE e.job = :job AND e.state != :statePending ORDER BY e.startedAt DESC',
+                Execution::class,
+            ))
             ->setParameter('job', $cronJob::class)
             ->setParameter('statePending', Execution::STATE_PENDING)
-            ->getQuery()
-            ->disableResultCache()
             ->getResult();
     }
     

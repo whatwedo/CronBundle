@@ -73,14 +73,14 @@ class Execution
     #[ORM\Column(type: Types::JSON, nullable: false)]
     protected ?array $command = [];
 
-    #[ORM\Column(name: 'started_at', type: Types::DATETIME_MUTABLE, nullable: false)]
-    protected \DateTime $startedAt;
+    #[ORM\Column(name: 'started_at', type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    protected \DateTimeImmutable $startedAt;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    protected \DateTime $updatedAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    protected \DateTimeImmutable $updatedAt;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected ?\DateTime $finishedAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    protected ?\DateTimeImmutable $finishedAt = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     protected ?int $pid;
@@ -98,8 +98,8 @@ class Execution
 
     public function __construct()
     {
-        $this->startedAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->startedAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -151,36 +151,36 @@ class Execution
 
     public function getStartedAt(): ?\DateTime
     {
-        return $this->startedAt;
+        return \DateTime::createFromImmutable($this->startedAt);
     }
 
-    public function setStartedAt(\DateTime $startedAt): self
+    public function setStartedAt(\DateTimeInterface $startedAt): self
     {
-        $this->startedAt = $startedAt;
+        $this->startedAt = \DateTimeImmutable::createFromInterface($startedAt);
 
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTime
     {
-        return $this->updatedAt;
+        return \DateTime::createFromImmutable($this->updatedAt);
     }
 
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = \DateTimeImmutable::createFromInterface($updatedAt);
 
         return $this;
     }
 
     public function getFinishedAt(): ?\DateTime
     {
-        return $this->finishedAt;
+        return $this->finishedAt !== null ? \DateTime::createFromImmutable($this->finishedAt) : null;
     }
 
-    public function setFinishedAt(?\DateTime $finishedAt): self
+    public function setFinishedAt(?\DateTimeInterface $finishedAt): self
     {
-        $this->finishedAt = $finishedAt;
+        $this->finishedAt = $finishedAt !== null ? \DateTimeImmutable::createFromInterface($finishedAt) : null;
 
         return $this;
     }

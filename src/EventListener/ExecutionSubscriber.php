@@ -29,7 +29,7 @@ declare(strict_types=1);
 
 namespace whatwedo\CronBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
@@ -37,7 +37,8 @@ use whatwedo\CronBundle\Entity\Execution;
 use whatwedo\CronBundle\Exception\CronJobNotFoundException;
 use whatwedo\CronBundle\Manager\CronJobManager;
 
-class ExecutionSubscriber implements EventSubscriber
+#[AsDoctrineListener(event: Events::postLoad)]
+class ExecutionSubscriber
 {
     /**
      * @var LoggerInterface
@@ -53,18 +54,6 @@ class ExecutionSubscriber implements EventSubscriber
     {
         $this->logger = $logger;
         $this->cronJobManager = $cronJobManager;
-    }
-
-    /**
-     * Returns an array of events this subscriber wants to listen to.
-     *
-     * @return string[]
-     */
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::postLoad,
-        ];
     }
 
     public function postLoad(PostLoadEventArgs $args): void
