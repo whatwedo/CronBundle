@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -39,7 +40,7 @@ use whatwedo\CronBundle\Manager\ExecutionManager;
 class CheckCommand extends Command
 {
     public function __construct(
-        protected ExecutionManager $executionManager
+        protected ExecutionManager $executionManager,
     ) {
         parent::__construct();
     }

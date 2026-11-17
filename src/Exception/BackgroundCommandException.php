@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -29,6 +30,4 @@ declare(strict_types=1);
 
 namespace whatwedo\CronBundle\Exception;
 
-class BackgroundCommandException extends CronException
-{
-}
+class BackgroundCommandException extends CronException {}

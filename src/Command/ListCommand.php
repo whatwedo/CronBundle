@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -42,7 +43,7 @@ use whatwedo\CronBundle\Manager\CronJobManager;
 class ListCommand extends Command
 {
     public function __construct(
-        protected CronJobManager $cronJobManager
+        protected CronJobManager $cronJobManager,
     ) {
         parent::__construct();
     }

@@ -11,7 +11,7 @@ class CronExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new \Twig\TwigFunction('wwd_cron_classFqcn', fn ($object) => $object::class),
+            new \Twig\TwigFunction('wwd_cron_classFqcn', fn($object) => $object::class),
         ];
     }
 }

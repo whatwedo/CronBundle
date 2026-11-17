@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -44,9 +45,8 @@ class ExecutionManager
         protected ExecutionRepository $repository,
         protected CronJobManager $cronJobManager,
         protected string $projectDir,
-        protected string $environment
-    ) {
-    }
+        protected string $environment,
+    ) {}
 
     public function check(int $checkIntervall): void
     {

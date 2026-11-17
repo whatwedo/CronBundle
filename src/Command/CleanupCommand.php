@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -42,7 +43,7 @@ class CleanupCommand extends Command
     public const NAME = 'whatwedo:cron:cleanup';
 
     public function __construct(
-        protected ExecutionRepository $executionRepository
+        protected ExecutionRepository $executionRepository,
     ) {
         parent::__construct();
     }
@@ -62,30 +63,30 @@ class CleanupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $deletedSuccessful = $this->executionRepository->deleteSuccessfulJobs(
-            new \DateTimeImmutable('-'.$input->getOption('max-retention-successful'))
+            new \DateTimeImmutable('-'.$input->getOption('max-retention-successful')),
         );
 
         $output->writeln(sprintf(
             '- deleted <info>%s</info> successful job execution logs',
-            $deletedSuccessful
+            $deletedSuccessful,
         ));
 
         $deletedNotSuccessful = $this->executionRepository->deleteNotSuccessfulJobs(
-            new \DateTimeImmutable('-'.$input->getOption('max-retention'))
+            new \DateTimeImmutable('-'.$input->getOption('max-retention')),
         );
 
         $output->writeln(sprintf(
             '- deleted <info>%s</info> not successful job execution logs',
-            $deletedNotSuccessful
+            $deletedNotSuccessful,
         ));
 
         $deletedStale = $this->executionRepository->deleteStaleJobs(
-            new \DateTimeImmutable('-'.$input->getOption('max-retention-stale'))
+            new \DateTimeImmutable('-'.$input->getOption('max-retention-stale')),
         );
 
         $output->writeln(sprintf(
             '- deleted <info>%s</info> stale job execution logs',
-            $deletedStale
+            $deletedStale,
         ));
 
         return Command::SUCCESS;

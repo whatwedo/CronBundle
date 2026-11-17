@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -247,6 +248,6 @@ class Execution
 
     public function __toString(): string
     {
-        return '#'.str_pad((string)$this->getId(), 6, '0', STR_PAD_LEFT);
+        return '#'.str_pad((string) $this->getId(), 6, '0', STR_PAD_LEFT);
     }
 }
