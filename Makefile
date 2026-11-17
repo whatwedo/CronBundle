@@ -31,7 +31,7 @@ ecs:
 
 ## PHP Unit
 phpunit:
-	vendor/bin/simple-phpunit -v
+	vendor/bin/phpunit
 
 ## PHP Stan
 phpstan:

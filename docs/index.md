@@ -4,7 +4,18 @@ This documentation provides a basic view of the possibilities of the whatwedoCro
 
 ## Requirements
 
-This bundle has been tested on PHP >= 7.3 and Symfony >= 4.2. We don't guarantee that it works on lower versions.
+This bundle supports PHP >= 8.3, Symfony 6.4, 7.x and 8.x, Doctrine ORM >= 2.13 and DoctrineBundle >= 2.8. It is tested against Symfony 6.4 with Doctrine ORM 2, Symfony 7.4 and Symfony 8 (PHP 8.3 to 8.5).
+
+## Upgrading
+
+### To 1.1 (Symfony 8 support)
+
+- The date columns of `whatwedo_cron_execution` (`started_at`, `updated_at`, `finished_at`) are now mapped as `datetime_immutable`. The SQL type does not change. On DBAL 4 no migration is needed. On DBAL 3 (Doctrine ORM 2) `doctrine:migrations:diff` generates a migration that only adds the `(DC2Type:datetime_immutable)` column comments.
+- `Execution` getters still return `\DateTime`, but as copies: modifying a returned date no longer changes the entity. Use the setters, which now accept any `\DateTimeInterface`.
+- The Doctrine listener is registered via `#[AsDoctrineListener]`, so DoctrineBundle >= 2.8 is required.
+- `whatwedo_cron_execution` gets new indexes for all queried columns, replacing the `started_at` index. Generate and run a migration (`doctrine:migrations:diff`).
+- `whatwedo:cron:cleanup` now also deletes stale executions, by default those older than one month (`--max-retention-stale`).
+- `ExecutionRepository::findNonPendingExcecution()`, removed in 1.0.0, is available again.
 
 ## Installation
 

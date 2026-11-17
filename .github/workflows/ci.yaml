@@ -13,21 +13,50 @@ on:
 jobs:
   phpunit:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '8.3'
+            symfony-version: '6.4.*'
+            doctrine-orm: '^2.20'
+          - php-version: '8.3'
+            symfony-version: '7.4.*'
+          - php-version: '8.4'
+            symfony-version: '8.*'
+          - php-version: '8.5'
+            symfony-version: '8.*'
+    name: PHP ${{ matrix.php-version }} / Symfony ${{ matrix.symfony-version }}${{ matrix.doctrine-orm && ' / ORM ' || '' }}${{ matrix.doctrine-orm }}
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      SYMFONY_REQUIRE: ${{ matrix.symfony-version }}
     steps:
-      - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
         with:
-          php-version: '8.3'
-      - uses: samin/mysql-action@v1.3
-        with:
-          mysql root password: root
-      - uses: actions/checkout@v2
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          extensions: pdo_mysql, posix
+          tools: flex
+      - name: Pin Doctrine ORM
+        if: matrix.doctrine-orm
+        run: composer require --dev --no-update "doctrine/orm:${{ matrix.doctrine-orm }}"
       - name: Install Dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Install Suggested Dependencies
-        run: composer require symfony/stimulus-bundle symfony/webpack-encore-bundle
+        run: composer update --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Check Code Styles
         run: vendor/bin/ecs
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: vendor/bin/simple-phpunit
+        run: vendor/bin/phpunit
       - name: Check with phpstan
         run: vendor/bin/phpstan analyse
