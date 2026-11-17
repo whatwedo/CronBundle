@@ -13,3 +13,4 @@ composer.lock
 .php-version
 .phpunit.result.cache
 # End of https://www.gitignore.io/api/composer
+/tests/App/config/reference.php
