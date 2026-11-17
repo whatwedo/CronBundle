@@ -97,7 +97,7 @@ class InfoCommand extends Command
         }
 
         if ($cronJob instanceof Command) {
-            return $cronJob->getDefaultName() ?? '';
+            return $cronJob->getName() ?? '';
         }
 
         return '';

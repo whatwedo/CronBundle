@@ -46,6 +46,7 @@ use whatwedo\CronBundle\Event\CronFinishEvent;
 use whatwedo\CronBundle\Event\CronStartEvent;
 use whatwedo\CronBundle\Exception\MaxRuntimeReachedException;
 use whatwedo\CronBundle\Manager\CronJobManager;
+use whatwedo\CronBundle\Repository\ExecutionRepository;
 
 #[AsCommand(name: 'whatwedo:cron:execute', description: 'Execute cron job')]
 class ExecuteCommand extends Command
@@ -121,7 +122,7 @@ class ExecuteCommand extends Command
             $this->checkMaxRuntime($execution, $cronJob, $process);
             $output->writeln(sprintf(
                 'Process %s is running...',
-                implode(' ', $execution->getCommand())
+                implode(' ', $command)
             ));
             $this->logger->info(sprintf('execute %s: is running PID:%s', $logId, $process->getPid()));
             sleep(5);
@@ -156,23 +157,13 @@ class ExecuteCommand extends Command
 
         // cleanup Executions
         foreach ($cronJob->getExecutionRetention() as $state => $maxRetained) {
-            $topIds = $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
-                ->select('execution.id')
-                ->where('execution.job = :jobClass')
-                ->andWhere('execution.state = :state')
-                ->orderBy('execution.startedAt', 'DESC')
-                ->setMaxResults($maxRetained)
-                ->setParameter('jobClass', $cronJob::class)
-                ->setParameter('state', $state)
-                ->getQuery()
-                ->disableResultCache()
-                ->getScalarResult();
+            $repository = $this->entityManager->getRepository(Execution::class);
+            \assert($repository instanceof ExecutionRepository);
+            $topIds = $repository->findNewestIdsByJobAndState($cronJob, $state, $maxRetained);
 
             if (empty($topIds)) {
                 continue;
             }
-
-            $topIds = array_map(fn ($item) => $item['id'], $topIds);
 
             $this->entityManager->getRepository(Execution::class)->createQueryBuilder('execution')
                 ->delete()
@@ -197,7 +188,7 @@ class ExecuteCommand extends Command
         }
 
         if ($cron instanceof Command) {
-            return $cron->getDefaultName() ?? '';
+            return $cron->getName() ?? '';
         }
 
         return '';
