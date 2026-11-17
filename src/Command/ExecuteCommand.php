@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Copyright (c) 2019, whatwedo GmbH
  * All rights reserved
@@ -57,7 +58,7 @@ class ExecuteCommand extends Command
         protected EventDispatcherInterface $eventDispatcher,
         protected LoggerInterface $logger,
         protected string $projectDir,
-        protected string $environment
+        protected string $environment,
     ) {
         parent::__construct();
     }
@@ -122,7 +123,7 @@ class ExecuteCommand extends Command
             $this->checkMaxRuntime($execution, $cronJob, $process);
             $output->writeln(sprintf(
                 'Process %s is running...',
-                implode(' ', $command)
+                implode(' ', $command),
             ));
             $this->logger->info(sprintf('execute %s: is running PID:%s', $logId, $process->getPid()));
             sleep(5);

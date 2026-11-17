@@ -101,7 +101,7 @@ class ExecutionRepository extends ServiceEntityRepository
 
         return array_map(static fn(array $row): int => (int) $row['id'], $rows);
     }
-    
+
     /**
      * @return Execution[]
      */
@@ -116,7 +116,7 @@ class ExecutionRepository extends ServiceEntityRepository
             ->setParameter('statePending', Execution::STATE_PENDING)
             ->getResult();
     }
-    
+
     /**
      * @return Execution[]
      */

@@ -20,8 +20,7 @@ class CronJobController extends AbstractController
         private ExecutionManager $executionManager,
         private ExecutionRepository $executionRepository,
         private EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     public function index(): Response
     {
